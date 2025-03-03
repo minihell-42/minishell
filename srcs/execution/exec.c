@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_command.c                                     :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/01 20:11:08 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/01 20:31:34 by samcasti         ###   ########.fr       */
+/*   Created: 2025/03/01 20:03:02 by samcasti          #+#    #+#             */
+/*   Updated: 2025/03/01 20:30:14 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	exec_command(t_node *node)
-{
-	char	*tokens;
+#include "../../includes/execution.h"
 
-	if (fork() == 0)
-	{
-	}
+void	exec(t_tree *tree)
+{
+	if (tree->type == "CMD")
+		exec_command(tree);
+	else if (tree->type == "PIPE")
+		exec_pipe(tree);
+	else if (tree->type == "SEQUENCE")
+		exec_sequence(tree);
+	else if(tree->type == "REDIR")
+		exec_redir(tree);
+	else if(tree->type == "ARG")
+		exec_arg(tree);
+	else
+		type_error("");
 }
