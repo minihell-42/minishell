@@ -21,7 +21,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
