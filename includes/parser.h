@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 19:14:35 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/03/04 16:32:49 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:49:27 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef enum s_token_type
 	TKN_SEMICOLON,
 	TKN_NEWLINE,
 	TKN_END
-}	t_token_typeTKN_;
+}	t_token_type;
 
 typedef struct s_token	t_token;
 
