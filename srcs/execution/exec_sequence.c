@@ -14,8 +14,8 @@
 
 int	exec_sequence(t_tree *tree, t_context *ctx, char **envp)
 {
-	t_tree	*current;
-	int		children;
+	t_tree		*current;
+	int			children;
 	t_context	seq_ctx;
 
 	current = tree;

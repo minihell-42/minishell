@@ -34,10 +34,10 @@ int	exec_right_side(t_tree *right_side, t_context *ctx, char **envp, int pid[2])
 
 int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
 {
-	int			pid[2];
-	int			children;
-	t_tree		*left_side;
-	t_tree		*right_side;
+	int		pid[2];
+	int		children;
+	t_tree	*left_side;
+	t_tree	*right_side;
 
 	children = 0;
 	if (pipe(pid) == -1)
