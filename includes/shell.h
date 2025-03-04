@@ -23,5 +23,10 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdbool.h>
+# include <limits.h>
+# include "parser.h"
 
 #endif

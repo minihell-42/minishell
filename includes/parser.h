@@ -12,38 +12,39 @@
 
 #ifndef PARSER_H
 # define PARSER_H
-# include "shell.h"
 
 typedef enum s_token_type
 {
-	ARG,
-	ENV_VAR,
-	PIPE,
-	HERE_DOC,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	SEMICOLON,
-	NEWLINE,
-	END
-}	t_token_type;
+	TKN_ARG,
+	TKN_ENV_VAR,
+	TKN_PIPE,
+	TKN_HERE_DOC,
+	TKN_REDIR_IN,
+	TKN_REDIR_OUT,
+	TKN_REDIR_APPEND,
+	TKN_SEMICOLON,
+	TKN_NEWLINE,
+	TKN_END
+}	t_token_typeTKN_;
 
-typedef struct s_token
+typedef struct s_token	t_token;
+
+struct s_token
 {
 	char	*value;
 	int		type;
 	size_t	len;
 	t_token	*next;
 	t_token	*prev;
-}	t_token;
+};
 
 typedef enum e_node_type
 {
-	CMD,
-	PIPE,
-	SEQUENCE,
-	REDIR,
-	ARG,
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_SEQUENCE,
+	NODE_REDIR,
+	NODE_ARG,
 }	t_node_type;
 
 typedef enum e_cmd_type
@@ -58,13 +59,15 @@ typedef enum e_cmd_type
 	OTHER,
 }	t_cmd_type;
 
-typedef struct s_tree
+typedef struct s_tree	t_tree;
+
+struct s_tree
 {
 	t_node_type	type;
 	t_cmd_type	cmd_type;
 	char		*value;
 	t_tree		*left;
 	t_tree		*right;
-}	t_tree;
+};
 
 #endif
