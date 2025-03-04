@@ -6,11 +6,12 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 20:03:02 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/04 15:04:25 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:18:11 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execution.h"
+#include <readline/readline.h>
 
 void	exec(t_tree *tree, char **envp)
 {
@@ -45,6 +46,18 @@ int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 	else
 	{
 		type_error("Invalid tree type");
+		printf("Invalid type");
 		return (0);
 	}
+}
+
+int	main(int argc, char *argv[], char **envp)
+{
+	char	*input;
+
+	(void)argc;
+	(void)argv;
+	(void)envp;
+	input = readline("minishell$ ");
+	return (0);
 }

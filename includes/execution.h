@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:36:27 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/03 18:15:32 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:23:17 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_context
 	int	fd_close;
 }		t_context;
 
+// EXECUTION
 int		exec_tree(t_tree *tree, t_context *ctx, char **envp);
 int		exec_command(t_tree *tree, t_context *ctx, char **envp);
 int		exec_pipe(t_tree *tree, t_context *ctx, char **envp);

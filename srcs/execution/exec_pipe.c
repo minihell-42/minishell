@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:10:10 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/03 18:01:10 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:19:16 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
 
 	children = 0;
 	if (pipe(pid) == -1)
-		pipe_error("Pipe error");
+		// pipe_error("Pipe error");
+		printf("Pipe error");
 	left_side = tree->left;
 	right_side = tree->right;
 	children += exec_left_side(left_side, ctx, envp, pid);

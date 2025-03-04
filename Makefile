@@ -9,14 +9,14 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/exec_sequence.c \
-       srcs/parser/parser.c
+    #    srcs/parser/parser.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
