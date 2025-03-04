@@ -5,6 +5,8 @@ SRC_DIR = srcs
 OBJ_DIR = obj
 NAME = minishell
 
+LIBFT = libft/libft.a
+
 SRCS = srcs/execution/exec.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
@@ -13,10 +15,13 @@ SRCS = srcs/execution/exec.c \
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-all: $(NAME)
+all: $(LIBFT) $(NAME)
+
+$(LIBFT):
+	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
@@ -24,9 +29,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 	rm -rf $(OBJ_DIR)
+	make -C libft clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C libft fclean
 
 re: fclean all
 
