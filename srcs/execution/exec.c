@@ -37,7 +37,7 @@ int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 	else if (tree->type == PIPE)
 		return (exec_pipe(tree, ctx, envp));
 	else if (tree->type == SEQUENCE)
-		return (exec_sequence(tree, envp));
+		return (exec_sequence(tree, ctx, envp));
 	else if (tree->type == REDIR)
 		exec_redir(tree, ctx, envp);
 	else if (tree->type == ARG)
