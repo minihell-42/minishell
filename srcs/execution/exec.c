@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 20:03:02 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/03 18:23:52 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:04:25 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ void	exec(t_tree *tree, char **envp)
 
 int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 {
-	if (tree->type == CMD)
+	if (tree->type == NODE_CMD)
 		return (exec_command(tree, ctx, envp));
-	else if (tree->type == PIPE)
+	else if (tree->type == NODE_PIPE)
 		return (exec_pipe(tree, ctx, envp));
-	else if (tree->type == SEQUENCE)
+	else if (tree->type == NODE_SEQUENCE)
 		return (exec_sequence(tree, ctx, envp));
-	else if (tree->type == REDIR)
+	else if (tree->type == NODE_REDIR)
 		exec_redir(tree, ctx, envp);
-	else if (tree->type == ARG)
+	else if (tree->type == NODE_ARG)
 		exec_arg(tree, ctx, envp);
 	else
 	{
