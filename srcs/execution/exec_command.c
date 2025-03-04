@@ -17,6 +17,7 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 	int		pid;
 	char	*argv[2] = {"ls", 0};
 	char	*program_path;
+	(void)tree;
 
 	// get token array from the tree and its length(argc)
 	// populate argv with tokens and make the last element NULL
@@ -33,6 +34,5 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 			close(ctx->fd_close);
 		execve(program_path, argv, envp);
 	}
-	else
-		return (1);
+	return (1);
 }

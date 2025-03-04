@@ -32,15 +32,15 @@ void	exec(t_tree *tree, char **envp)
 
 int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 {
-	if (tree->type == "CMD")
+	if (tree->type == CMD)
 		return (exec_command(tree, ctx, envp));
-	else if (tree->type == "PIPE")
+	else if (tree->type == PIPE)
 		return (exec_pipe(tree, ctx, envp));
-	else if (tree->type == "SEQUENCE")
+	else if (tree->type == SEQUENCE)
 		return (exec_sequence(tree, envp));
-	else if (tree->type == "REDIR")
+	else if (tree->type == REDIR)
 		exec_redir(tree, ctx, envp);
-	else if (tree->type == "ARG")
+	else if (tree->type == ARG)
 		exec_arg(tree, ctx, envp);
 	else
 	{

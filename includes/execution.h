@@ -15,7 +15,6 @@
 
 # include "parser.h"
 # include "shell.h"
-# include <sys/wait.h>
 
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
