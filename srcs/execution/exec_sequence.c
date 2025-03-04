@@ -16,12 +16,18 @@ int	exec_sequence(t_tree *tree, t_context *ctx, char **envp)
 {
 	t_tree	*current;
 	int		children;
+	t_context	seq_ctx;
 
 	current = tree;
 	children = 0;
 	while (current)
 	{
-		children += exec_tree(current->left, ctx, envp);
+		seq_ctx = *ctx;
+		seq_ctx.fd[STDIN_FILENO] = STDIN_FILENO;
+		seq_ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
+		seq_ctx.fd_close = -1;
+		children += exec_tree(current->left, &seq_ctx, envp);
+		wait(NULL);
 		current = current->right;
 	}
 	return (children);
