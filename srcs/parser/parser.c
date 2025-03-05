@@ -14,16 +14,18 @@
 Command to compile:
 cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
 */
-#include "shell.h"
+#include "parser.h"
 
 int	main(void)
 {
 	char	*input;
+	t_token	*tokens;
 
 	input = readline("minishell$ ");
 	if (input == NULL)
 		exit(0);
-	lexer_tokenize(input);
+	tokens = lexer_tokenize(input);
+	print_tokens(tokens);
 	free(input);
 	return (0);
 }
