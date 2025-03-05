@@ -11,7 +11,11 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/exec_sequence.c \
-       srcs/parser/parser.c
+       srcs/execution/program_path.c \
+      #  srcs/execution/testing_sequence.c \
+      #  srcs/execution/testing_pipe.c \
+      #  srcs/execution/testing_cmd.c \
+      #  srcs/parser/parser.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
@@ -21,7 +25,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
