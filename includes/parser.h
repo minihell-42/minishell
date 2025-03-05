@@ -65,7 +65,8 @@ struct s_tree
 {
 	t_node_type	type;
 	t_cmd_type	cmd_type;
-	char		*value;
+	char		**arg_vect;
+	int			arg_count;
 	t_tree		*left;
 	t_tree		*right;
 };
