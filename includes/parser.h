@@ -17,6 +17,7 @@
 
 typedef enum s_token_type
 {
+	TKN_CMD,
 	TKN_ARG,
 	TKN_ENV_VAR,
 	TKN_PIPE,
@@ -73,4 +74,25 @@ struct					s_tree
 	t_tree				*right;
 };
 
+// LEXER
+t_token					*lexer_tokenize(char *input);
+t_token					*create_token(char *value, t_token_type type);
+void					free_tokens(t_token *tokens);
+
+// TOKENS
+t_token					*tokenize_redirections(char *input);
+t_token					*tokenize_pipes_and_separators(char *input);
+void					print_tokens(t_token *tokens);
+
+// PARSER
+t_tree					*parse_tokens(t_token *tokens);
+t_tree					*parse_command(t_token **tokens);
+t_tree					*parse_redirection(t_token **tokens);
+t_tree					*parse_pipeline(t_token **tokens);
+t_tree					*parse_sequence(t_token **tokens);
+
+// AST
+t_tree					*create_ast_node(t_node_type type, char *value);
+void					print_ast(t_tree *root, int depth);
+void					free_ast(t_tree *root);
 #endif
