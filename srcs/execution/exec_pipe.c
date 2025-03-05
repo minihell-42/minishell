@@ -41,8 +41,10 @@ int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
 
 	children = 0;
 	if (pipe(pid) == -1)
-		// pipe_error("Pipe error");
+	{
 		printf("Pipe error");
+		return (-1);
+	}
 	left_side = tree->left;
 	right_side = tree->right;
 	children += exec_left_side(left_side, ctx, envp, pid);

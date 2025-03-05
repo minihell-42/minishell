@@ -14,7 +14,6 @@
 # define EXECUTION_H
 
 # include "parser.h"
-# include "shell.h"
 
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
@@ -26,9 +25,13 @@ typedef struct s_context
 }		t_context;
 
 // EXECUTION
+void	exec(t_tree *tree, char **envp);
 int		exec_tree(t_tree *tree, t_context *ctx, char **envp);
 int		exec_command(t_tree *tree, t_context *ctx, char **envp);
 int		exec_pipe(t_tree *tree, t_context *ctx, char **envp);
 int		exec_sequence(t_tree *tree, t_context *ctx, char **envp);
+
+// PROGRAM PATH
+char	*get_program_path(char *cmd, char **envp);
 
 #endif

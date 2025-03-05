@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "../../includes/execution.h"
-#include <readline/readline.h>
 
 void	exec(t_tree *tree, char **envp)
 {
 	t_context	ctx;
 	int			children;
 	int			i;
+	int			status;
 
 	i = 0;
 	ctx.fd[0] = STDIN_FILENO;
@@ -26,38 +26,28 @@ void	exec(t_tree *tree, char **envp)
 	children = exec_tree(tree, &ctx, envp);
 	while (i < children)
 	{
-		wait(NULL);
+		waitpid(-1, &status, 0);
 		i++;
 	}
 }
 
 int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 {
+	if (!tree)
+		return (0);
 	if (tree->type == NODE_CMD)
 		return (exec_command(tree, ctx, envp));
 	else if (tree->type == NODE_PIPE)
 		return (exec_pipe(tree, ctx, envp));
 	else if (tree->type == NODE_SEQUENCE)
 		return (exec_sequence(tree, ctx, envp));
-	else if (tree->type == NODE_REDIR)
-		exec_redir(tree, ctx, envp);
-	else if (tree->type == NODE_ARG)
-		exec_arg(tree, ctx, envp);
+	// else if (tree->type == NODE_REDIR)
+	// 	exec_redir(tree, ctx, envp);
+	// else if (tree->type == NODE_ARG)
+	// 	exec_arg(tree, ctx, envp);
 	else
 	{
-		type_error("Invalid tree type");
 		printf("Invalid type");
 		return (0);
 	}
-}
-
-int	main(int argc, char *argv[], char **envp)
-{
-	char	*input;
-
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	input = readline("minishell$ ");
-	return (0);
 }
