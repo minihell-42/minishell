@@ -17,6 +17,7 @@ int	exec_sequence(t_tree *tree, t_context *ctx, char **envp)
 	t_tree		*current;
 	int			children;
 	t_context	seq_ctx;
+	int			status;
 
 	current = tree;
 	children = 0;
@@ -27,11 +28,11 @@ int	exec_sequence(t_tree *tree, t_context *ctx, char **envp)
 		seq_ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
 		seq_ctx.fd_close = -1;
 		children += exec_tree(current->left, &seq_ctx, envp);
-		wait(NULL);
+		waitpid(-1, &status, 0);
 		if (current->right && current->right->type != NODE_SEQUENCE)
 		{
 			children += exec_tree(current->right, &seq_ctx, envp);
-			wait(NULL);
+			waitpid(-1, &status, 0);
 			break ;
 		}
 		current = current->right;

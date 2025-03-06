@@ -12,17 +12,36 @@
 
 #include "../../includes/execution.h"
 
+static void	write_cmd_error(t_tree *tree)
+{
+	write(STDERR_FILENO, "minishell: ", 11);
+	write(STDERR_FILENO, tree->argv[0], ft_strlen(tree->argv[0]));
+	write(STDERR_FILENO, ": command not found\n", 20);
+}
+
+static void	handle_sys_error(char *path, char *msg)
+{
+	perror(msg);
+	free(path);
+	exit(EXIT_FAILURE);
+}
+
 static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 		char *program_path)
 {
-	dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO);
-	dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO);
+	if (dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO) == -1)
+		handle_sys_error(program_path, "minishell: dup2 failed");
+	if (dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
+		handle_sys_error(program_path, "minishell: dup2 failed");
 	if (ctx->fd_close >= 0)
-		close(ctx->fd_close);
+	{
+		if (close(ctx->fd_close) == -1)
+			handle_sys_error(program_path, "minishell: close failed");
+	}
 	execve(program_path, tree->argv, envp);
-	perror("execve failed");
+	perror("minishell: execve failed");
 	free(program_path);
-	exit(EXIT_FAILURE);
+	exit(127);
 }
 
 int	exec_command(t_tree *tree, t_context *ctx, char **envp)
@@ -33,13 +52,13 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 	program_path = get_program_path(tree->argv[0], envp);
 	if (!program_path)
 	{
-		write(STDERR_FILENO, "bash: command not found\n", 24);
+		write_cmd_error(tree);
 		return (-1);
 	}
 	pid = fork();
 	if (pid == FORKED_ERROR)
 	{
-		printf("Fork error");
+		perror("minishell: fork failed");
 		free(program_path);
 		return (-1);
 	}

@@ -42,14 +42,17 @@ int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
 	children = 0;
 	if (pipe(pid) == -1)
 	{
-		printf("Pipe error");
+		perror("minishell: pipe failed");
 		return (-1);
 	}
 	left_side = tree->left;
 	right_side = tree->right;
 	children += exec_left_side(left_side, ctx, envp, pid);
 	children += exec_right_side(right_side, ctx, envp, pid);
-	close(pid[STDIN_FILENO]);
-	close(pid[STDOUT_FILENO]);
+	if (close(pid[STDIN_FILENO]) == -1 || close(pid[STDOUT_FILENO]) == -1)
+	{
+		perror("minishell: close failed");
+		return (-1);
+	}
 	return (children);
 }

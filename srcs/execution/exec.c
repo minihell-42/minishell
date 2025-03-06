@@ -19,6 +19,8 @@ void	exec(t_tree *tree, char **envp)
 	int			i;
 	int			status;
 
+	if (!tree)
+		return ;
 	i = 0;
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
@@ -47,7 +49,7 @@ int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 	// 	exec_arg(tree, ctx, envp);
 	else
 	{
-		printf("Invalid type");
-		return (0);
+		write(STDERR_FILENO, "minishell: invalid node type\n", 29);
+		return (-1);
 	}
 }
