@@ -29,15 +29,20 @@ static void	handle_sys_error(char *path, char *msg)
 static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 		char *program_path)
 {
-	if (dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO) == -1)
-		handle_sys_error(program_path, "minishell: dup2 failed");
-	if (dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
-		handle_sys_error(program_path, "minishell: dup2 failed");
-	if (ctx->fd_close >= 0)
+	if (ctx->fd[STDIN_FILENO] != STDIN_FILENO)
 	{
-		if (close(ctx->fd_close) == -1)
-			handle_sys_error(program_path, "minishell: close failed");
+		if (dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO) == -1)
+			handle_sys_error(program_path, "minishell: dup2 failed for stdin");
+		close(ctx->fd[STDIN_FILENO]);
 	}
+	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+	{
+		if (dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
+			handle_sys_error(program_path, "minishell: dup2 failed for stdout");
+		close(ctx->fd[STDOUT_FILENO]);
+	}
+	if (ctx->fd_close >= 0)
+		close(ctx->fd_close);
 	execve(program_path, tree->argv, envp);
 	perror("minishell: execve failed");
 	free(program_path);

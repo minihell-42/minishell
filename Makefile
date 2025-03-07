@@ -8,10 +8,13 @@ NAME = minishell
 LIBFT = libft/libft.a
 
 SRCS = srcs/execution/exec.c \
+       srcs/execution/program_path.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/exec_sequence.c \
-       srcs/execution/program_path.c \
+       srcs/execution/exec_redir.c \
+      #  srcs/execution/testing_all.c \
+      #  srcs/execution/testing_redir.c \
       #  srcs/execution/testing_sequence.c \
       #  srcs/execution/testing_pipe.c \
       #  srcs/execution/testing_cmd.c \
