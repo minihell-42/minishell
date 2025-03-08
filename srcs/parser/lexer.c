@@ -42,9 +42,9 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-// TODO: divide it in smaller funcions, implement ft_strndup, implement ft_isspace, and handle errors
+// TODO: divide it in smaller funcions, 
+// TOSDO: implement ft_strndup and ft_isspace, 
 // TODO: handle quotes
-// TODO: handle ARG token
 // TODO: handle $? expansion
 t_token	*lexer_tokenize(char *input)
 {
@@ -52,9 +52,11 @@ t_token	*lexer_tokenize(char *input)
 	t_token	*current;
 	t_token	*new_token;
 	char	*start;
+	int		is_first_word;
 
 	head = NULL;
 	current = NULL;
+	is_first_word = 1;
 	while (*input)
 	{
 		while (*input && isspace(*input))
@@ -62,9 +64,15 @@ t_token	*lexer_tokenize(char *input)
 		if (!*input)
 			break ;
 		if (*input == '|')
+		{
 			new_token = create_token(ft_strdup("|"), TKN_PIPE);
+			is_first_word = 1;
+		}
 		else if (*input == ';')
+		{
 			new_token = create_token(ft_strdup(";"), TKN_SEMICOLON);
+			is_first_word = 1;
+		}
 		else if (*input == '>')
 		{
 			if (*(input + 1) == '>')
@@ -74,6 +82,7 @@ t_token	*lexer_tokenize(char *input)
 			}
 			else
 				new_token = create_token(ft_strdup(">"), TKN_REDIR_OUT);
+			is_first_word = 1;
 		}
 		else if (*input == '<')
 		{
@@ -84,9 +93,13 @@ t_token	*lexer_tokenize(char *input)
 			}
 			else
 				new_token = create_token(ft_strdup("<"), TKN_REDIR_IN);
+			is_first_word = 1;
 		}
 		else if (*input == '\n')
+		{
 			new_token = create_token(ft_strdup("\n"), TKN_NEWLINE);
+			is_first_word = 1;
+		}
 		else if (*input == '$')
 		{
 			start = input;
@@ -97,9 +110,13 @@ t_token	*lexer_tokenize(char *input)
 		else
 		{
 			start = input;
-			while (*input && !isspace(*input) && *input != '|' && *input != ';' && *input != '<' && *input != '>' && *input != '\n')
+			while (*input && !isspace(*input) && *input != '|' && *input != ';' && *input != '<' && *input != '>' && *input != '\n' && *input != '$')
 				input++;
-			new_token = create_token(strndup(start, input - start), TKN_CMD);
+			if (is_first_word)
+				new_token = create_token(strndup(start, input - start), TKN_CMD);
+			else
+				new_token = create_token(strndup(start, input - start), TKN_ARG);
+			is_first_word = 0;
 		}
 		if (!new_token)
 			return (NULL);
