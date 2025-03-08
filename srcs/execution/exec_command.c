@@ -54,6 +54,8 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 	int		pid;
 	char	*program_path;
 
+	if (tree->cmd_type >= ECHO && tree->cmd_type <= EXIT)
+		return (handle_builtins(tree, ctx, &envp));
 	program_path = get_program_path(tree->argv[0], envp);
 	if (!program_path)
 	{

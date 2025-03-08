@@ -35,4 +35,7 @@ int		exec_redir(t_tree *tree, t_context *ctx, char **envp);
 // PROGRAM PATH
 char	*get_program_path(char *cmd, char **envp);
 
+// BUILTINS
+int		handle_builtins(t_tree *tree, t_context *ctx, char ***envp);
+
 #endif
