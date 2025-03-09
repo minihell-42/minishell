@@ -2,6 +2,14 @@
 // this will be removed
 #include <ctype.h>
 
+/**
+ * Creates a new token with the given value and type.
+ *
+ * @param value The value of the token.
+ * @param type The type of the token.
+ *
+ * @returns A pointer to the newly created token.
+ */
 t_token	*create_token(char *value, t_token_type type)
 {
 	t_token	*token;
@@ -15,6 +23,13 @@ t_token	*create_token(char *value, t_token_type type)
 	return (token);
 }
 
+/**
+ * Frees the memory allocated for a linked list of tokens.
+ *
+ * @param tokens A pointer to the head of the token linked list.
+ *
+ * @returns None
+ */
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;
@@ -30,6 +45,13 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+/**
+ * Skips over whitespace characters in a string.
+ *
+ * @param input A pointer to a pointer to the input string.
+ *
+ * @returns None
+ */
 void	skip_whitespace(char **input)
 {
 	while (**input && isspace(**input))

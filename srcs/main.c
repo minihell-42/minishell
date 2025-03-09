@@ -1,5 +1,12 @@
 #include "shell.h"
 
+/**
+ * Checks for unmatched quotes in the input string.
+ *
+ * @param input The input string to check for unmatched quotes.
+ *
+ * @return 1 if there are unmatched quotes, 0 otherwise.
+ */
 int	check_unmatched_quotes(char *input)
 {
 	int	single_quote;
@@ -20,6 +27,8 @@ int	check_unmatched_quotes(char *input)
 	return (0);
 }
 
+// TODO: handle signals
+// TODO: improve quotes handling
 int	main(void)
 {
 	char	*input;
@@ -44,7 +53,6 @@ int	main(void)
 		}
 		tokens = lexer_tokenizer(input);
 		print_tokens(tokens);
-		// parse_tokens(tokens);
 		free_tokens(tokens);
 		free(input);
 	}

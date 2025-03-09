@@ -1,6 +1,13 @@
 #include "parser.h"
 #include <ctype.h>
 
+/**
+ * Tokenizes redirection symbols in the input string.
+ *
+ * @param input The input string to tokenize.
+ *
+ * @returns A token representing the redirection symbol found in the input.
+ */
 t_token	*tokenize_redirections(char *input)
 {
 	t_token	*token;
@@ -24,6 +31,13 @@ t_token	*tokenize_redirections(char *input)
 	return (token);
 }
 
+/**
+ * Tokenizes pipes and separators in the input string.
+ *
+ * @param input The input string to tokenize.
+ *
+ * @returns A token representing the pipe or newline character.
+ */
 t_token	*tokenize_pipes_and_separators(char *input)
 {
 	t_token	*token;
@@ -37,6 +51,13 @@ t_token	*tokenize_pipes_and_separators(char *input)
 	return (token);
 }
 
+/**
+ * Tokenizes an environment variable from the input string.
+ *
+ * @param input A pointer to the input string containing the environment variable.
+ *
+ * @returns A token representing the environment variable.
+ */
 t_token	*tokenize_env_var(char **input)
 {
 	t_token	*token;
@@ -55,6 +76,14 @@ t_token	*tokenize_env_var(char **input)
 	return (token);
 }
 
+/**
+ * Tokenizes the input command and argument.
+ *
+ * @param input Double pointer to the input string.
+ * @param is_first_word Pointer to a flag indicating if it is the first word.
+ *
+ * @returns A pointer to the tokenized command or argument.
+ */
 t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 {
 	t_token	*token;
@@ -74,6 +103,13 @@ t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 	return (token);
 }
 
+/**
+ * Prints the tokens in a linked list of tokens.
+ *
+ * @param tokens A pointer to the head of the linked list of tokens.
+ *
+ * @returns None
+ */
 void	print_tokens(t_token *tokens)
 {
 	t_token	*current;
