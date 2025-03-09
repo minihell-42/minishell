@@ -43,7 +43,7 @@ t_token	*tokenize_env_var(char **input)
 	char	*start;
 
 	start = *input;
-	if(*(*input + 1) == '?')
+	if (*(*input + 1) == '?')
 	{
 		(*input) += 2;
 		token = create_token(ft_strdup("$?"), TKN_ENV_VAR);
@@ -73,6 +73,7 @@ t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 		token = create_token(strndup(start, *input - start), TKN_ARG);
 	return (token);
 }
+
 void	print_tokens(t_token *tokens)
 {
 	t_token	*current;
@@ -80,7 +81,7 @@ void	print_tokens(t_token *tokens)
 	current = tokens;
 	while (current)
 	{
-		printf("start\n");
+		printf("------- NEW TOKEN -------\n");
 		printf("Token: %s\n", current->value);
 		printf("Type: %d\n", current->type);
 		current = current->next;

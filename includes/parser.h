@@ -74,8 +74,12 @@ struct					s_tree
 };
 
 // LEXER
+t_token					*get_next_token(char **input, int *is_first_word);
 t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
+void					skip_whitespace(char **input);
+void					append_token(t_token **head, t_token **current,
+							t_token *new_token);
 void					free_tokens(t_token *tokens);
 
 // TOKENS
@@ -95,7 +99,8 @@ t_cmd_type				is_builtin(char *cmd);
 int						validate_syntax(t_token *tokens);
 
 // AST
-t_tree					*create_ast_node(t_node_type type, char **argv, int argc, t_cmd_type cmd_type);
+t_tree					*create_ast_node(t_node_type type, char **argv,
+							int argc, t_cmd_type cmd_type);
 void					print_ast(t_tree *root, int depth);
 void					free_ast(t_tree *root);
 #endif
