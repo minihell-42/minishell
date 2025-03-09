@@ -43,8 +43,7 @@ void	free_tokens(t_token *tokens)
 }
 
 // TODO: divide it in smaller funcions, 
-// TOSDO: implement ft_strndup and ft_isspace, 
-// TODO: handle quotes
+// TODO: implement strndup and ft_isspace, 
 // TODO: handle $? expansion
 t_token	*lexer_tokenize(char *input)
 {
@@ -63,41 +62,15 @@ t_token	*lexer_tokenize(char *input)
 			input++;
 		if (!*input)
 			break ;
-		if (*input == '|')
+		if (*input == '<' || *input == '>')
 		{
-			new_token = create_token(ft_strdup("|"), TKN_PIPE);
+			new_token = tokenize_redirections(input);
+			input += ft_strlen(new_token->value) - 1;
 			is_first_word = 1;
 		}
-		else if (*input == ';')
+		else if (*input == '|' || *input == '\n')
 		{
-			new_token = create_token(ft_strdup(";"), TKN_SEMICOLON);
-			is_first_word = 1;
-		}
-		else if (*input == '>')
-		{
-			if (*(input + 1) == '>')
-			{
-				new_token = create_token(ft_strdup(">>"), TKN_REDIR_APPEND);
-				input++;
-			}
-			else
-				new_token = create_token(ft_strdup(">"), TKN_REDIR_OUT);
-			is_first_word = 1;
-		}
-		else if (*input == '<')
-		{
-			if (*(input + 1) == '<')
-			{
-				new_token = create_token(ft_strdup("<<"), TKN_HERE_DOC);
-				input++;
-			}
-			else
-				new_token = create_token(ft_strdup("<"), TKN_REDIR_IN);
-			is_first_word = 1;
-		}
-		else if (*input == '\n')
-		{
-			new_token = create_token(ft_strdup("\n"), TKN_NEWLINE);
+			new_token = tokenize_pipes_and_separators(input);
 			is_first_word = 1;
 		}
 		else if (*input == '$')
@@ -110,7 +83,8 @@ t_token	*lexer_tokenize(char *input)
 		else
 		{
 			start = input;
-			while (*input && !isspace(*input) && *input != '|' && *input != ';' && *input != '<' && *input != '>' && *input != '\n' && *input != '$')
+			while (*input && !isspace(*input) && *input != '|' && *input != '<'
+				&& *input != '>' && *input != '\n')
 				input++;
 			if (is_first_word)
 				new_token = create_token(strndup(start, input - start), TKN_CMD);
