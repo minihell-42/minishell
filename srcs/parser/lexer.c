@@ -18,7 +18,8 @@
  * Parses the input string to extract the next token.
  *
  * @param input A pointer to the input string.
- * @param is_first_word A pointer to a flag indicating if the token is the first word.
+ * @param is_first_word A pointer to a flag indicating if the token is 
+ * the first word.
  *
  * @returns A pointer to the next token extracted from the input string.
  */

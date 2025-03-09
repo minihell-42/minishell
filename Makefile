@@ -7,16 +7,23 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-SRCS = $(shell find $(SRC_DIR) -name "*.c")
-# SRCS = srcs/execution/exec.c \
-#        srcs/execution/exec_command.c \
-#        srcs/execution/exec_pipe.c \
-#        srcs/execution/exec_sequence.c \
-#        srcs/execution/program_path.c \
-#        srcs/execution/testing_sequence.c \
-#        srcs/execution/testing_pipe.c \
-#        srcs/execution/testing_cmd.c \
-#        srcs/parser/parser.c
+# SRCS = $(shell find $(SRC_DIR) -name "*.c") --> find all files in srcs
+SRCS = srcs/main.c \
+			 srcs/execution/exec.c \
+       srcs/execution/exec_command.c \
+       srcs/execution/exec_pipe.c \
+       srcs/execution/exec_sequence.c \
+       srcs/execution/program_path.c \
+			 srcs/parser/lexer.c \
+			 srcs/parser/lexer_utils.c \
+			 srcs/parser/parser.c \
+			 srcs/parser/parser_utils.c \
+			 srcs/parser/token.c \
+			 srcs/parser/ast.c \
+#      srcs/execution/testing_sequence.c \
+#      srcs/execution/testing_pipe.c \
+#      srcs/execution/testing_cmd.c \
+#      srcs/parser/parser.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

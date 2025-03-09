@@ -54,7 +54,8 @@ t_token	*tokenize_pipes_and_separators(char *input)
 /**
  * Tokenizes an environment variable from the input string.
  *
- * @param input A pointer to the input string containing the environment variable.
+ * @param input A pointer to the input string containing 
+ * the environment variable.
  *
  * @returns A token representing the environment variable.
  */
