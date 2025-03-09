@@ -25,7 +25,6 @@ typedef enum s_token_type
 	TKN_REDIR_IN,
 	TKN_REDIR_OUT,
 	TKN_REDIR_APPEND,
-	TKN_SEMICOLON,
 	TKN_NEWLINE,
 	TKN_END
 }						t_token_type;
@@ -82,6 +81,7 @@ void					free_tokens(t_token *tokens);
 // TOKENS
 t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
+t_token					*tokenize_command(char **input);
 void					print_tokens(t_token *tokens);
 
 // PARSER
@@ -90,9 +90,11 @@ t_tree					*parse_command(t_token **tokens);
 t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
 t_tree					*parse_sequence(t_token **tokens);
+t_cmd_type				is_builtin(char *cmd);
+int						validate_syntax(t_token *tokens);
 
 // AST
-t_tree					*create_ast_node(t_node_type type, char *value);
+t_tree					*create_ast_node(t_node_type type, char **argv, int argc, t_cmd_type cmd_type);
 void					print_ast(t_tree *root, int depth);
 void					free_ast(t_tree *root);
 #endif
