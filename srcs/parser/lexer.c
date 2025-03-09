@@ -75,10 +75,18 @@ t_token	*lexer_tokenize(char *input)
 		}
 		else if (*input == '$')
 		{
+			if (*(input + 1) == '?')
+			{
+				new_token = create_token(ft_strdup("$?"), TKN_ENV_VAR);
+				input++;
+			}
+			else
+			{
 			start = input;
 			while (*input && (ft_isalnum(*input) || *input == '_'))
 				input++;
 			new_token = create_token(strndup(start, input - start), TKN_ENV_VAR);
+			}
 		}
 		else
 		{
