@@ -37,6 +37,42 @@ t_token	*tokenize_pipes_and_separators(char *input)
 	return (token);
 }
 
+t_token	*tokenize_env_var(char **input)
+{
+	t_token	*token;
+	char	*start;
+
+	start = *input;
+	if(*(*input + 1) == '?')
+	{
+		(*input) += 2;
+		token = create_token(ft_strdup("$?"), TKN_ENV_VAR);
+	}
+	(*input)++;
+	while (*input && (ft_isalnum(**input) || **input == '_'))
+		(*input)++;
+	token = create_token(strndup(start, *input - start), TKN_ENV_VAR);
+	return (token);
+}
+
+t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
+{
+	t_token	*token;
+	char	*start;
+
+	start = *input;
+	while (**input && !isspace(**input) && **input != '|' && **input != '<'
+		&& **input != '>' && **input != '\n')
+		(*input)++;
+	if (*is_first_word)
+	{
+		token = create_token(strndup(start, *input - start), TKN_CMD);
+		*is_first_word = 0;
+	}
+	else
+		token = create_token(strndup(start, *input - start), TKN_ARG);
+	return (token);
+}
 void	print_tokens(t_token *tokens)
 {
 	t_token	*current;

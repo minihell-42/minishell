@@ -81,7 +81,8 @@ void					free_tokens(t_token *tokens);
 // TOKENS
 t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
-t_token					*tokenize_command(char **input);
+t_token					*tokenize_env_var(char **input);
+t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
 void					print_tokens(t_token *tokens);
 
 // PARSER
