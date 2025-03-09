@@ -48,7 +48,7 @@ void	skip_whitespace(char **input)
 		(*input)++;
 }
 
-t_token	*lexer_tokenize(char *input)
+t_token	*lexer_tokenizer(char *input)
 {
 	t_token	*head;
 	t_token	*current;

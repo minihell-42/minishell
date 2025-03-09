@@ -74,7 +74,7 @@ struct					s_tree
 };
 
 // LEXER
-t_token					*lexer_tokenize(char *input);
+t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
 void					free_tokens(t_token *tokens);
 

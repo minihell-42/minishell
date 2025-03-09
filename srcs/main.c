@@ -42,7 +42,7 @@ int	main(void)
 			input = ft_strjoin(input, new_input);
 			free(new_input);
 		}
-		tokens = lexer_tokenize(input);
+		tokens = lexer_tokenizer(input);
 		print_tokens(tokens);
 		// parse_tokens(tokens);
 		free_tokens(tokens);
