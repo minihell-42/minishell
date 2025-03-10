@@ -50,5 +50,10 @@ char	*ft_getenv(char *name, char **envp);
 void	update_pwd(char *old_pwd, char ***envp);
 int		set_env_var(char *var_string, char ***envp);
 void	*ft_realloc(void *ptr, size_t new_size);
+int		is_valid_identifier(char *str);
+int		print_sorted_env(char **envp);
+void	sort_env(char **env, int count);
+void	print_export_format(char **env);
+void	ft_free_array(char **array);
 
 #endif
