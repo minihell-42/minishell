@@ -232,13 +232,15 @@
 // {
 // 	(void)argc;
 // 	(void)argv;
+// 	char	**shell_env;
+// 	shell_env = copy_environment(envp);
 // 	printf("Starting sequence tests...\n");
-// 	test_simple_sequence(envp);
-// 	test_sequence_with_pipe(envp);
-// 	test_complex_sequence(envp);
-// 	test_many_sequences(envp);
-// 	test_error_in_sequence(envp);
-// 	test_pipe_and_error(envp);
+// 	test_simple_sequence(shell_env);
+// 	test_sequence_with_pipe(shell_env);
+// 	test_complex_sequence(shell_env);
+// 	test_many_sequences(shell_env);
+// 	test_error_in_sequence(shell_env);
+// 	test_pipe_and_error(shell_env);
 // 	printf("All sequence tests completed.\n");
 // 	return (0);
 // }

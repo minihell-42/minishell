@@ -201,12 +201,15 @@
 // {
 // 	(void)argc;
 // 	(void)argv;
+// 	char	**shell_env;
+// 	shell_env = copy_environment(envp);
+
 // 	printf("Starting pipe tests...\n");
-// 	test_simple_pipe(envp);
-// 	test_multiple_pipes(envp);
-// 	test_complex_pipes(envp);
-// 	test_error_handling(envp);
-// 	test_large_data(envp);
+// 	test_simple_pipe(shell_env);
+// 	test_multiple_pipes(shell_env);
+// 	test_complex_pipes(shell_env);
+// 	test_error_handling(shell_env);
+// 	test_large_data(shell_env);
 // 	printf("All pipe tests completed.\n");
 // 	return (0);
 // }

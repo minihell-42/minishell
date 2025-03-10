@@ -303,6 +303,8 @@
 // {
 //     (void)argc;
 //     (void)argv;
+// 	char	**shell_env;
+// 	shell_env = copy_environment(envp);
     
 //     // Command arguments
 //     char *cat_args[] = {NULL};
@@ -337,67 +339,67 @@
 //     // Test 1: Basic pipe with input redirection (using < operator)
 //     printf("\nTest 1: Basic pipe with input redirection (using <)\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input1.txt", NULL, 0, envp);
+//                         "test_input1.txt", NULL, 0, shell_env);
     
 //     // Test 1b: Basic pipe with cat argument
 //     printf("\nTest 1b: Basic pipe with cat argument\n");
 //     char *cat_with_file[] = {"test_input1.txt", NULL};
 //     test_pipe_with_redir("cat", cat_with_file, "grep", grep_args,
-//                         NULL, NULL, 0, envp);
+//                         NULL, NULL, 0, shell_env);
     
 //     // Test 2: Pipe with output redirection (using < operator)
 //     printf("\nTest 2: Pipe with output redirection (using <)\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input1.txt", "output1.txt", 0, envp);
+//                         "test_input1.txt", "output1.txt", 0, shell_env);
     
 //     // Test 2b: Pipe with output redirection (using cat argument)
 //     printf("\nTest 2b: Pipe with output redirection (using cat argument)\n");
 //     test_pipe_with_redir("cat", cat_with_file, "grep", grep_args,
-//                         NULL, "output1b.txt", 0, envp);
+//                         NULL, "output1b.txt", 0, shell_env);
     
 //     // Test 3: Pipe with both input and output redirection
 //     printf("\nTest 3: Pipe with both input and output redirection\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input1.txt", "output2.txt", 0, envp);
+//                         "test_input1.txt", "output2.txt", 0, shell_env);
     
 //     // Test 4: Pipe with sort and output
 //     printf("\nTest 4: Pipe with sort\n");
 //     test_pipe_with_redir("cat", cat_args, "sort", sort_args,
-//                         "test_input1.txt", "sorted1.txt", 0, envp);
+//                         "test_input1.txt", "sorted1.txt", 0, shell_env);
     
 //     // Test 5: Multiple files through pipe
 //     printf("\nTest 5: Different input file\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input2.txt", "output3.txt", 0, envp);
+//                         "test_input2.txt", "output3.txt", 0, shell_env);
     
 //     // Test 6: Count lines through pipe
 //     printf("\nTest 6: Counting lines through pipe\n");
 //     test_pipe_with_redir("cat", cat_args, "wc", wc_args,
-//                         "test_input1.txt", "count1.txt", 0, envp);
+//                         "test_input1.txt", "count1.txt", 0, shell_env);
     
 //     // Test 7: Sort and grep combination
 //     printf("\nTest 7: Sort and grep combination\n");
 //     test_pipe_with_redir("sort", sort_args, "grep", grep_args,
-//                         "test_input2.txt", "sorted_grep.txt", 0, envp);
+//                         "test_input2.txt", "sorted_grep.txt", 0, shell_env);
     
 //     // Test 8: Nonexistent input file (should show error)
 //     printf("\nTest 8: Nonexistent input file\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "nonexistent.txt", "error_out.txt", 0, envp);
+//                         "nonexistent.txt", "error_out.txt", 0, shell_env);
     
 //     // Test 9: Write to same output file (should overwrite)
 //     printf("\nTest 9: Overwriting output file\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input1.txt", "same_output.txt", 0, envp);
+//                         "test_input1.txt", "same_output.txt", 0, shell_env);
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input2.txt", "same_output.txt", 0, envp);
+//                         "test_input2.txt", "same_output.txt", 0, shell_env);
     
 //     // Test 10: Test append redirection
 //     printf("\nTest 10: Append output\n");
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input1.txt", "append_output.txt", 1, envp);
+//                         "test_input1.txt", "append_output.txt", 1, shell_env);
 //     test_pipe_with_redir("cat", cat_args, "grep", grep_args,
-//                         "test_input2.txt", "append_output.txt", 1, envp);
+//                         "test_input2.txt", "append_output.txt", 1, shell_env);
     
 //     printf("\n=== ALL PIPE TESTS COMPLETED ===\n");
     

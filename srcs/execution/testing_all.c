@@ -260,16 +260,19 @@
 // {
 // 	(void)argc;
 // 	(void)argv;
+// 	char	**shell_env;
+// 	shell_env = copy_environment(envp);
+
 
 // 	printf("=== Starting Comprehensive Execution Tests ===\n");
 
 // 	// Test complex combinations
-// 	test_complex_pipe_redir_sequence(envp);
-// 	test_multiple_redirections(envp);
-// 	test_complex_pipeline(envp);
+// 	test_complex_pipe_redir_sequence(shell_env);
+// 	test_multiple_redirections(shell_env);
+// 	test_complex_pipeline(shell_env);
 
 // 	// Test error cases
-// 	test_error_cases(envp);
+// 	test_error_cases(shell_env);
 
 // 	printf("\n=== All Tests Completed ===\n");
 // 	return (0);
