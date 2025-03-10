@@ -2,9 +2,8 @@
 
 char	*ft_getenv(char *name, char **envp)
 {
-	int		i;
-	int		len;
-	char	*tmp;
+	int	i;
+	int	len;
 
 	if (!name || !envp)
 		return (NULL);

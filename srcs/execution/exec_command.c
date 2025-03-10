@@ -14,9 +14,10 @@
 
 static void	write_cmd_error(t_tree *tree)
 {
-	write(STDERR_FILENO, "minishell: ", 11);
-	write(STDERR_FILENO, tree->argv[0], ft_strlen(tree->argv[0]));
-	write(STDERR_FILENO, ": command not found\n", 20);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(tree->argv[0], STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
 static void	handle_sys_error(char *path, char *msg)
