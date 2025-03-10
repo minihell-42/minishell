@@ -45,4 +45,10 @@ int		builtin_unset(int argc, char **argv, char ***envp);
 int		builtin_env(char **envp);
 int		builtin_exit(int argc, char **argv);
 
+// BUILTIN UTILS
+char	*ft_getenv(char *name, char **envp);
+void	update_pwd(char *old_pwd, char ***envp);
+int		set_env_var(char *var_string, char ***envp);
+void	*ft_realloc(void *ptr, size_t new_size);
+
 #endif

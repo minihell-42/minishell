@@ -4,11 +4,10 @@ static int	exec_builtins(t_tree *tree, char ***envp)
 {
 	int	children;
 
-	(void)envp;
 	if (tree->cmd_type == ECHO)
 		children = builtin_echo(tree->argc, tree->argv);
-	// else if (tree->cmd_type == CD)
-	// 	children = builtin_cd(tree->argc, tree->argv, envp);
+	else if (tree->cmd_type == CD)
+		children = builtin_cd(tree->argc, tree->argv, envp);
 	// else if (tree->cmd_type == PWD)
 	// 	children = builtin_pwd();
 	// else if (tree->cmd_type == EXPORT)
