@@ -54,6 +54,7 @@ int		is_valid_identifier(char *str);
 int		print_sorted_env(char **envp);
 void	sort_env(char **env, int count);
 void	print_export_format(char **env);
+void	unset_env_var(char *name, char ***envp);
 void	ft_free_array(char **array);
 
 #endif
