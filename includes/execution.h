@@ -37,5 +37,12 @@ char	*get_program_path(char *cmd, char **envp);
 
 // BUILTINS
 int		handle_builtins(t_tree *tree, t_context *ctx, char ***envp);
+int		builtin_echo(int argc, char **argv);
+int		builtin_cd(int argc, char **argv, char ***envp);
+int		builtin_pwd(void);
+int		builtin_export(int argc, char **argv, char ***envp);
+int		builtin_unset(int argc, char **argv, char ***envp);
+int		builtin_env(char **envp);
+int		builtin_exit(int argc, char **argv);
 
 #endif

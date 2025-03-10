@@ -82,7 +82,7 @@
 // 	(void)argv;
 
 // 	// Test 1: Simple command
-// 	tree = create_cmd_node("grep PATH /etc/passwd", OTHER);
+// 	tree = create_cmd_node("echo hello world", OTHER);
 // 	if (!tree)
 // 	{
 // 		printf("Failed to create tree\n");

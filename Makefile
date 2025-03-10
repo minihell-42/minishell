@@ -13,11 +13,13 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/exec_sequence.c \
        srcs/execution/exec_redir.c \
+       srcs/execution/built-ins/exec_builtins.c \
+       srcs/execution/built-ins/echo.c \
+      #  srcs/execution/testing_cmd.c \
       #  srcs/execution/testing_all.c \
       #  srcs/execution/testing_redir.c \
       #  srcs/execution/testing_sequence.c \
       #  srcs/execution/testing_pipe.c \
-      #  srcs/execution/testing_cmd.c \
       #  srcs/parser/parser.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
