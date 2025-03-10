@@ -2,8 +2,10 @@
 
 int	builtin_env(char **envp)
 {
-	int i;
+	int	i;
 
+	if (!envp)
+		return (1);
 	i = 0;
 	while (envp[i])
 	{

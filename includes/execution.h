@@ -57,4 +57,7 @@ void	print_export_format(char **env);
 void	unset_env_var(char *name, char ***envp);
 void	ft_free_array(char **array);
 
+// ENVIRONMENT MANAGEMENT
+char	**copy_environment(char **original_env);
+
 #endif

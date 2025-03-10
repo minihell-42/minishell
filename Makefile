@@ -17,9 +17,14 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/built-ins/echo.c \
        srcs/execution/built-ins/cd.c \
        srcs/execution/built-ins/pwd.c \
+       srcs/execution/built-ins/export.c \
+       srcs/execution/built-ins/unset.c \
+       srcs/execution/built-ins/env.c \
        srcs/execution/built-ins/utils.c \
        srcs/execution/built-ins/utils2.c \
-       srcs/execution/testing_cmd.c \
+       srcs/execution/built-ins/utils3.c \
+      #  srcs/execution/testing_builtins.c \
+      #  srcs/execution/testing_cmd.c \
       #  srcs/execution/testing_all.c \
       #  srcs/execution/testing_redir.c \
       #  srcs/execution/testing_sequence.c \
