@@ -44,7 +44,6 @@ typedef enum e_node_type
 {
 	NODE_CMD,
 	NODE_PIPE,
-	NODE_SEQUENCE,
 	NODE_REDIR,
 	NODE_ARG,
 }						t_node_type;
@@ -94,7 +93,6 @@ t_tree					*parse_tokens(t_token *tokens);
 t_tree					*parse_command(t_token **tokens);
 t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
-t_tree					*parse_sequence(t_token **tokens);
 t_cmd_type				is_builtin(char *cmd);
 int						validate_syntax(t_token *tokens);
 

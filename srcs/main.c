@@ -64,6 +64,7 @@ int	main(void)
 			free(new_input);
 		}
 		tokens = lexer_tokenizer(input);
+		print_tokens(tokens);
 		free_tokens(tokens);
 		free(input);
 	}

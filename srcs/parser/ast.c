@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
-t_tree	*create_ast_node(t_node_type type, char *value);
+t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
+			t_cmd_type cmd_type);
 void	print_ast(t_tree *root, int depth);
 void	free_ast(t_tree *root);

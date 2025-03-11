@@ -12,8 +12,8 @@
 
 #include "parser.h"
 
-t_tree	*parse_tokens(t_token *tokens);
-t_tree	*parse_command(t_token **tokens);
-t_tree	*parse_redirection(t_token **tokens);
-t_tree	*parse_pipeline(t_token **tokens);
-t_tree	*parse_sequence(t_token **tokens);
+// TODO: Gives back the type of the command
+t_cmd_type	is_builtin(char *cmd);
+
+// TODO: Checks for syntax errors before parsing (e.x | |, > <, etc)
+int			validate_syntax(t_token *tokens);
