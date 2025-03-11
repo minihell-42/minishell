@@ -17,6 +17,7 @@
 
 typedef enum s_token_type
 {
+	TKN_CMD,
 	TKN_ARG,
 	TKN_ENV_VAR,
 	TKN_PIPE,
@@ -24,7 +25,6 @@ typedef enum s_token_type
 	TKN_REDIR_IN,
 	TKN_REDIR_OUT,
 	TKN_REDIR_APPEND,
-	TKN_SEMICOLON,
 	TKN_NEWLINE,
 	TKN_END
 }						t_token_type;
@@ -44,7 +44,6 @@ typedef enum e_node_type
 {
 	NODE_CMD,
 	NODE_PIPE,
-	NODE_SEQUENCE,
 	NODE_REDIR,
 	NODE_ARG,
 }						t_node_type;
@@ -73,4 +72,33 @@ struct					s_tree
 	t_tree				*right;
 };
 
+// LEXER
+t_token					*get_next_token(char **input, int *is_first_word);
+t_token					*lexer_tokenizer(char *input);
+t_token					*create_token(char *value, t_token_type type);
+void					skip_whitespace(char **input);
+void					append_token(t_token **head, t_token **current,
+							t_token *new_token);
+void					free_tokens(t_token *tokens);
+
+// TOKENS
+t_token					*tokenize_redirections(char *input);
+t_token					*tokenize_pipes_and_separators(char *input);
+t_token					*tokenize_env_var(char **input);
+t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
+void					print_tokens(t_token *tokens);
+
+// PARSER
+t_tree					*parse_tokens(t_token *tokens);
+t_tree					*parse_command(t_token **tokens);
+t_tree					*parse_redirection(t_token **tokens);
+t_tree					*parse_pipeline(t_token **tokens);
+t_cmd_type				is_builtin(char *cmd);
+int						validate_syntax(t_token *tokens);
+
+// AST
+t_tree					*create_ast_node(t_node_type type, char **argv,
+							int argc, t_cmd_type cmd_type);
+void					print_ast(t_tree *root, int depth);
+void					free_ast(t_tree *root);
 #endif
