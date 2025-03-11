@@ -7,12 +7,12 @@ OBJ_DIR = obj
 NAME = minishell
 
 LIBFT = libft/libft.a
-
-SRCS = srcs/execution/exec.c \
-       srcs/execution/program_path.c \
+# SRCS = $(shell find $(SRC_DIR) -name "*.c") --> find all files in srcs
+SRCS = srcs/main.c \
+       srcs/execution/exec.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
-       srcs/execution/exec_sequence.c \
+       srcs/execution/program_path.c \
        srcs/execution/exec_redir.c \
        srcs/execution/built-ins/exec_builtins.c \
        srcs/execution/built-ins/echo.c \
@@ -25,7 +25,12 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/built-ins/utils.c \
        srcs/execution/built-ins/utils2.c \
        srcs/execution/built-ins/utils3.c \
-      #  srcs/parser/parser.c
+       srcs/parser/lexer.c \
+       srcs/parser/lexer_utils.c \
+       srcs/parser/parser.c \
+       srcs/parser/parser_utils.c \
+       srcs/parser/tokens.c \
+       srcs/parser/ast.c \
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
@@ -35,7 +40,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L/opt/homebrew/lib -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
