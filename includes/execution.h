@@ -56,6 +56,7 @@ void	sort_env(char **env, int count);
 void	print_export_format(char **env);
 void	unset_env_var(char *name, char ***envp);
 void	ft_free_array(char **array);
+int		is_numeric(char *str);
 
 // ENVIRONMENT MANAGEMENT
 char	**copy_environment(char **original_env);

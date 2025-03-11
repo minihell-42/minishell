@@ -20,13 +20,29 @@ void	unset_env_var(char *name, char ***envp)
 	j = 0;
 	while ((*envp)[i])
 	{
-		if (ft_strncmp((*envp)[i], name, len) != 0 || (*envp)[i][len] != '=')
+		if (ft_strncmp((*envp)[i], name, len) || (*envp)[i][len] != '=')
 			new_env[j++] = ft_strdup((*envp)[i]);
 		i++;
 	}
 	new_env[j] = NULL;
 	ft_free_array(*envp);
 	*envp = new_env;
+}
+
+int	is_numeric(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	ft_free_array(char **array)

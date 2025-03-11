@@ -24,7 +24,7 @@ void	update_pwd(char *old_pwd, char ***envp)
 	char	*pwd_var;
 	char	*oldpwd_var;
 
-	if (getcwd(cwd, PATH_MAX) != NULL)
+	if (getcwd(cwd, PATH_MAX))
 	{
 		pwd_var = ft_strjoin("PWD=", cwd);
 		oldpwd_var = ft_strjoin("OLDPWD=", old_pwd);
