@@ -15,6 +15,7 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/exec_redir.c \
        srcs/execution/built-ins/exec_builtins.c \
        srcs/execution/built-ins/echo.c \
+       srcs/execution/built-ins/exit.c \
        srcs/execution/built-ins/cd.c \
        srcs/execution/built-ins/pwd.c \
        srcs/execution/built-ins/export.c \
