@@ -37,7 +37,8 @@
 // }
 
 // // Function to create a redirection node with both input and output
-// t_tree *create_input_redir_node(t_tree *cmd_node, char *input_file, char *output_file, int append)
+// t_tree *create_redir_node(t_tree *cmd_node, char *input_file, int input_type, 
+//                           char *output_file, int output_type)
 // {
 //     t_tree *node;
     
@@ -54,13 +55,25 @@
     
 //     // Set input redirection
 //     node->input_file = input_file ? ft_strdup(input_file) : NULL;
-//     node->input_type = input_file ? TKN_REDIR_IN : 0;
+//     node->input_type = input_type;
     
 //     // Set output redirection
 //     node->output_file = output_file ? ft_strdup(output_file) : NULL;
-//     node->output_type = output_file ? (append ? TKN_REDIR_APPEND : TKN_REDIR_OUT) : 0;
+//     node->output_type = output_type;
     
 //     return (node);
+// }
+
+// // Helper function for backward compatibility
+// t_tree *create_input_redir_node(t_tree *cmd_node, char *input_file, char *output_file, int append)
+// {
+//     int output_type = 0;
+    
+//     if (output_file)
+//         output_type = append ? TKN_REDIR_APPEND : TKN_REDIR_OUT;
+    
+//     return create_redir_node(cmd_node, input_file, input_file ? TKN_REDIR_IN : 0, 
+//                             output_file, output_type);
 // }
 
 // // Function to free the tree
@@ -87,6 +100,69 @@
 //         free(tree->output_file);
     
 //     free(tree);
+// }
+
+// // Function to test heredoc redirection
+// int test_heredoc_redirection(char *cmd, char **args, char *delimiter, 
+//                              char *output_file, int append, char **envp)
+// {
+//     t_tree *cmd_node;
+//     t_tree *redir_node;
+    
+//     printf("\n--- Testing: %s << %s %s %s ---\n", 
+//            cmd, delimiter, output_file ? (append ? ">>" : ">") : "", 
+//            output_file ? output_file : "");
+    
+//     // Create nodes
+//     cmd_node = create_command_node(cmd, args);
+//     if (!cmd_node)
+//     {
+//         printf("Error: Failed to create command node\n");
+//         return (-1);
+//     }
+    
+//     // Create redirection node with heredoc input
+//     redir_node = create_redir_node(cmd_node, delimiter, TKN_HERE_DOC, 
+//                                    output_file, output_file ? 
+//                                    (append ? TKN_REDIR_APPEND : TKN_REDIR_OUT) : 0);
+    
+//     if (!redir_node)
+//     {
+//         printf("Error: Failed to create redir node\n");
+//         free_tree(cmd_node);
+//         return (-1);
+//     }
+    
+//     // Execute and get result
+//     printf("Enter text for heredoc. End with '%s'\n", delimiter);
+//     exec(redir_node, envp);
+    
+//     // Clean up
+//     free_tree(redir_node);
+    
+//     printf("--- Test complete ---\n");
+    
+//     // If output file was created, display its contents
+//     if (output_file)
+//     {
+//         int fd = open(output_file, O_RDONLY);
+//         char buffer[1024];
+//         ssize_t bytes_read;
+        
+//         if (fd != -1)
+//         {
+//             printf("Output file contents:\n");
+//             while ((bytes_read = read(fd, buffer, sizeof(buffer) - 1)) > 0)
+//             {
+//                 buffer[bytes_read] = '\0';
+//                 printf("%s", buffer);
+//             }
+//             printf("\n");
+//             close(fd);
+//         }
+//     }
+    
+//     return (0);
 // }
 
 // // Function to test combined input and output redirection
@@ -199,6 +275,86 @@
 //     node->output_file = NULL;
     
 //     return (node);
+// }
+
+// // Test heredoc with pipe
+// int test_heredoc_with_pipe(char *cmd1, char **args1, char *cmd2, char **args2,
+//                            char *delimiter, char *output_file, int append, char **envp)
+// {
+//     t_tree *cmd1_node;
+//     t_tree *cmd2_node;
+//     t_tree *pipe_node;
+//     t_tree *redir_node;
+    
+//     printf("\n--- Testing: %s | %s << %s %s %s ---\n",
+//            cmd1,
+//            cmd2,
+//            delimiter,
+//            output_file ? (append ? ">>" : ">") : "",
+//            output_file ? output_file : "");
+    
+//     cmd1_node = create_command_node(cmd1, args1);
+//     if (!cmd1_node)
+//     {
+//         printf("Error: Failed to create first command node\n");
+//         return (-1);
+//     }
+    
+//     cmd2_node = create_command_node(cmd2, args2);
+//     if (!cmd2_node)
+//     {
+//         printf("Error: Failed to create second command node\n");
+//         free_tree(cmd1_node);
+//         return (-1);
+//     }
+    
+//     pipe_node = create_pipe_node(cmd1_node, cmd2_node);
+//     if (!pipe_node)
+//     {
+//         printf("Error: Failed to create pipe node\n");
+//         free_tree(cmd1_node);
+//         free_tree(cmd2_node);
+//         return (-1);
+//     }
+    
+//     // Create redirection node with heredoc input
+//     redir_node = create_redir_node(pipe_node, delimiter, TKN_HERE_DOC, 
+//                                    output_file, output_file ? 
+//                                    (append ? TKN_REDIR_APPEND : TKN_REDIR_OUT) : 0);
+    
+//     if (!redir_node)
+//     {
+//         printf("Error: Failed to create redir node\n");
+//         free_tree(pipe_node);
+//         return (-1);
+//     }
+    
+//     printf("Enter text for heredoc. End with '%s'\n", delimiter);
+//     exec(redir_node, envp);
+    
+//     if (output_file)
+//     {
+//         int fd = open(output_file, O_RDONLY);
+//         if (fd != -1)
+//         {
+//             char buffer[1024];
+//             ssize_t bytes_read;
+            
+//             printf("\nOutput file contents:\n");
+//             while ((bytes_read = read(fd, buffer, sizeof(buffer) - 1)) > 0)
+//             {
+//                 buffer[bytes_read] = '\0';
+//                 printf("%s", buffer);
+//             }
+//             printf("\n");
+//             close(fd);
+//         }
+//     }
+    
+//     free_tree(redir_node);
+    
+//     printf("--- Test complete ---\n");
+//     return (0);
 // }
 
 // // Simplified pipe test function
@@ -334,6 +490,31 @@
 //     write(fd, content2, strlen(content2));
 //     close(fd);
     
+//     printf("\n=== TESTING HEREDOC FUNCTIONALITY ===\n");
+    
+//     // Test 1: Basic heredoc
+//     printf("\nTest 1: Basic heredoc with cat\n");
+//     test_heredoc_redirection("cat", cat_args, "EOF", NULL, 0, shell_env);
+    
+//     // Test 2: Heredoc with output redirection
+//     printf("\nTest 2: Heredoc with output redirection\n");
+//     test_heredoc_redirection("cat", cat_args, "EOF", "heredoc_output.txt", 0, shell_env);
+    
+//     // Test 3: Heredoc with grep
+//     printf("\nTest 3: Heredoc with grep\n");
+//     test_heredoc_redirection("grep", grep_args, "EOF", "heredoc_grep.txt", 0, shell_env);
+    
+//     // Test 4: Heredoc with pipe
+//     printf("\nTest 4: Heredoc with pipe\n");
+//     test_heredoc_with_pipe("cat", cat_args, "grep", grep_args, "EOF", "heredoc_pipe.txt", 0, shell_env);
+    
+//     // Test 5: Heredoc with append
+//     printf("\nTest 5: Heredoc with append\n");
+//     test_heredoc_redirection("cat", cat_args, "EOF", "heredoc_append.txt", 1, shell_env);
+//     test_heredoc_redirection("echo", grep_args, "EOF", "heredoc_append.txt", 1, shell_env);
+    
+//     printf("\n=== HEREDOC TESTS COMPLETED ===\n");
+    
 //     printf("\n=== TESTING PIPES WITH REDIRECTIONS ===\n");
     
 //     // Test 1: Basic pipe with input redirection (using < operator)
@@ -405,7 +586,8 @@
     
 //     // Display all output files
 //     printf("\n=== FINAL OUTPUT FILES CONTENTS ===\n");
-//     char *output_files[] = {"output1.txt", "output2.txt", "output3.txt", 
+//     char *output_files[] = {"heredoc_output.txt", "heredoc_grep.txt", "heredoc_pipe.txt", 
+//                            "heredoc_append.txt", "output1.txt", "output2.txt", "output3.txt", 
 //                            "sorted1.txt", "count1.txt", "sorted_grep.txt", 
 //                            "same_output.txt", "append_output.txt", NULL};
     

@@ -1,5 +1,6 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes
+LDFLAGS = -lreadline
 
 SRC_DIR = srcs
 OBJ_DIR = obj
@@ -24,10 +25,10 @@ SRCS = srcs/execution/exec.c \
        srcs/execution/built-ins/utils.c \
        srcs/execution/built-ins/utils2.c \
        srcs/execution/built-ins/utils3.c \
+      #  srcs/execution/testing_redir.c \
       #  srcs/execution/testing_builtins.c \
       #  srcs/execution/testing_cmd.c \
       #  srcs/execution/testing_all.c \
-      #  srcs/execution/testing_redir.c \
       #  srcs/execution/testing_sequence.c \
       #  srcs/execution/testing_pipe.c \
       #  srcs/parser/parser.c
@@ -40,7 +41,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
