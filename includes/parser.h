@@ -70,6 +70,10 @@ struct					s_tree
 	int					argc;
 	t_tree				*left;
 	t_tree				*right;
+	t_token_type		input_type;
+	t_token_type		output_type;
+	char				*input_file;
+	char				*output_file;
 };
 
 // LEXER

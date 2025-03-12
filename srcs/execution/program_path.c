@@ -2,8 +2,13 @@
 
 static char	*handle_absolute_path(char *cmd)
 {
+	char	*path;
+
 	if (access(cmd, F_OK | X_OK) == 0)
-		return (cmd);
+	{
+		path = ft_strdup(cmd);
+		return (path);
+	}
 	return (NULL);
 }
 
@@ -68,16 +73,22 @@ static char	*handle_relative_path(char *cmd, char **envp)
 
 char	*get_program_path(char *cmd, char **envp)
 {
-	char *program_path;
-	char *cmd_copy;
+	char	*program_path;
+	char	*cmd_copy;
 
 	cmd_copy = ft_strdup(cmd);
 	if (!cmd_copy)
 		return (NULL);
 	if (cmd_copy[0] == '/')
+	{
 		program_path = handle_absolute_path(cmd_copy);
+		free(cmd_copy);
+		return (program_path);
+	}
 	else
+	{
 		program_path = handle_relative_path(cmd_copy, envp);
-	free(cmd_copy);
-	return (program_path);
+		free(cmd_copy);
+		return (program_path);
+	}
 }
