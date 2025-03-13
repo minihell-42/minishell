@@ -9,7 +9,7 @@ OBJS_DIR = obj
 INCS_DIR = include
 PRINTF_DIR = src/ft_printf
 
-SRCS = $(SRCS_DIR)/ft_strncmp.c $(SRCS_DIR)/ft_strcmp.c $(SRCS_DIR)/ft_isascii.c $(SRCS_DIR)/ft_isalnum.c $(SRCS_DIR)/ft_isalpha.c $(SRCS_DIR)/ft_isdigit.c\
+SRCS = $(SRCS_DIR)/ft_isspace.c $(SRCS_DIR)/ft_strncmp.c $(SRCS_DIR)/ft_strcmp.c $(SRCS_DIR)/ft_isascii.c $(SRCS_DIR)/ft_isalnum.c $(SRCS_DIR)/ft_isalpha.c $(SRCS_DIR)/ft_isdigit.c\
 	$(SRCS_DIR)/ft_isprint.c $(SRCS_DIR)/ft_atoi.c $(SRCS_DIR)/ft_atol.c $(SRCS_DIR)/ft_bzero.c $(SRCS_DIR)/ft_calloc.c $(SRCS_DIR)/ft_memchr.c\
 	$(SRCS_DIR)/ft_memcmp.c $(SRCS_DIR)/ft_memcpy.c $(SRCS_DIR)/ft_memmove.c $(SRCS_DIR)/ft_memset.c $(SRCS_DIR)/ft_strchr.c\
 	$(SRCS_DIR)/ft_strdup.c $(SRCS_DIR)/ft_strlcat.c $(SRCS_DIR)/ft_strlcpy.c $(SRCS_DIR)/ft_strlen.c $(SRCS_DIR)/ft_strnstr.c\

@@ -13,8 +13,8 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <stdlib.h>
 # include <limits.h>
+# include <stdlib.h>
 
 typedef struct s_list
 {
@@ -22,6 +22,7 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+int					ft_isspace(int c);
 int					ft_atoi(const char *str);
 long				ft_atol(const char *str);
 void				ft_bzero(void *s, size_t n);
