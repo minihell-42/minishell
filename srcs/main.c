@@ -63,6 +63,7 @@ int	main(void)
 			input = ft_strjoin(input, new_input);
 			free(new_input);
 		}
+		add_history(input);
 		tokens = lexer_tokenizer(input);
 		print_tokens(tokens);
 		free_tokens(tokens);
