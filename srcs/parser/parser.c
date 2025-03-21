@@ -28,8 +28,6 @@ t_tree	*parse_tokens(t_token *tokens)
 {
 	if (!tokens || tokens->type == TKN_END)
 		return (NULL);
-	if (!validate_syntax(tokens))
-		return (NULL);
 	return (parse_pipeline(&tokens));
 }
 
@@ -45,7 +43,7 @@ t_tree	*parse_pipeline(t_token **tokens)
 	t_tree	*left_node;
 	t_tree	*pipe_node;
 
-	left_node = parse_command(tokens);
+	left_node = parse_redirection(tokens);
 	if (!left_node)
 		return (NULL);
 	if ((*tokens)->type == TKN_PIPE)
@@ -61,13 +59,78 @@ t_tree	*parse_pipeline(t_token **tokens)
 
 t_tree	*parse_redirection(t_token **tokens)
 {
-	t_tree				*redir_node;
-	t_redir_type	redir_type;
-	char					**argv;
+	char	*filename;
+	t_tree	*cmd_node;
+	t_token	*redir_token;
+	t_tree	*redir_node;
 
-	if (!*tokens)
+	cmd_node = parse_command(tokens);
+	if (!cmd_node)
 		return (NULL);
-	
+	while (*tokens && ((*tokens)->type == TKN_REDIR_IN || (*tokens)->type == TKN_REDIR_OUT || (*tokens)->type == TKN_REDIR_APPEND || (*tokens)->type == TKN_HERE_DOC))
+	{
+		redir_token = *tokens;
+		*tokens = (*tokens)->next;
+		if (!*tokens || (((*tokens)->type != TKN_CMD) && ((*tokens)->type != TKN_ARG)
+		&& ((*tokens)->type != TKN_ENV_VAR)))
+			return (NULL);
+		filename = ft_strdup((*tokens)->value);
+		*tokens = (*tokens)->next;
+		redir_node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
+		if (redir_token->type == TKN_REDIR_IN)
+		{
+			redir_node->redir_type = REDIR_IN;
+			redir_node->input_file = filename;
+		}
+		else if (redir_token->type == TKN_REDIR_OUT)
+		{
+			redir_node->redir_type = REDIR_OUT;
+			redir_node->output_file = filename;
+		}
+		else if (redir_token->type == TKN_REDIR_APPEND)
+		{
+			redir_node->redir_type = REDIR_APPEND;
+			redir_node->output_file = filename;
+		}
+		else if (redir_token->type == TKN_HERE_DOC)
+		{
+			redir_node->redir_type = HERE_DOC;
+			redir_node->input_file = filename;
+		}
+		redir_node->left = cmd_node;
+		cmd_node = redir_node;
+	}
+	return (cmd_node);
 }
 
-t_tree	*parse_command(t_token **tokens);
+t_tree	*parse_command(t_token **tokens)
+{
+	int		i;
+	int		count;
+	char	**argv;
+	t_token	*current;
+	t_cmd_type	cmd_type;
+
+	count = 0;
+	current = *tokens;
+	while (current && (current->type == TKN_CMD || current->type == TKN_ARG || current->type == TKN_ENV_VAR))
+	{
+		count++;
+		current = current->next;
+	}
+	if (count == 0)
+		return (NULL);
+	argv = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!argv)
+		return (NULL);
+	i = 0;
+	while (*tokens && ((*tokens)->type == TKN_CMD || (*tokens)->type == TKN_ARG || (*tokens)->type == TKN_ENV_VAR))
+	{
+		argv[i] = ft_strdup((*tokens)->value);
+		*tokens = (*tokens)->next;
+		i++;
+	}
+	argv[i] = NULL;
+	cmd_type = is_builtin(argv[0]);
+	return (create_ast_node(NODE_CMD, argv, count, cmd_type));
+}

@@ -70,6 +70,7 @@ void	print_ast(t_tree *root, int depth)
   if (!root)
     return ;
   i = 0;
+  printf("\n------- NEW TREE NODE-------\n");
   while (i < depth)
   {
     printf("  ");
@@ -79,6 +80,8 @@ void	print_ast(t_tree *root, int depth)
   {
     printf("CMD: %s\n", root->argv[0]);
     printf("CMD_TYPE: %d\n", root->cmd_type);
+    for (i = 1; i < root->argc; i++)
+      printf("ARG: %s\n", root->argv[i]);
   }
   else if (root->type == NODE_PIPE)
     printf("PIPE\n");
@@ -86,14 +89,11 @@ void	print_ast(t_tree *root, int depth)
   {
     printf("REDIR\n");
     printf("REDIR_TYPE: %d\n", root->redir_type);
+    if (root->input_file)
+      printf("INPUT_FILE: %s\n", root->input_file);
+    if (root->output_file)
+      printf("OUTPUT_FILE: %s\n", root->output_file);
   }
-  else if (root->type == NODE_CMD)
-  {
-    printf("CMD: %s\n", root->argv[0]);
-    printf("CMD_TYPE: %d\n", root->cmd_type);
-  }
-  else if (root->type == NODE_ARG)
-    printf("ARG: %s\n", root->argv[0]);
   print_ast(root->left, depth + 1);
   print_ast(root->right, depth + 1);
 }
