@@ -66,6 +66,6 @@ void	free_tokens(t_token *tokens)
  */
 void	skip_whitespace(char **input)
 {
-	while (**input && isspace(**input))
+	while (**input && isspace(**input) && **input != '\n')
 		(*input)++;
 }

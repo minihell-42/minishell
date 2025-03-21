@@ -44,8 +44,7 @@ typedef enum e_node_type
 {
 	NODE_CMD,
 	NODE_PIPE,
-	NODE_REDIR,
-	NODE_ARG,
+	NODE_REDIR
 }						t_node_type;
 
 typedef enum e_cmd_type

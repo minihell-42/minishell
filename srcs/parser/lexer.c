@@ -92,10 +92,11 @@ t_token	*lexer_tokenizer(char *input)
 	{
 		new_token = get_next_token(&input, &is_first_word);
 		if (!new_token)
-			return (NULL);
+			break ;
 		append_token(&head, &current, new_token);
 		input++;
 	}
-	current->next = create_token(ft_strdup("\0"), TKN_END);
+	if (current != NULL)
+		current->next = create_token(ft_strdup("\0"), TKN_END);
 	return (head);
 }

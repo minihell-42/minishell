@@ -22,19 +22,23 @@ cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
  * @param tokens The input tokens to be parsed.
  *
  * @returns A pointer to the root of the AST representing the parsed tokens.
- *          Returns NULL if the input tokens are empty or if syntax validation fails.
+ *    Returns NULL if the input tokens are empty or if syntax validation fails.
  */
 t_tree	*parse_tokens(t_token *tokens)
 {
+	if (tokens && tokens->type == TKN_NEWLINE)
+		tokens = tokens->next;
 	if (!tokens || tokens->type == TKN_END)
 		return (NULL);
 	return (parse_pipeline(&tokens));
 }
 
 /**
- * Parses a pipeline of commands and creates an abstract syntax tree (AST) for the pipeline.
+ * Parses a pipeline of commands and creates an 
+ * abstract syntax tree (AST) for the pipeline.
  *
- * @param tokens A pointer to the pointer to the tokens representing the pipeline.
+ * @param tokens A pointer to the pointer to the tokens 
+ * representing the pipeline.
  *
  * @returns A pointer to the root of the AST representing the pipeline.
  */
@@ -57,6 +61,15 @@ t_tree	*parse_pipeline(t_token **tokens)
 	return (left_node);
 }
 
+/**
+ * Parses a redirection and creates an 
+ * abstract syntax tree (AST) for the redirection.
+ *
+ * @param tokens A pointer to the pointer to the tokens 
+ * representing the redirection.
+ *
+ * @returns A pointer to the root of the AST representing the redirection.
+ */
 t_tree	*parse_redirection(t_token **tokens)
 {
 	char	*filename;
@@ -67,12 +80,14 @@ t_tree	*parse_redirection(t_token **tokens)
 	cmd_node = parse_command(tokens);
 	if (!cmd_node)
 		return (NULL);
-	while (*tokens && ((*tokens)->type == TKN_REDIR_IN || (*tokens)->type == TKN_REDIR_OUT || (*tokens)->type == TKN_REDIR_APPEND || (*tokens)->type == TKN_HERE_DOC))
+	while (*tokens && ((*tokens)->type == TKN_REDIR_IN
+			|| (*tokens)->type == TKN_REDIR_OUT || (*tokens)->type
+			== TKN_REDIR_APPEND || (*tokens)->type == TKN_HERE_DOC))
 	{
 		redir_token = *tokens;
 		*tokens = (*tokens)->next;
-		if (!*tokens || (((*tokens)->type != TKN_CMD) && ((*tokens)->type != TKN_ARG)
-		&& ((*tokens)->type != TKN_ENV_VAR)))
+		if (!*tokens || (((*tokens)->type != TKN_CMD) && ((*tokens)->type
+					!= TKN_ARG) && ((*tokens)->type != TKN_ENV_VAR)))
 			return (NULL);
 		filename = ft_strdup((*tokens)->value);
 		*tokens = (*tokens)->next;
@@ -103,17 +118,26 @@ t_tree	*parse_redirection(t_token **tokens)
 	return (cmd_node);
 }
 
+/**
+ * Parses a command and creates an abstract syntax tree (AST) for the command.
+ *
+ * @param tokens A pointer to the pointer to the tokens 
+ * representing the command.
+ *
+ * @returns A pointer to the root of the AST representing the command.
+ */
 t_tree	*parse_command(t_token **tokens)
 {
-	int		i;
-	int		count;
-	char	**argv;
-	t_token	*current;
-	t_cmd_type	cmd_type;
+	t_token			*current;
+	t_cmd_type		cmd_type;
+	int				i;
+	int				count;
+	char			**argv;
 
 	count = 0;
 	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG || current->type == TKN_ENV_VAR))
+	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
+			|| current->type == TKN_ENV_VAR))
 	{
 		count++;
 		current = current->next;
@@ -124,7 +148,8 @@ t_tree	*parse_command(t_token **tokens)
 	if (!argv)
 		return (NULL);
 	i = 0;
-	while (*tokens && ((*tokens)->type == TKN_CMD || (*tokens)->type == TKN_ARG || (*tokens)->type == TKN_ENV_VAR))
+	while (*tokens && ((*tokens)->type == TKN_CMD || (*tokens)->type == TKN_ARG
+			|| (*tokens)->type == TKN_ENV_VAR))
 	{
 		argv[i] = ft_strdup((*tokens)->value);
 		*tokens = (*tokens)->next;
