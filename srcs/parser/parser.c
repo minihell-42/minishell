@@ -16,6 +16,7 @@ cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
 */
 #include "parser.h"
 
+//TODO: error handling
 /**
  * Parses a sequence of tokens to build an abstract syntax tree (AST).
  *
@@ -29,6 +30,8 @@ t_tree	*parse_tokens(t_token *tokens)
 	if (tokens && tokens->type == TKN_NEWLINE)
 		tokens = tokens->next;
 	if (!tokens || tokens->type == TKN_END)
+		return (NULL);
+	if (!validate_syntax(tokens))
 		return (NULL);
 	return (parse_pipeline(&tokens));
 }

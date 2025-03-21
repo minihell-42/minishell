@@ -38,5 +38,51 @@ t_cmd_type	is_builtin(char *cmd)
 	return (OTHER);
 }
 
-// TODO: Checks for syntax errors before parsing (e.g., | |, > <, | >, etc.)
-int	validate_syntax(t_token *tokens);
+/**
+ * Determines if a given token is a redirection token.
+ *
+ * @param type The type of the token.
+ *
+ * @returns 1 if the token is a redirection token, 0 otherwise.
+ */
+int	is_redir(int type)
+{
+	return (type == TKN_REDIR_IN || type == TKN_REDIR_OUT
+		|| type == TKN_REDIR_APPEND || type == TKN_HERE_DOC);
+}
+
+
+// TODO: Make it more strict
+/**
+ * Validates the syntax of the tokens.
+ *
+ * @param tokens A pointer to the head of the token linked list.
+ *
+ * @returns 1 if the syntax is valid, 0 otherwise.
+ */
+int	validate_syntax(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	if (!current || is_redir(current->type) || current->type == TKN_PIPE)
+		return (0);
+	while (current && current->type != TKN_END)
+	{
+		if (current->type == TKN_PIPE)
+		{
+			if (!current->next || is_redir(current->next->type) || current->next->type
+					== TKN_PIPE || current->next->type == TKN_END)
+				return (0);
+		}
+		else if (is_redir(current->type))
+		{
+			if (!current->next || is_redir(current->next->type) || current->next->type
+					== TKN_PIPE || current->next->type == TKN_END)
+				return (0);
+		}
+		current = current->next;
+	}
+	return (1);
+}
+

@@ -32,6 +32,7 @@ t_token	*create_token(char *value, t_token_type type)
 	token->value = value;
 	token->type = type;
 	token->next = NULL;
+	token->prev = NULL;
 	return (token);
 }
 
