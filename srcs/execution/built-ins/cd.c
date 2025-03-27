@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 18:05:26 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/27 18:05:30 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:19:47 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/execution.h"
+#include <limits.h>
+#include <linux/limits.h>
 
 void	print_dir_error(char *path)
 {
