@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/27 18:06:24 by samcasti          #+#    #+#             */
+/*   Updated: 2025/03/27 18:10:10 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/execution.h"
 
 int	builtin_exit(int argc, char **argv)
 {
-	int status;
+	int	status;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (argc == 1)

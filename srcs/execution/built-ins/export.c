@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/27 18:06:30 by samcasti          #+#    #+#             */
+/*   Updated: 2025/03/27 18:10:37 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/execution.h"
 
 int	builtin_export(int argc, char **argv, char ***envp)
 {
-	int i;
-	int result;
+	int	i;
+	int	result;
 
 	result = 0;
 	if (argc == 1)

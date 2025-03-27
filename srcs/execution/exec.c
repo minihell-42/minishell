@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 20:03:02 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/04 17:18:11 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:13:29 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 		return (exec_pipe(tree, ctx, envp));
 	else if (tree->type == NODE_REDIR)
 		return (exec_redir(tree, ctx, envp));
-	// else if (tree->type == NODE_ARG)
-	// 	exec_arg(tree, ctx, envp);
+	else if (tree->type == NODE_ARG)
+		exec_arg(tree, ctx, envp);
 	else
 	{
 		write(STDERR_FILENO, "minishell: invalid node type\n", 29);

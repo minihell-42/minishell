@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/27 18:04:28 by samcasti          #+#    #+#             */
+/*   Updated: 2025/03/27 18:15:51 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/execution.h"
 
 static void	run_heredoc(int pipe_fd[2], char *delimiter)
@@ -10,7 +22,7 @@ static void	run_heredoc(int pipe_fd[2], char *delimiter)
 		line = readline("");
 		if (!line)
 		{
-			ft_putendl_fd("\nminishell: warning: here-document delimited by end-of-file",
+			ft_putendl_fd("\nminishell: warning: delimited by end-of-file",
 				STDERR_FILENO);
 			break ;
 		}
@@ -51,7 +63,8 @@ static int	exec_input_redir(t_tree *tree, t_context *ctx)
 	}
 	else
 	{
-		if ((infile = open(tree->input_file, O_RDONLY)) == -1)
+		infile = open(tree->input_file, O_RDONLY);
+		if (infile == -1)
 		{
 			perror("minishell: open file failed");
 			return (-1);
@@ -75,7 +88,8 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 		flags |= O_APPEND;
 	else if (tree->redir_type == REDIR_OUT)
 		flags |= O_TRUNC;
-	if ((outfile = open(tree->output_file, flags, 0644)) == -1)
+	outfile = open(tree->output_file, flags, 0644);
+	if (outfile == -1)
 	{
 		perror("minishell: open output file failed");
 		return (-1);
