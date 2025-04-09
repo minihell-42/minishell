@@ -22,20 +22,21 @@
  *
  * @returns A pointer to the newly created AST node.
  */
-t_tree	*create_ast_node(t_node_type type, char **argv, int argc, t_cmd_type cmd_type)
+t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
+	t_cmd_type cmd_type)
 {
-  t_tree	*node;
+	t_tree	*node;
 
-  node = malloc(sizeof(t_tree));
-  if (!node)
-    return (NULL);
-  node->type = type;
-  node->cmd_type = cmd_type;
-  node->argv = argv;
-  node->argc = argc;
-  node->left = NULL;
-  node->right = NULL;
-  return (node);
+	node = malloc(sizeof(t_tree));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->cmd_type = cmd_type;
+	node->argv = argv;
+	node->argc = argc;
+	node->left = NULL;
+	node->right = NULL;
+	return (node);
 }
 
 /**
@@ -47,12 +48,12 @@ t_tree	*create_ast_node(t_node_type type, char **argv, int argc, t_cmd_type cmd_
  */
 void	free_ast(t_tree *root)
 {
-  if (!root)
-  return ;
-  free_ast(root->left);
-  free_ast(root->right);
-  free(root->argv);
-  free(root);
+	if (!root)
+		return ;
+	free_ast(root->left);
+	free_ast(root->right);
+	free(root->argv);
+	free(root);
 }
 
 /**
@@ -65,35 +66,35 @@ void	free_ast(t_tree *root)
  */
 void	print_ast(t_tree *root, int depth)
 {
-  int	i;
+	int	i;
 
-  if (!root)
-    return ;
-  i = 0;
-  printf("\n------- NEW TREE NODE-------\n");
-  while (i < depth)
-  {
-    printf("  ");
-    i++;
-  }
-  if (root->type == NODE_CMD)
-  {
-    printf("CMD: %s\n", root->argv[0]);
-    printf("CMD_TYPE: %d\n", root->cmd_type);
-    for (i = 1; i < root->argc; i++)
-      printf("ARG: %s\n", root->argv[i]);
-  }
-  else if (root->type == NODE_PIPE)
-    printf("PIPE\n");
-  else if (root->type == NODE_REDIR)
-  {
-    printf("REDIR\n");
-    printf("REDIR_TYPE: %d\n", root->redir_type);
-    if (root->input_file)
-      printf("INPUT_FILE: %s\n", root->input_file);
-    if (root->output_file)
-      printf("OUTPUT_FILE: %s\n", root->output_file);
-  }
-  print_ast(root->left, depth + 1);
-  print_ast(root->right, depth + 1);
+	if (!root)
+		return ;
+	i = 0;
+	printf("\n------- NEW TREE NODE-------\n");
+	while (i < depth)
+	{
+		printf("  ");
+		i++;
+	}
+	if (root->type == NODE_CMD)
+	{
+		printf("CMD: %s\n", root->argv[0]);
+		printf("CMD_TYPE: %d\n", root->cmd_type);
+		for (i = 1; i < root->argc; i++)
+			printf("ARG: %s\n", root->argv[i]);
+	}
+	else if (root->type == NODE_PIPE)
+		printf("PIPE\n");
+	else if (root->type == NODE_REDIR)
+	{
+		printf("REDIR\n");
+		printf("REDIR_TYPE: %d\n", root->redir_type);
+		if (root->input_file)
+			printf("INPUT_FILE: %s\n", root->input_file);
+		if (root->output_file)
+			printf("OUTPUT_FILE: %s\n", root->output_file);
+	}
+	print_ast(root->left, depth + 1);
+	print_ast(root->right, depth + 1);
 }

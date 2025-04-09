@@ -51,7 +51,6 @@ int	is_redir(int type)
 		|| type == TKN_REDIR_APPEND || type == TKN_HERE_DOC);
 }
 
-
 // TODO: Make it more strict
 /**
  * Validates the syntax of the tokens.
@@ -71,18 +70,19 @@ int	validate_syntax(t_token *tokens)
 	{
 		if (current->type == TKN_PIPE)
 		{
-			if (!current->next || is_redir(current->next->type) || current->next->type
-					== TKN_PIPE || current->next->type == TKN_END)
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
 				return (0);
 		}
 		else if (is_redir(current->type))
 		{
-			if (!current->next || is_redir(current->next->type) || current->next->type
-					== TKN_PIPE || current->next->type == TKN_END)
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
 				return (0);
 		}
 		current = current->next;
 	}
 	return (1);
 }
-
