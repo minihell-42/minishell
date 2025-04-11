@@ -46,6 +46,7 @@ int	main(void)
 	char	*input;
 	char	*new_input;
 	t_token	*tokens;
+	t_tree	*ast;
 
 	while (1)
 	{
@@ -63,9 +64,12 @@ int	main(void)
 			input = ft_strjoin(input, new_input);
 			free(new_input);
 		}
+		add_history(input);
 		tokens = lexer_tokenizer(input);
 		print_tokens(tokens);
+		ast = parse_tokens(tokens);
 		free_tokens(tokens);
+		print_ast(ast, 0);
 		free(input);
 	}
 	return (0);

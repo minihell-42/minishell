@@ -44,8 +44,7 @@ typedef enum e_node_type
 {
 	NODE_CMD,
 	NODE_PIPE,
-	NODE_REDIR,
-	NODE_ARG,
+	NODE_REDIR
 }						t_node_type;
 
 typedef enum e_cmd_type
@@ -60,12 +59,21 @@ typedef enum e_cmd_type
 	OTHER,
 }						t_cmd_type;
 
+typedef enum e_redir_type
+{
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	HERE_DOC,
+}						t_redir_type;
+
 typedef struct s_tree	t_tree;
 
 struct					s_tree
 {
 	t_node_type			type;
 	t_cmd_type			cmd_type;
+	t_redir_type		redir_type;
 	char				**argv;
 	int					argc;
 	t_tree				*left;

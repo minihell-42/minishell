@@ -32,6 +32,7 @@ t_token	*create_token(char *value, t_token_type type)
 	token->value = value;
 	token->type = type;
 	token->next = NULL;
+	token->prev = NULL;
 	return (token);
 }
 
@@ -66,6 +67,6 @@ void	free_tokens(t_token *tokens)
  */
 void	skip_whitespace(char **input)
 {
-	while (**input && isspace(**input))
+	while (**input && isspace(**input) && **input != '\n')
 		(*input)++;
 }
