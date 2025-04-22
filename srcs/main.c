@@ -48,6 +48,7 @@ int	main(void)
 	t_token	*tokens;
 	t_tree	*ast;
 
+	setup_signals();
 	while (1)
 	{
 		input = readline("minishell$ ");
