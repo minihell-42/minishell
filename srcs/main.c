@@ -41,13 +41,17 @@ int	check_unmatched_quotes(char *input)
 
 // TODO: handle signals
 // TODO: improve quotes handling
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	char	*new_input;
 	t_token	*tokens;
 	t_tree	*ast;
+	char **copy_env;
+	(void)argc;
+	(void)argv;
 
+	copy_env = copy_environment(envp);
 	setup_signals();
 	while (1)
 	{
@@ -71,6 +75,7 @@ int	main(void)
 		ast = parse_tokens(tokens);
 		free_tokens(tokens);
 		print_ast(ast, 0);
+		exec(ast, copy_env);
 		free(input);
 	}
 	return (0);
