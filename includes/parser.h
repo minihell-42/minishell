@@ -20,6 +20,7 @@ typedef enum s_token_type
 	TKN_CMD,
 	TKN_ARG,
 	TKN_ENV_VAR,
+	TKN_SHELL_VAR,
 	TKN_PIPE,
 	TKN_HERE_DOC,
 	TKN_REDIR_IN,
@@ -74,6 +75,7 @@ struct					s_tree
 	t_node_type			type;
 	t_cmd_type			cmd_type;
 	t_redir_type		redir_type;
+	int							is_env;
 	char				**argv;
 	int					argc;
 	t_tree				*left;
