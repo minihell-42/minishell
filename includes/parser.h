@@ -90,6 +90,7 @@ struct					s_tree
 t_token					*get_next_token(char **input, int *is_first_word);
 t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
+char					*extract_quoted(char **input, char quote);
 void					skip_whitespace(char **input);
 void					append_token(t_token **head, t_token **current,
 							t_token *new_token);
