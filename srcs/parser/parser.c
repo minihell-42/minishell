@@ -93,27 +93,32 @@ t_tree	*parse_redirection(t_token **tokens)
 					!= TKN_ARG) && ((*tokens)->type != TKN_ENV_VAR)))
 			return (NULL);
 		filename = ft_strdup((*tokens)->value);
+		t_quote_type file_quote = (*tokens)->quote_type;
 		*tokens = (*tokens)->next;
 		redir_node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
 		if (redir_token->type == TKN_REDIR_IN)
 		{
 			redir_node->redir_type = REDIR_IN;
 			redir_node->input_file = filename;
+			redir_node->input_quote = file_quote;
 		}
 		else if (redir_token->type == TKN_REDIR_OUT)
 		{
 			redir_node->redir_type = REDIR_OUT;
 			redir_node->output_file = filename;
+			redir_node->output_quote = file_quote;
 		}
 		else if (redir_token->type == TKN_REDIR_APPEND)
 		{
 			redir_node->redir_type = REDIR_APPEND;
 			redir_node->output_file = filename;
+			redir_node->output_quote = file_quote;
 		}
 		else if (redir_token->type == TKN_HERE_DOC)
 		{
 			redir_node->redir_type = HERE_DOC;
 			redir_node->input_file = filename;
+			redir_node->input_quote = file_quote;
 		}
 		redir_node->left = cmd_node;
 		cmd_node = redir_node;
@@ -136,6 +141,8 @@ t_tree	*parse_command(t_token **tokens)
 	int				i;
 	int				count;
 	char			**argv;
+	t_quote_type	*arg_quotes;
+	t_tree			*node;
 
 	count = 0;
 	current = *tokens;
@@ -148,17 +155,30 @@ t_tree	*parse_command(t_token **tokens)
 	if (count == 0)
 		return (NULL);
 	argv = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!argv)
-		return (NULL);
-	i = 0;
-	while (*tokens && ((*tokens)->type == TKN_CMD || (*tokens)->type == TKN_ARG
-			|| (*tokens)->type == TKN_ENV_VAR))
+	arg_quotes = (t_quote_type *)malloc(sizeof(t_quote_type) * count);
+	if (!argv || !arg_quotes)
 	{
-		argv[i] = ft_strdup((*tokens)->value);
-		*tokens = (*tokens)->next;
+		free(argv);
+		free(arg_quotes);
+		return (NULL);
+	}
+	i = 0;
+	current = *tokens;
+	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
+			|| current->type == TKN_ENV_VAR))
+	{
+		argv[i] = ft_strdup(current->value);
+		arg_quotes[i] = current->quote_type;
+		current = current->next;
 		i++;
 	}
+	*tokens = current;
 	argv[i] = NULL;
 	cmd_type = is_builtin(argv[0]);
-	return (create_ast_node(NODE_CMD, argv, count, cmd_type));
+	node = create_ast_node(NODE_CMD, argv, count, cmd_type);
+	if (node)
+		node->arg_quotes = arg_quotes;
+	else
+		free(arg_quotes);
+	return (node);
 }
