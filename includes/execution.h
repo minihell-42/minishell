@@ -18,6 +18,7 @@
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
 
+typedef struct s_tree t_tree;
 typedef struct s_context
 {
 	int	fd[2];
@@ -60,5 +61,7 @@ int		is_numeric(char *str);
 
 // ENVIRONMENT MANAGEMENT
 char	**copy_environment(char **original_env);
+char	*expand_env_var(char *var, char **envp);
+void	expand_env_vars_in_tree(t_tree *tree, char **envp);
 
 #endif
