@@ -10,6 +10,7 @@ LIBFT = libft/libft.a
 # SRCS = $(shell find $(SRC_DIR) -name "*.c") --> find all files in srcs
 SRCS = srcs/main.c \
        srcs/execution/exec.c \
+       srcs/execution/expand_env.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/program_path.c \

@@ -75,7 +75,6 @@ struct					s_tree
 	t_node_type			type;
 	t_cmd_type			cmd_type;
 	t_redir_type		redir_type;
-	int							is_env;
 	char				**argv;
 	int					argc;
 	t_tree				*left;

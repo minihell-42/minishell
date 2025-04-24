@@ -21,6 +21,7 @@ void	exec(t_tree *tree, char **envp)
 
 	if (!tree)
 		return ;
+	expand_env_vars_in_tree(tree, envp);
 	i = 0;
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
