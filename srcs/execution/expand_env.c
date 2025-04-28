@@ -19,8 +19,7 @@ char	*expand_env_var(char *var, char **envp)
         return (ft_strdup(""));
     if (var[0] != '$')
         return (ft_strdup(var));
-    // Handle $? for exit status - needs to be modified
-    if (ft_strcmp(var, "$?") == 0)
+    if (ft_strcmp(var, "$?") == 0)// Handle $? for exit status - needs to be modified
         return (ft_strdup("0"));
     var_name = var + 1;
     if (!*var_name)
@@ -46,13 +45,12 @@ char	*expand_env_var(char *var, char **envp)
  *
  * @returns 1 if the string contains environment variables, 0 otherwise.
  */
-static int	contains_env_var(char *str)
+int	contains_env_var(char *str)
 {
     int i;
     
     if (!str)
         return (0);
-    
     i = 0;
     while (str[i])
     {
@@ -65,88 +63,104 @@ static int	contains_env_var(char *str)
 }
 
 /**
- * Expands environment variables within a string.
- * 
- * @param str The string that may contain environment variables.
- * @param envp The environment variables array.
- * 
- * @returns A newly allocated string with variables expanded.
+ * Processes a variable within a string
+ *
+ * @param vars The variables struct
+ * @param str The string to process
+ * @param envp The environment variables array
+ * @return The new position in the string
  */
-static char *expand_vars_in_string(char *str, char **envp)
+int process_variable(t_expand_vars *vars, char *str, char **envp)
 {
-    char *result;
-    char *var_start;
-    char *var_end;
-    char *var_name;
-    char *var_value;
-    char *temp;
-    int i, j;
+    char    *temp;
     
+    vars->var_end = vars->var_start + 1;
+    while (*(vars->var_end) && (ft_isalnum(*(vars->var_end)) || *(vars->var_end) == '_'))
+        vars->var_end++;
+    if (vars->var_start[1] == '?')
+        vars->var_end = vars->var_start + 2;
+    vars->var_name = ft_substr(vars->var_start, 0, vars->var_end - vars->var_start);
+    vars->var_value = expand_env_var(vars->var_name, envp);
+    temp = vars->result;
+    vars->result = ft_strjoin(vars->result, vars->var_value);
+    free(temp);
+    free(vars->var_name);
+    free(vars->var_value);
+    return (vars->var_end - str);
+}
+
+/**
+ * Appends text before a variable
+ *
+ * @param vars The variables struct
+ * @param str The string to process
+ * @param i The current position in the string
+ */
+void append_prefix(t_expand_vars *vars, char *str, int i)
+{
+    int     j;
+    char    *temp;
+    char    *prefix;
+    
+    j = vars->var_start - (str + i);
+    if (j > 0)
+    {
+        prefix = ft_substr(str + i, 0, j);
+        temp = vars->result;
+        vars->result = ft_strjoin(vars->result, prefix);
+        free(temp);
+        free(prefix);
+    }
+}
+
+/**
+ * Appends remaining text after all variables
+ *
+ * @param vars The variables struct
+ * @param str The string to process
+ * @param i The current position in the string
+ */
+void append_remainder(t_expand_vars *vars, char *str, int i)
+{
+    char    *temp;
+    
+    temp = vars->result;
+    vars->result = ft_strjoin(vars->result, str + i);
+    free(temp);
+}
+
+/**
+ * Expands environment variables within a string.
+ *
+ * @param str The string to process.
+ * @param envp The environment variables array.
+ *
+ * @returns A newly allocated string with the expanded variables, or a copy of
+ *          the original string if no variables are found.
+ */
+char *expand_vars_in_string(char *str, char **envp)
+{
+    t_expand_vars vars;
+    int           i;
+
     if (!str)
         return (NULL);
-    
-    // If it's just a variable, use the existing function
     if (str[0] == '$' && !ft_strchr(str + 1, '$'))
         return (expand_env_var(str, envp));
-    
-    // Otherwise, we need to handle embedded variables
-    result = ft_strdup("");
-    i = 0;
-    
+    vars.result = ft_strdup("");
+    i = 0;  
     while (str[i])
     {
-        // Find the next $ sign
-        var_start = ft_strchr(str + i, '$');
-        
-        // If no more $ signs, append the rest of the string and break
-        if (!var_start)
+        vars.var_start = ft_strchr(str + i, '$');     
+        if (!vars.var_start)
         {
-            temp = result;
-            result = ft_strjoin(result, str + i);
-            free(temp);
+            append_remainder(&vars, str, i);
             break;
-        }
-        
-        // Append everything up to the $ sign
-        j = var_start - (str + i);
-        if (j > 0)
-        {
-            char *prefix = ft_substr(str + i, 0, j);
-            temp = result;
-            result = ft_strjoin(result, prefix);
-            free(temp);
-            free(prefix);
-        }
-        
-        // Find the end of the variable name
-        var_end = var_start + 1;
-        while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-            var_end++;
-        
-        // Special case for $?
-        if (var_start[1] == '?')
-            var_end = var_start + 2;
-        
-        // Extract the variable name
-        var_name = ft_substr(var_start, 0, var_end - var_start);
-        
-        // Get the variable value
-        var_value = expand_env_var(var_name, envp);
-        
-        // Append the variable value to the result
-        temp = result;
-        result = ft_strjoin(result, var_value);
-        free(temp);
-        
-        // Free temporary strings
-        free(var_name);
-        free(var_value);
-        
-        // Move past the variable
-        i = var_end - str;
+        }   
+        append_prefix(&vars, str, i);
+        i = process_variable(&vars, str, envp);
     }
-    
-    return (result);
+    return (vars.result);
 }
 
 /**

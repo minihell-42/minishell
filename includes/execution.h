@@ -25,6 +25,15 @@ typedef struct s_context
 	int	fd_close;
 }		t_context;
 
+typedef struct s_expand_vars
+{
+    char    *result;
+    char    *var_start;
+    char    *var_end;
+    char    *var_name;
+    char    *var_value;
+}   		t_expand_vars;
+
 // EXECUTION
 void	exec(t_tree *tree, char **envp);
 int		exec_tree(t_tree *tree, t_context *ctx, char **envp);
