@@ -78,30 +78,25 @@ char *expand_vars_in_string(char *str, char **envp)
  * @param tree The command tree to process
  * @param envp The environment variables array
  */
- void expand_cmd_args(t_tree *tree, char **envp)
- {
-     int     i;
-     char    *expanded;
-     
-     i = 0;
-     while (i < tree->argc)
-     {
-         if (tree->argv[i])
-         {
-             if (tree->arg_quotes && tree->arg_quotes[i] == QUOTE_SINGLE)
-             {
-                 // Skip single-quoted strings
-             }
-             else if (contains_env_var(tree->argv[i]))
-             {
-                 expanded = expand_vars_in_string(tree->argv[i], envp);
-                 free(tree->argv[i]);
-                 tree->argv[i] = expanded;
-             }
-         }
-         i++;
-     }
- }
+void expand_cmd_args(t_tree *tree, char **envp)
+{
+    int     i;
+    char    *expanded;
+    
+    i = 0;
+    while (i < tree->argc)
+    {
+        if (tree->argv[i] && 
+            (!tree->arg_quotes || tree->arg_quotes[i] != QUOTE_SINGLE) && 
+            contains_env_var(tree->argv[i]))
+        {
+            expanded = expand_vars_in_string(tree->argv[i], envp);
+            free(tree->argv[i]);
+            tree->argv[i] = expanded;
+        }
+        i++;
+    }
+}
  
  /**
   * Expands environment variables in redirection files
