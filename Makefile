@@ -9,6 +9,7 @@ NAME = minishell
 LIBFT = libft/libft.a
 # SRCS = $(shell find $(SRC_DIR) -name "*.c") --> find all files in srcs
 SRCS = srcs/main.c \
+       srcs/signal.c \
        srcs/execution/exec.c \
        srcs/execution/expand_env.c \
        srcs/execution/expand_env_utils.c \

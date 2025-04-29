@@ -15,6 +15,8 @@
 
 # include "parser.h"
 
+typedef struct s_tree t_tree;
+
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
 

@@ -17,11 +17,12 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	t_token	*tokens;
 	t_tree	*ast;
-	char	**copy_env;
-	
+	char **copy_env;
 	(void)argc;
 	(void)argv;
+
 	copy_env = copy_environment(envp);
+	setup_signals();
 	while (1)
 	{
 		input = readline("minishell$ ");

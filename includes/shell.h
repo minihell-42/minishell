@@ -14,6 +14,9 @@
 # define SHELL_H
 
 # include "../libft/include/libft.h"
+# include "execution.h"
+# include "parser.h"
+# include <linux/limits.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -28,6 +31,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "parser.h"
-# include "execution.h"
+
+// SIGNALS
+void	setup_signals(void);
+
 #endif
