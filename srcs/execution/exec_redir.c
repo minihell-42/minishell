@@ -43,7 +43,7 @@ static int	exec_input_redir(t_tree *tree, t_context *ctx)
 {
 	int	infile;
 
-	if (tree->redir_type == TKN_HERE_DOC)
+	if (tree->redir_type == HERE_DOC)
 	{
 		infile = create_heredoc(tree->input_file);
 		if (infile == -1)
@@ -71,9 +71,9 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 	if (!tree->output_file)
 		return (0);
 	flags = O_WRONLY | O_CREAT;
-	if (tree->redir_type == TKN_REDIR_APPEND)
+	if (tree->redir_type == REDIR_APPEND)
 		flags |= O_APPEND;
-	else if (tree->redir_type == TKN_REDIR_OUT)
+	else if (tree->redir_type == REDIR_OUT)
 		flags |= O_TRUNC;
 	if ((outfile = open(tree->output_file, flags, 0644)) == -1)
 	{

@@ -26,10 +26,24 @@
 t_token	*get_next_token(char **input, int *is_first_word)
 {
 	t_token	*new_token;
+	char	quote;
+	char	*word;
 
 	skip_whitespace(input);
 	if (!**input)
 		return (NULL);
+	if (**input == '\'' || **input == '"')
+	{
+		quote = **input;
+		word = extract_quoted(input, quote);
+		new_token = create_token(word, TKN_ARG);
+		if (quote == '\'')
+			new_token->quote_type = QUOTE_SINGLE;
+		else
+			new_token->quote_type = QUOTE_DOUBLE;
+		*is_first_word = 0;
+		return (new_token);
+	}
 	if (**input == '<' || **input == '>')
 	{
 		new_token = tokenize_redirections(*input);

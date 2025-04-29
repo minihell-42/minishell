@@ -11,6 +11,8 @@ LIBFT = libft/libft.a
 SRCS = srcs/main.c \
        srcs/signal.c \
        srcs/execution/exec.c \
+       srcs/execution/expand_env.c \
+       srcs/execution/expand_env_utils.c \
        srcs/execution/exec_command.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/program_path.c \

@@ -15,6 +15,29 @@
 #include <ctype.h>
 
 /**
+ * Extracts a quoted string from the input string.
+ *
+ * @param input A pointer to a pointer to the input string.
+ * @param quote The quote character to extract.
+ *
+ * @returns The extracted quoted string.
+ */
+char	*extract_quoted(char **input, char quote)
+{
+	char	*start;
+	char	*val;
+	
+	(*input)++;
+	start = *input;
+	while (**input && **input != quote)
+		(*input)++;
+	val = strndup(start, *input - start);
+	if (**input == quote)
+		(*input)++;
+	return (val);
+}
+
+/**
  * Creates a new token with the given value and type.
  *
  * @param value The value of the token.

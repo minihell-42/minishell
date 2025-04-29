@@ -80,10 +80,10 @@ t_token	*tokenize_env_var(char **input)
 	if (*(*input + 1) == '?')
 	{
 		(*input) += 2;
-		return (create_token(ft_strdup("$?"), TKN_ENV_VAR));
+		return (create_token(ft_strdup("$?"), TKN_SHELL_VAR));
 	}
 	(*input)++;
-	while (*input && (ft_isalnum(**input) || **input == '_'))
+	while (*input && (ft_isalpha(**input) || **input == '_'))
 		(*input)++;
 	token = create_token(strndup(start, *input - start), TKN_ENV_VAR);
 	return (token);

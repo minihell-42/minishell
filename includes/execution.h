@@ -20,11 +20,21 @@ typedef struct s_tree t_tree;
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
 
+typedef struct s_tree t_tree;
 typedef struct s_context
 {
 	int	fd[2];
 	int	fd_close;
 }		t_context;
+
+typedef struct s_expand_vars
+{
+    char    *result;
+    char    *var_start;
+    char    *var_end;
+    char    *var_name;
+    char    *var_value;
+}   		t_expand_vars;
 
 // EXECUTION
 void	exec(t_tree *tree, char **envp);
@@ -62,5 +72,11 @@ int		is_numeric(char *str);
 
 // ENVIRONMENT MANAGEMENT
 char	**copy_environment(char **original_env);
+char	*expand_env_var(char *var, char **envp);
+void	expand_env_vars_in_tree(t_tree *tree, char **envp);
+int		contains_env_var(char *str);
+void	append_prefix(t_expand_vars *vars, char *str, int i);
+void	append_remainder(t_expand_vars *vars, char *str, int i);
+int		process_variable(t_expand_vars *vars, char *str, char **envp);
 
 #endif

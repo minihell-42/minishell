@@ -20,6 +20,7 @@ typedef enum s_token_type
 	TKN_CMD,
 	TKN_ARG,
 	TKN_ENV_VAR,
+	TKN_SHELL_VAR,
 	TKN_PIPE,
 	TKN_HERE_DOC,
 	TKN_REDIR_IN,
@@ -29,6 +30,13 @@ typedef enum s_token_type
 	TKN_END
 }						t_token_type;
 
+typedef enum e_quote_type
+{
+	QUOTE_NONE,
+	QUOTE_SINGLE,
+	QUOTE_DOUBLE
+}                       t_quote_type;
+
 typedef struct s_token	t_token;
 
 struct					s_token
@@ -36,6 +44,7 @@ struct					s_token
 	char				*value;
 	int					type;
 	size_t				len;
+	t_quote_type		quote_type;
 	t_token				*next;
 	t_token				*prev;
 };
@@ -69,6 +78,7 @@ typedef enum e_redir_type
 
 typedef struct s_tree	t_tree;
 
+
 struct					s_tree
 {
 	t_node_type			type;
@@ -76,18 +86,22 @@ struct					s_tree
 	t_redir_type		redir_type;
 	char				**argv;
 	int					argc;
+	t_quote_type        *arg_quotes;
 	t_tree				*left;
 	t_tree				*right;
 	t_token_type		input_type;
 	t_token_type		output_type;
 	char				*input_file;
 	char				*output_file;
+	t_quote_type        input_quote;
+	t_quote_type        output_quote;
 };
 
 // LEXER
 t_token					*get_next_token(char **input, int *is_first_word);
 t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
+char					*extract_quoted(char **input, char quote);
 void					skip_whitespace(char **input);
 void					append_token(t_token **head, t_token **current,
 							t_token *new_token);
