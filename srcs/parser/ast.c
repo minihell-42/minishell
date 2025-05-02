@@ -23,7 +23,7 @@
  * @returns A pointer to the newly created AST node.
  */
 t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
-	t_cmd_type cmd_type)
+		t_cmd_type cmd_type)
 {
 	t_tree	*node;
 
@@ -53,17 +53,26 @@ void	free_ast(t_tree *root)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (!root)
 		return ;
 	free_ast(root->left);
 	free_ast(root->right);
-	while (root->argv[i])
+	if (root->argv)
 	{
-		free(root->argv[i]);
-		i++;
+		while (root->argv[++i])
+			free(root->argv[i]);
+		free(root->argv);
 	}
-	free(root->argv);
+	if (root->arg_quotes)
+		free(root->arg_quotes);
+	if (root->type == NODE_REDIR)
+	{
+		if (root->input_file)
+			free(root->input_file);
+		if (root->output_file)
+			free(root->output_file);
+	}
 	free(root);
 }
 
