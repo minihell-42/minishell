@@ -51,10 +51,18 @@ t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
  */
 void	free_ast(t_tree *root)
 {
+	int	i;
+
+	i = 0;
 	if (!root)
 		return ;
 	free_ast(root->left);
 	free_ast(root->right);
+	while (root->argv[i])
+	{
+		free(root->argv[i]);
+		i++;
+	}
 	free(root->argv);
 	free(root);
 }
