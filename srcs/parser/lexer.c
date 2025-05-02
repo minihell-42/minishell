@@ -108,7 +108,6 @@ t_token	*lexer_tokenizer(char *input)
 		if (!new_token)
 			break ;
 		append_token(&head, &current, new_token);
-		input++;
 	}
 	if (current != NULL)
 		current->next = create_token(ft_strdup("\0"), TKN_END);

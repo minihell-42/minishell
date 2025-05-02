@@ -1,6 +1,7 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes
-LDFLAGS = -lreadline
+CFLAGS = -Wall -Wextra -Werror
+READLINE_PATH = /opt/homebrew/opt/readline
+LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 
 SRC_DIR = srcs
 OBJ_DIR = obj
@@ -42,12 +43,13 @@ all: $(LIBFT) $(NAME)
 $(LIBFT):
 	make -C libft
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L/opt/homebrew/lib -lreadline -o $(NAME)
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ -Iincludes -I$(READLINE_PATH)/include
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME)
+
 
 clean:
 	rm -rf $(OBJ_DIR)

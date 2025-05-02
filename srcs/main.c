@@ -35,7 +35,9 @@ int	main(int argc, char **argv, char **envp)
 		free_tokens(tokens);
 		// print_ast(ast, 0);
 		exec(ast, copy_env);
+		free_ast(ast);
 		free(input);
 	}
+	rl_clear_history();
 	return (0);
 }
