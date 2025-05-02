@@ -16,7 +16,7 @@ cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
 */
 #include "parser.h"
 
-//TODO: error handling
+// TODO: error handling
 /**
  * Parses a sequence of tokens to build an abstract syntax tree (AST).
  *
@@ -37,10 +37,10 @@ t_tree	*parse_tokens(t_token *tokens)
 }
 
 /**
- * Parses a pipeline of commands and creates an 
+ * Parses a pipeline of commands and creates an
  * abstract syntax tree (AST) for the pipeline.
  *
- * @param tokens A pointer to the pointer to the tokens 
+ * @param tokens A pointer to the pointer to the tokens
  * representing the pipeline.
  *
  * @returns A pointer to the root of the AST representing the pipeline.
@@ -65,20 +65,21 @@ t_tree	*parse_pipeline(t_token **tokens)
 }
 
 /**
- * Parses a redirection and creates an 
+ * Parses a redirection and creates an
  * abstract syntax tree (AST) for the redirection.
  *
- * @param tokens A pointer to the pointer to the tokens 
+ * @param tokens A pointer to the pointer to the tokens
  * representing the redirection.
  *
  * @returns A pointer to the root of the AST representing the redirection.
  */
 t_tree	*parse_redirection(t_token **tokens)
 {
-	char	*filename;
-	t_tree	*cmd_node;
-	t_token	*redir_token;
-	t_tree	*redir_node;
+	char				*filename;
+	t_quote_type		file_quote;
+	t_tree				*cmd_node;
+	t_token				*redir_token;
+	t_tree				*redir_node;
 
 	cmd_node = parse_command(tokens);
 	if (!cmd_node)
@@ -89,11 +90,12 @@ t_tree	*parse_redirection(t_token **tokens)
 	{
 		redir_token = *tokens;
 		*tokens = (*tokens)->next;
-		if (!*tokens || (((*tokens)->type != TKN_CMD) && ((*tokens)->type
-					!= TKN_ARG) && ((*tokens)->type != TKN_ENV_VAR)))
+		if (!*tokens || (((*tokens)->type != TKN_CMD)
+				&& ((*tokens)->type != TKN_ARG)
+				&& ((*tokens)->type != TKN_ENV_VAR)))
 			return (NULL);
 		filename = ft_strdup((*tokens)->value);
-		t_quote_type file_quote = (*tokens)->quote_type;
+		file_quote = (*tokens)->quote_type;
 		*tokens = (*tokens)->next;
 		redir_node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
 		if (redir_token->type == TKN_REDIR_IN)
@@ -129,7 +131,7 @@ t_tree	*parse_redirection(t_token **tokens)
 /**
  * Parses a command and creates an abstract syntax tree (AST) for the command.
  *
- * @param tokens A pointer to the pointer to the tokens 
+ * @param tokens A pointer to the pointer to the tokens
  * representing the command.
  *
  * @returns A pointer to the root of the AST representing the command.

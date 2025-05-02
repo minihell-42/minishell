@@ -101,8 +101,12 @@ void	print_ast(t_tree *root, int depth)
 	{
 		printf("CMD: %s\n", root->argv[0]);
 		printf("CMD_TYPE: %d\n", root->cmd_type);
-		for (i = 1; i < root->argc; i++)
+		i = 1;
+		while (i < root->argc)
+		{
 			printf("ARG: %s\n", root->argv[i]);
+			i++;
+		}
 	}
 	else if (root->type == NODE_PIPE)
 		printf("PIPE\n");
