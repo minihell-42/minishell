@@ -10,11 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-Command to compile:
-cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
-*/
 #include "parser.h"
+
+// TODO: Make it more strict
+/**
+ * Validates the syntax of the tokens.
+ *
+ * @param tokens A pointer to the head of the token linked list.
+ *
+ * @returns 1 if the syntax is valid, 0 otherwise.
+ */
+int	validate_syntax(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	if (!current || is_redir(current->type) || current->type == TKN_PIPE)
+		return (0);
+	while (current && current->type != TKN_END)
+	{
+		if (current->type == TKN_PIPE)
+		{
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
+				return (0);
+		}
+		else if (is_redir(current->type))
+		{
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
+				return (0);
+		}
+		current = current->next;
+	}
+	return (1);
+}
 
 // TODO: error handling
 /**
@@ -62,61 +94,4 @@ t_tree	*parse_pipeline(t_token **tokens)
 		return (pipe_node);
 	}
 	return (left_node);
-}
-
-/**
- * Parses a command and creates an abstract syntax tree (AST) for the command.
- *
- * @param tokens A pointer to the pointer to the tokens
- * representing the command.
- *
- * @returns A pointer to the root of the AST representing the command.
- */
-t_tree	*parse_command(t_token **tokens)
-{
-	t_token			*current;
-	t_cmd_type		cmd_type;
-	int				i;
-	int				count;
-	char			**argv;
-	t_quote_type	*arg_quotes;
-	t_tree			*node;
-
-	count = 0;
-	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR))
-	{
-		count++;
-		current = current->next;
-	}
-	if (count == 0)
-		return (NULL);
-	argv = (char **)malloc(sizeof(char *) * (count + 1));
-	arg_quotes = (t_quote_type *)malloc(sizeof(t_quote_type) * count);
-	if (!argv || !arg_quotes)
-	{
-		free(argv);
-		free(arg_quotes);
-		return (NULL);
-	}
-	i = 0;
-	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR))
-	{
-		argv[i] = ft_strdup(current->value);
-		arg_quotes[i] = current->quote_type;
-		current = current->next;
-		i++;
-	}
-	*tokens = current;
-	argv[i] = NULL;
-	cmd_type = is_builtin(argv[0]);
-	node = create_ast_node(NODE_CMD, argv, count, cmd_type);
-	if (node)
-		node->arg_quotes = arg_quotes;
-	else
-		free(arg_quotes);
-	return (node);
 }
