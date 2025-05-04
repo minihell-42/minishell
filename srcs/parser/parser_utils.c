@@ -38,19 +38,6 @@ t_cmd_type	is_builtin(char *cmd)
 	return (OTHER);
 }
 
-/**
- * Determines if a given token is a redirection token.
- *
- * @param type The type of the token.
- *
- * @returns 1 if the token is a redirection token, 0 otherwise.
- */
-int	is_redir(int type)
-{
-	return (type == TKN_REDIR_IN || type == TKN_REDIR_OUT
-		|| type == TKN_REDIR_APPEND || type == TKN_HERE_DOC);
-}
-
 // TODO: Make it more strict
 /**
  * Validates the syntax of the tokens.
