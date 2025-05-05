@@ -62,22 +62,12 @@ char	*expand_env_var(char *var, char **envp)
 char	*expand_vars_in_string(char *str, char **envp)
 {
 	t_expand_vars	vars;
-	char			*var_end;
 	int				i;
 
 	if (!str)
 		return (NULL);
-	if (str[0] == '$')
-	{
-		var_end = str + 1;
-		if (*var_end == '?')
-				var_end++;
-		else
-			while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-			var_end++;
-		if (*var_end == '\0')
-			return (expand_env_var(str, envp));
-	}
+	if (is_pure_variable(str))
+		return (expand_env_var(str, envp));
 	vars.result = ft_strdup("");
 	i = 0;
 	while (str[i])

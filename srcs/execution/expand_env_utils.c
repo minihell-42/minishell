@@ -29,12 +29,27 @@ int	contains_env_var(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1]
-			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'
+			&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_'
 				|| str[i + 1] == '?'))
 			return (1);
 		i++;
 	}
 	return (0);
+}
+
+int	is_pure_variable(const char *str)
+{
+	const char	*var_end;
+
+	if (!str || *str != '$')
+		return (0);
+	var_end = str + 1;
+	if (*var_end == '?')
+		var_end++;
+	else
+		while (*var_end && (ft_isalnum((int)*var_end) || *var_end == '_'))
+			var_end++;
+	return (*var_end == '\0');
 }
 
 /**

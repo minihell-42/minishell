@@ -75,6 +75,7 @@ char	**copy_environment(char **original_env);
 char	*expand_env_var(char *var, char **envp);
 void	expand_env_vars_in_tree(t_tree *tree, char **envp);
 int		contains_env_var(char *str);
+int     is_pure_variable(const char *str);
 void	append_prefix(t_expand_vars *vars, char *str, int i);
 void	append_remainder(t_expand_vars *vars, char *str, int i);
 int		process_variable(t_expand_vars *vars, char *str, char **envp);
