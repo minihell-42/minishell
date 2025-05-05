@@ -6,17 +6,49 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 19:15:04 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/03/04 13:03:46 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:59:55 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-Command to compile:
-cc -I includes srcs/parser/parser.c -L/opt/homebrew/lib -lreadline -o minishell
-*/
 #include "parser.h"
 
-//TODO: error handling
+// TODO: Make it more strict
+/**
+ * Validates the syntax of the tokens.
+ *
+ * @param tokens A pointer to the head of the token linked list.
+ *
+ * @returns 1 if the syntax is valid, 0 otherwise.
+ */
+int	validate_syntax(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	if (!current || is_redir(current->type) || current->type == TKN_PIPE)
+		return (0);
+	while (current && current->type != TKN_END)
+	{
+		if (current->type == TKN_PIPE)
+		{
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
+				return (0);
+		}
+		else if (is_redir(current->type))
+		{
+			if (!current->next || is_redir(current->next->type)
+				|| current->next->type == TKN_PIPE
+				|| current->next->type == TKN_END)
+				return (0);
+		}
+		current = current->next;
+	}
+	return (1);
+}
+
+// TODO: error handling
 /**
  * Parses a sequence of tokens to build an abstract syntax tree (AST).
  *
@@ -37,10 +69,10 @@ t_tree	*parse_tokens(t_token *tokens)
 }
 
 /**
- * Parses a pipeline of commands and creates an 
+ * Parses a pipeline of commands and creates an
  * abstract syntax tree (AST) for the pipeline.
  *
- * @param tokens A pointer to the pointer to the tokens 
+ * @param tokens A pointer to the pointer to the tokens
  * representing the pipeline.
  *
  * @returns A pointer to the root of the AST representing the pipeline.
@@ -62,123 +94,4 @@ t_tree	*parse_pipeline(t_token **tokens)
 		return (pipe_node);
 	}
 	return (left_node);
-}
-
-/**
- * Parses a redirection and creates an 
- * abstract syntax tree (AST) for the redirection.
- *
- * @param tokens A pointer to the pointer to the tokens 
- * representing the redirection.
- *
- * @returns A pointer to the root of the AST representing the redirection.
- */
-t_tree	*parse_redirection(t_token **tokens)
-{
-	char	*filename;
-	t_tree	*cmd_node;
-	t_token	*redir_token;
-	t_tree	*redir_node;
-
-	cmd_node = parse_command(tokens);
-	if (!cmd_node)
-		return (NULL);
-	while (*tokens && ((*tokens)->type == TKN_REDIR_IN
-			|| (*tokens)->type == TKN_REDIR_OUT || (*tokens)->type
-			== TKN_REDIR_APPEND || (*tokens)->type == TKN_HERE_DOC))
-	{
-		redir_token = *tokens;
-		*tokens = (*tokens)->next;
-		if (!*tokens || (((*tokens)->type != TKN_CMD) && ((*tokens)->type
-					!= TKN_ARG) && ((*tokens)->type != TKN_ENV_VAR)))
-			return (NULL);
-		filename = ft_strdup((*tokens)->value);
-		t_quote_type file_quote = (*tokens)->quote_type;
-		*tokens = (*tokens)->next;
-		redir_node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
-		if (redir_token->type == TKN_REDIR_IN)
-		{
-			redir_node->redir_type = REDIR_IN;
-			redir_node->input_file = filename;
-			redir_node->input_quote = file_quote;
-		}
-		else if (redir_token->type == TKN_REDIR_OUT)
-		{
-			redir_node->redir_type = REDIR_OUT;
-			redir_node->output_file = filename;
-			redir_node->output_quote = file_quote;
-		}
-		else if (redir_token->type == TKN_REDIR_APPEND)
-		{
-			redir_node->redir_type = REDIR_APPEND;
-			redir_node->output_file = filename;
-			redir_node->output_quote = file_quote;
-		}
-		else if (redir_token->type == TKN_HERE_DOC)
-		{
-			redir_node->redir_type = HERE_DOC;
-			redir_node->input_file = filename;
-			redir_node->input_quote = file_quote;
-		}
-		redir_node->left = cmd_node;
-		cmd_node = redir_node;
-	}
-	return (cmd_node);
-}
-
-/**
- * Parses a command and creates an abstract syntax tree (AST) for the command.
- *
- * @param tokens A pointer to the pointer to the tokens 
- * representing the command.
- *
- * @returns A pointer to the root of the AST representing the command.
- */
-t_tree	*parse_command(t_token **tokens)
-{
-	t_token			*current;
-	t_cmd_type		cmd_type;
-	int				i;
-	int				count;
-	char			**argv;
-	t_quote_type	*arg_quotes;
-	t_tree			*node;
-
-	count = 0;
-	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR))
-	{
-		count++;
-		current = current->next;
-	}
-	if (count == 0)
-		return (NULL);
-	argv = (char **)malloc(sizeof(char *) * (count + 1));
-	arg_quotes = (t_quote_type *)malloc(sizeof(t_quote_type) * count);
-	if (!argv || !arg_quotes)
-	{
-		free(argv);
-		free(arg_quotes);
-		return (NULL);
-	}
-	i = 0;
-	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR))
-	{
-		argv[i] = ft_strdup(current->value);
-		arg_quotes[i] = current->quote_type;
-		current = current->next;
-		i++;
-	}
-	*tokens = current;
-	argv[i] = NULL;
-	cmd_type = is_builtin(argv[0]);
-	node = create_ast_node(NODE_CMD, argv, count, cmd_type);
-	if (node)
-		node->arg_quotes = arg_quotes;
-	else
-		free(arg_quotes);
-	return (node);
 }

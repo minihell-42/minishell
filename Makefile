@@ -32,8 +32,10 @@ SRCS = srcs/main.c \
        srcs/parser/lexer.c \
        srcs/parser/lexer_utils.c \
        srcs/parser/parser.c \
-       srcs/parser/parser_utils.c \
+       srcs/parser/parse_command.c \
+       srcs/parser/parse_redirection.c \
        srcs/parser/tokens.c \
+       srcs/parser/token_handler.c \
        srcs/parser/ast.c \
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

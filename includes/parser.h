@@ -35,7 +35,7 @@ typedef enum e_quote_type
 	QUOTE_NONE,
 	QUOTE_SINGLE,
 	QUOTE_DOUBLE
-}                       t_quote_type;
+}						t_quote_type;
 
 typedef struct s_token	t_token;
 
@@ -78,7 +78,6 @@ typedef enum e_redir_type
 
 typedef struct s_tree	t_tree;
 
-
 struct					s_tree
 {
 	t_node_type			type;
@@ -86,15 +85,15 @@ struct					s_tree
 	t_redir_type		redir_type;
 	char				**argv;
 	int					argc;
-	t_quote_type        *arg_quotes;
+	t_quote_type		*arg_quotes;
 	t_tree				*left;
 	t_tree				*right;
 	t_token_type		input_type;
 	t_token_type		output_type;
 	char				*input_file;
 	char				*output_file;
-	t_quote_type        input_quote;
-	t_quote_type        output_quote;
+	t_quote_type		input_quote;
+	t_quote_type		output_quote;
 };
 
 // LEXER
@@ -112,6 +111,12 @@ t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
 t_token					*tokenize_env_var(char **input);
 t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
+t_token					*handle_quote(char **input, int *is_first_word);
+t_token					*handle_redirection(char **input, int *is_first_word);
+t_token					*handle_pipe_or_newline(char **input,
+							int *is_first_word);
+t_token					*handle_env(char **input);
+t_token					*handle_cmd(char **input, int *is_first_word);
 void					print_tokens(t_token *tokens);
 
 // PARSER
@@ -121,6 +126,7 @@ t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
 t_cmd_type				is_builtin(char *cmd);
 int						validate_syntax(t_token *tokens);
+int						is_redir(int type);
 
 // AST
 t_tree					*create_ast_node(t_node_type type, char **argv,

@@ -26,7 +26,7 @@ char	*extract_quoted(char **input, char quote)
 {
 	char	*start;
 	char	*val;
-	
+
 	(*input)++;
 	start = *input;
 	while (**input && **input != quote)
