@@ -31,8 +31,8 @@ char	*expand_env_var(char *var, char **envp)
 		return (ft_strdup(""));
 	if (var[0] != '$')
 		return (ft_strdup(var));
-	if (ft_strcmp(var, "$?") == 0) // Handle $? for exit status - needs to be modified
-		return (ft_strdup("0"));
+	if (ft_strcmp(var, "$?") == 0)
+		return (ft_itoa(g_signal));
 	var_name = var + 1;
 	if (!*var_name)
 		return (ft_strdup("$"));

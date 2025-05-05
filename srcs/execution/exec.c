@@ -30,6 +30,10 @@ void	exec(t_tree *tree, char **envp)
 	while (i < children)
 	{
 		waitpid(-1, &status, 0);
+		if (WIFEXITED(status))
+			g_signal = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_signal = WTERMSIG(status) + 128;
 		i++;
 	}
 }

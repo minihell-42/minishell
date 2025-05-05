@@ -63,7 +63,8 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 	if (!program_path)
 	{
 		write_cmd_error(tree);
-		return (-1);
+		g_signal = 127;
+		return (0);
 	}
 	pid = fork();
 	if (pid == FORKED_ERROR)
