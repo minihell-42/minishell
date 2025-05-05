@@ -6,13 +6,11 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 12:53:03 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/03/04 13:02:20 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/05/05 11:26:15 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-// this will be removed
-#include <ctype.h>
 
 /**
  * Parses the input string to extract the next token.
@@ -25,43 +23,22 @@
  */
 t_token	*get_next_token(char **input, int *is_first_word)
 {
-	t_token	*new_token;
-	char	quote;
-	char	*word;
+	t_token	*token;
 
 	skip_whitespace(input);
 	if (!**input)
 		return (NULL);
 	if (**input == '\'' || **input == '"')
-	{
-		quote = **input;
-		word = extract_quoted(input, quote);
-		new_token = create_token(word, TKN_ARG);
-		if (quote == '\'')
-			new_token->quote_type = QUOTE_SINGLE;
-		else
-			new_token->quote_type = QUOTE_DOUBLE;
-		*is_first_word = 0;
-		return (new_token);
-	}
+		return (handle_quote(input, is_first_word));
 	if (**input == '<' || **input == '>')
-	{
-		new_token = tokenize_redirections(*input);
-		*input += ft_strlen(new_token->value) - 1;
-		skip_whitespace(input);
-		*is_first_word = 0;
-	}
+		token = handle_redirection(input, is_first_word);
 	else if (**input == '|' || **input == '\n')
-	{
-		new_token = tokenize_pipes_and_separators(*input);
-		*is_first_word = 1;
-		*input += ft_strlen(new_token->value) - 1;
-	}
+		token = handle_pipe_or_newline(input, is_first_word);
 	else if (**input == '$')
-		new_token = tokenize_env_var(input);
+		token = handle_env(input);
 	else
-		new_token = tokenize_cmd_and_arg(input, is_first_word);
-	return (new_token);
+		token = handle_cmd(input, is_first_word);
+	return (token);
 }
 
 /**
