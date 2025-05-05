@@ -52,8 +52,7 @@ static int	count_cmd_tokens(t_token *token)
 
 	count = 0;
 	current = token;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR || current->type == TKN_SHELL_VAR))
+	while (current && (current->type == TKN_CMD || current->type == TKN_ARG))
 	{
 		count++;
 		current = current->next;
@@ -76,8 +75,7 @@ static void	fill_args(char **argv, t_quote_type *arg_quotes, t_token **tokens)
 
 	i = 0;
 	current = *tokens;
-	while (current && (current->type == TKN_CMD || current->type == TKN_ARG
-			|| current->type == TKN_ENV_VAR || current->type == TKN_SHELL_VAR))
+	while (current && (current->type == TKN_CMD || current->type == TKN_ARG))
 	{
 		argv[i] = ft_strdup(current->value);
 		arg_quotes[i] = current->quote_type;

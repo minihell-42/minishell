@@ -34,8 +34,7 @@ int	is_redir(int type)
  */
 static int	is_filename_token(int type)
 {
-	if (type == TKN_CMD || type == TKN_ARG || type == TKN_ENV_VAR
-		|| type == TKN_SHELL_VAR)
+	if (type == TKN_CMD || type == TKN_ARG)
 		return (1);
 	return (0);
 }

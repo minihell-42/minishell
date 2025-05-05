@@ -64,32 +64,6 @@ t_token	*tokenize_pipes_and_separators(char *input)
 }
 
 /**
- * Tokenizes an environment variable from the input string.
- *
- * @param input A pointer to the input string containing 
- * the environment variable.
- *
- * @returns A token representing the environment variable.
- */
-t_token	*tokenize_env_var(char **input)
-{
-	t_token	*token;
-	char	*start;
-
-	start = *input;
-	if (*(*input + 1) == '?')
-	{
-		(*input) += 2;
-		return (create_token(ft_strdup("$?"), TKN_SHELL_VAR));
-	}
-	(*input)++;
-	while (*input && (ft_isalpha(**input) || **input == '_'))
-		(*input)++;
-	token = create_token(strndup(start, *input - start), TKN_ENV_VAR);
-	return (token);
-}
-
-/**
  * Tokenizes the input command and argument.
  *
  * @param input Double pointer to the input string.

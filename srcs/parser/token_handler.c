@@ -50,14 +50,6 @@ t_token	*handle_pipe_or_newline(char **input, int *is_first_word)
 	return (new_token);
 }
 
-t_token	*handle_env(char **input)
-{
-	t_token	*new_token;
-
-	new_token = tokenize_env_var(input);
-	return (new_token);
-}
-
 t_token	*handle_cmd(char **input, int *is_first_word)
 {
 	t_token	*new_token;

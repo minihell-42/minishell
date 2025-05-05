@@ -19,8 +19,6 @@ typedef enum s_token_type
 {
 	TKN_CMD,
 	TKN_ARG,
-	TKN_ENV_VAR,
-	TKN_SHELL_VAR,
 	TKN_PIPE,
 	TKN_HERE_DOC,
 	TKN_REDIR_IN,
@@ -115,7 +113,6 @@ t_token					*handle_quote(char **input, int *is_first_word);
 t_token					*handle_redirection(char **input, int *is_first_word);
 t_token					*handle_pipe_or_newline(char **input,
 							int *is_first_word);
-t_token					*handle_env(char **input);
 t_token					*handle_cmd(char **input, int *is_first_word);
 void					print_tokens(t_token *tokens);
 
