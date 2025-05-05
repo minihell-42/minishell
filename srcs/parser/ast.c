@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:00:02 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/03/10 11:00:06 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/05/05 11:57:57 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,13 @@ t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
 {
 	t_tree	*node;
 
-	node = malloc(sizeof(t_tree));
+	node = ft_calloc(1, sizeof(t_tree));
 	if (!node)
 		return (NULL);
 	node->type = type;
 	node->cmd_type = cmd_type;
 	node->argv = argv;
 	node->argc = argc;
-	node->left = NULL;
-	node->right = NULL;
-	node->arg_quotes = NULL;
 	node->input_quote = QUOTE_NONE;
 	node->output_quote = QUOTE_NONE;
 	return (node);

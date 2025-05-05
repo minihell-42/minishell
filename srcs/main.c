@@ -30,10 +30,10 @@ int	main(int argc, char **argv, char **envp)
 			exit(0);
 		add_history(input);
 		tokens = lexer_tokenizer(input);
-		// print_tokens(tokens);
+		print_tokens(tokens);
 		ast = parse_tokens(tokens);
 		free_tokens(tokens);
-		// print_ast(ast, 0);
+		print_ast(ast, 0);
 		exec(ast, copy_env);
 		free_ast(ast);
 		free(input);
