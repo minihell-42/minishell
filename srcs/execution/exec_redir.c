@@ -1,8 +1,9 @@
 #include "../../includes/execution.h"
 
-static void	run_heredoc(int pipe_fd[2], char *delimiter)
+static void	run_heredoc(int pipe_fd[2], char *delimiter, char **envp)
 {
 	char	*line;
+	char	*expanded;
 
 	ft_putstr_fd("heredoc> ", STDERR_FILENO);
 	while (1)
@@ -19,13 +20,20 @@ static void	run_heredoc(int pipe_fd[2], char *delimiter)
 			free(line);
 			break ;
 		}
-		ft_putendl_fd(line, pipe_fd[STDOUT_FILENO]);
+		if (contains_env_var(line))
+		{
+			expanded = expand_vars_in_string(line, envp);
+			ft_putendl_fd(expanded, pipe_fd[STDOUT_FILENO]);
+			free(expanded);
+		}
+		else
+			ft_putendl_fd(line, pipe_fd[STDOUT_FILENO]);
 		free(line);
 		ft_putstr_fd("heredoc> ", STDERR_FILENO);
 	}
 }
 
-static int	create_heredoc(char *delimiter)
+static int	create_heredoc(char *delimiter, char **envp)
 {
 	int	pipe_fd[2];
 
@@ -34,18 +42,18 @@ static int	create_heredoc(char *delimiter)
 		perror("minishell: pipe failed");
 		return (-1);
 	}
-	run_heredoc(pipe_fd, delimiter);
+	run_heredoc(pipe_fd, delimiter, envp);
 	close(pipe_fd[STDOUT_FILENO]);
 	return (pipe_fd[STDIN_FILENO]);
 }
 
-static int	exec_input_redir(t_tree *tree, t_context *ctx)
+static int	exec_input_redir(t_tree *tree, t_context *ctx, char **envp)
 {
 	int	infile;
 
 	if (tree->redir_type == HERE_DOC)
 	{
-		infile = create_heredoc(tree->input_file);
+		infile = create_heredoc(tree->input_file, envp);
 		if (infile == -1)
 			return (-1);
 	}
@@ -94,7 +102,7 @@ int	exec_redir(t_tree *tree, t_context *ctx, char **envp)
 	redir_ctx = *ctx;
 	if (tree->input_file)
 	{
-		if (exec_input_redir(tree, &redir_ctx) == -1)
+		if (exec_input_redir(tree, &redir_ctx, envp) == -1)
 			return (-1);
 	}
 	if (tree->output_file)
