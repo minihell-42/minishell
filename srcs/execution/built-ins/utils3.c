@@ -20,8 +20,18 @@ void	unset_env_var(char *name, char ***envp)
 	j = 0;
 	while ((*envp)[i])
 	{
-		if (ft_strncmp((*envp)[i], name, len) || (*envp)[i][len] != '=')
-			new_env[j++] = ft_strdup((*envp)[i]);
+		if (ft_strncmp((*envp)[i], name, len) != 0 || ((*envp)[i][len] != '=' && (*envp)[i][len] != '\0'))
+		{
+			new_env[j] = ft_strdup((*envp)[i]);
+			if (!new_env[j])
+			{
+				while(j > 0)
+					free(new_env[--j]);
+				free(new_env);
+				return ;
+			}
+			j++;
+		}
 		i++;
 	}
 	new_env[j] = NULL;
@@ -70,7 +80,7 @@ char	**copy_environment(char **original_env)
 	i = 0;
 	while (original_env[i])
 		i++;
-	new_env = malloc(sizeof(char *) * (i + 1));
+	new_env = malloc(sizeof(char *) * (400));
 	if (!new_env)
 		return (NULL);
 	i = 0;

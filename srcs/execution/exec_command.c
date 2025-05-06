@@ -50,21 +50,21 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	exit(127);
 }
 
-int	exec_command(t_tree *tree, t_context *ctx, char **envp)
+int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 {
 	int		pid;
 	int		status;
 	char	*program_path;
 
-	if (!tree || !ctx || !envp)
+	if (!tree || !ctx || !envp || !*envp)
 		return (-1);
 	if (tree->cmd_type >= ECHO && tree->cmd_type <= EXIT)
 	{
-		status = handle_builtins(tree, ctx, &envp);
+		status = handle_builtins(tree, ctx, envp);
 		g_signal = status;
 		return (0);
 	}
-	program_path = get_program_path(tree->argv[0], envp);
+	program_path = get_program_path(tree->argv[0], *envp);
 	if (!program_path)
 	{
 		write_cmd_error(tree);
@@ -79,7 +79,7 @@ int	exec_command(t_tree *tree, t_context *ctx, char **envp)
 		return (-1);
 	}
 	else if (pid == FORKED_CHILD)
-		exec_child_process(tree, ctx, envp, program_path);
+		exec_child_process(tree, ctx, *envp, program_path);
 	free(program_path);
 	return (1);
 }

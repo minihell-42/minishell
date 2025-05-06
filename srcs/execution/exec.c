@@ -12,7 +12,7 @@
 
 #include "../../includes/execution.h"
 
-void	exec(t_tree *tree, char **envp)
+void	exec(t_tree *tree, char ***envp)
 {
 	t_context	ctx;
 	int			children;
@@ -21,7 +21,12 @@ void	exec(t_tree *tree, char **envp)
 
 	if (!tree)
 		return ;
-	expand_env_vars_in_tree(tree, envp);
+	if (!envp)
+	{
+		write(STDERR_FILENO, "minishell: envp is NULL\n", 26);
+		return ;
+	}
+	expand_env_vars_in_tree(tree, *envp);
 	i = 0;
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
@@ -38,7 +43,7 @@ void	exec(t_tree *tree, char **envp)
 	}
 }
 
-int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
+int	exec_tree(t_tree *tree, t_context *ctx, char ***envp)
 {
 	if (!tree)
 		return (0);

@@ -81,12 +81,12 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 		return (-1);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(ctx->fd_close);
+		close(ctx->fd[STDOUT_FILENO]);
 	ctx->fd[STDOUT_FILENO] = outfile;
 	return (0);
 }
 
-int	exec_redir(t_tree *tree, t_context *ctx, char **envp)
+int	exec_redir(t_tree *tree, t_context *ctx, char ***envp)
 {
 	int			children;
 	t_context	redir_ctx;
