@@ -20,7 +20,10 @@ t_token	*handle_quote(char **input, int *is_first_word)
 
 	quote = **input;
 	word = extract_quoted(input, quote);
-	new_token = create_token(word, TKN_ARG);
+	if (*is_first_word)
+		new_token = create_token(word, TKN_CMD);
+	else
+		new_token = create_token(word, TKN_ARG);
 	if (quote == '\'')
 		new_token->quote_type = QUOTE_SINGLE;
 	else

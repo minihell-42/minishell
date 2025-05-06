@@ -74,19 +74,37 @@ t_token	*tokenize_pipes_and_separators(char *input)
 t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 {
 	t_token	*token;
-	char	*start;
+	char	quote;
+	char	*frag;
+	char	*acc;
+	char	*tmp;
 
-	start = *input;
+	acc = ft_strdup("");
 	while (**input && !isspace(**input) && **input != '|' && **input != '<'
 		&& **input != '>' && **input != '\n')
-		(*input)++;
+	{
+		if (**input == '\'' || **input == '"')
+		{
+			quote = **input;
+			frag = extract_quoted(input, quote);
+		}
+		else
+		{
+			frag = strndup(*input, 1);
+			(*input)++;
+		}
+		tmp = acc;
+		acc = ft_strjoin(acc, frag);
+		free(tmp);
+		free(frag);
+	}
 	if (*is_first_word)
 	{
-		token = create_token(strndup(start, *input - start), TKN_CMD);
+		token = create_token(acc, TKN_CMD);
 		*is_first_word = 0;
 	}
 	else
-		token = create_token(strndup(start, *input - start), TKN_ARG);
+		token = create_token(acc, TKN_ARG);
 	return (token);
 }
 
