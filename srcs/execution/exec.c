@@ -48,10 +48,6 @@ int	exec_tree(t_tree *tree, t_context *ctx, char **envp)
 		return (exec_pipe(tree, ctx, envp));
 	else if (tree->type == NODE_REDIR)
 		return (exec_redir(tree, ctx, envp));
-	else if (tree->type == NODE_REDIR)
-	 	return (exec_redir(tree, ctx, envp));
-	// else if (tree->type == NODE_ARG)
-	// 	exec_arg(tree, ctx, envp);
 	else
 	{
 		write(STDERR_FILENO, "minishell: invalid node type\n", 29);
