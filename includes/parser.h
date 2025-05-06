@@ -19,8 +19,6 @@ typedef enum s_token_type
 {
 	TKN_CMD,
 	TKN_ARG,
-	TKN_ENV_VAR,
-	TKN_SHELL_VAR,
 	TKN_PIPE,
 	TKN_HERE_DOC,
 	TKN_REDIR_IN,
@@ -115,9 +113,7 @@ t_token					*handle_quote(char **input, int *is_first_word);
 t_token					*handle_redirection(char **input, int *is_first_word);
 t_token					*handle_pipe_or_newline(char **input,
 							int *is_first_word);
-t_token					*handle_env(char **input);
 t_token					*handle_cmd(char **input, int *is_first_word);
-void					print_tokens(t_token *tokens);
 
 // PARSER
 t_tree					*parse_tokens(t_token *tokens);
@@ -131,6 +127,10 @@ int						is_redir(int type);
 // AST
 t_tree					*create_ast_node(t_node_type type, char **argv,
 							int argc, t_cmd_type cmd_type);
-void					print_ast(t_tree *root, int depth);
 void					free_ast(t_tree *root);
+
+// DEBUG
+void					print_tokens(t_token *tokens);
+void					print_ast(t_tree *root, int depth);
+
 #endif

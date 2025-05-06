@@ -16,7 +16,7 @@
 # include "../libft/include/libft.h"
 # include "execution.h"
 # include "parser.h"
-// # include <linux/limits.h>
+# include <linux/limits.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -31,6 +31,8 @@
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+
+extern volatile sig_atomic_t  g_signal;
 
 // SIGNALS
 void	setup_signals(void);

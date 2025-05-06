@@ -54,6 +54,7 @@ t_token	*create_token(char *value, t_token_type type)
 		return (NULL);
 	token->value = value;
 	token->type = type;
+	token->quote_type = QUOTE_NONE;
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);

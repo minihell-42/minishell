@@ -34,8 +34,6 @@ t_token	*get_next_token(char **input, int *is_first_word)
 		token = handle_redirection(input, is_first_word);
 	else if (**input == '|' || **input == '\n')
 		token = handle_pipe_or_newline(input, is_first_word);
-	else if (**input == '$')
-		token = handle_env(input);
 	else
 		token = handle_cmd(input, is_first_word);
 	return (token);

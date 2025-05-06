@@ -26,7 +26,7 @@ volatile sig_atomic_t	g_signal = 0;
 void	sigint_handler(int signo)
 {
 	(void)signo;
-	g_signal = SIGINT;
+	g_signal = 128 + SIGINT;
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -55,4 +55,3 @@ void	setup_signals(void)
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
-//TODO: Handle Child process signals

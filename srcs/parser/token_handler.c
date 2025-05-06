@@ -20,7 +20,10 @@ t_token	*handle_quote(char **input, int *is_first_word)
 
 	quote = **input;
 	word = extract_quoted(input, quote);
-	new_token = create_token(word, TKN_ARG);
+	if (*is_first_word)
+		new_token = create_token(word, TKN_CMD);
+	else
+		new_token = create_token(word, TKN_ARG);
 	if (quote == '\'')
 		new_token->quote_type = QUOTE_SINGLE;
 	else
@@ -47,14 +50,6 @@ t_token	*handle_pipe_or_newline(char **input, int *is_first_word)
 	new_token = tokenize_pipes_and_separators(*input);
 	*is_first_word = 1;
 	*input += ft_strlen(new_token->value) - 1;
-	return (new_token);
-}
-
-t_token	*handle_env(char **input)
-{
-	t_token	*new_token;
-
-	new_token = tokenize_env_var(input);
 	return (new_token);
 }
 
