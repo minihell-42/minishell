@@ -44,6 +44,49 @@ t_token	*tokenize_redirections(char *input)
 }
 
 /**
+ * Gets a fragment from the input string.
+ *
+ * @param input Double pointer to the input string.
+ *
+ * @returns The extracted fragment.
+ */
+static char	*get_frag(char **input)
+{
+	char	quote;
+	char	*frag;
+
+	if (**input == '\'' || **input == '"')
+	{
+		quote = **input;
+		frag = extract_quoted(input, quote);
+	}
+	else
+	{
+		frag = strndup(*input, 1);
+		(*input)++;
+	}
+	return (frag);
+}
+
+/**
+ * Appends a fragment to the accumulated string.
+ *
+ * @param acc The accumulated string.
+ * @param frag The fragment to append.
+ *
+ * @returns The updated accumulated string.
+ */
+static char	*append_frag(char *acc, char *frag)
+{
+	char	*tmp;
+
+	tmp = acc;
+	acc = ft_strjoin(acc, frag);
+	free(tmp);
+	return (acc);
+}
+
+/**
  * Tokenizes pipes and separators in the input string.
  *
  * @param input The input string to tokenize.
@@ -74,28 +117,15 @@ t_token	*tokenize_pipes_and_separators(char *input)
 t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 {
 	t_token	*token;
-	char	quote;
 	char	*frag;
 	char	*acc;
-	char	*tmp;
 
 	acc = ft_strdup("");
 	while (**input && !isspace(**input) && **input != '|' && **input != '<'
 		&& **input != '>' && **input != '\n')
 	{
-		if (**input == '\'' || **input == '"')
-		{
-			quote = **input;
-			frag = extract_quoted(input, quote);
-		}
-		else
-		{
-			frag = strndup(*input, 1);
-			(*input)++;
-		}
-		tmp = acc;
-		acc = ft_strjoin(acc, frag);
-		free(tmp);
+		frag = get_frag(input);
+		acc = append_frag(acc, frag);
 		free(frag);
 	}
 	if (*is_first_word)
@@ -106,25 +136,4 @@ t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 	else
 		token = create_token(acc, TKN_ARG);
 	return (token);
-}
-
-/**
- * Prints the tokens in a linked list of tokens.
- *
- * @param tokens A pointer to the head of the linked list of tokens.
- *
- * @returns None
- */
-void	print_tokens(t_token *tokens)
-{
-	t_token	*current;
-
-	current = tokens;
-	while (current)
-	{
-		printf("------- NEW TOKEN -------\n");
-		printf("Token: %s\n", current->value);
-		printf("Type: %d\n", current->type);
-		current = current->next;
-	}
 }

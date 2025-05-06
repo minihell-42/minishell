@@ -37,6 +37,7 @@ SRCS = srcs/main.c \
        srcs/parser/tokens.c \
        srcs/parser/token_handler.c \
        srcs/parser/ast.c \
+       srcs/parser/debug.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
