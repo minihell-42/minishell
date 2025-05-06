@@ -60,9 +60,27 @@ int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 		return (-1);
 	if (tree->cmd_type >= ECHO && tree->cmd_type <= EXIT)
 	{
-		status = handle_builtins(tree, ctx, envp);
-		g_signal = status;
-		return (0);
+		if (ctx->fd[STDIN_FILENO] != STDIN_FILENO || ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		{
+			pid = fork();
+			if (pid == FORKED_ERROR)
+			{
+				perror("minishell: fork failed");
+				return (-1);
+			}
+			else if (pid == FORKED_CHILD)
+			{
+				status = handle_builtins(tree, ctx, envp);
+				exit(status);
+			}
+			return (1);
+		}
+		else
+		{
+			status = handle_builtins(tree, ctx, envp);
+			g_signal = status;
+			return (0);
+		}
 	}
 	program_path = get_program_path(tree->argv[0], *envp);
 	if (!program_path)
