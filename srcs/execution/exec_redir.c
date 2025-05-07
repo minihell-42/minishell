@@ -114,7 +114,7 @@ int	exec_redir(t_tree *tree, t_context *ctx, char ***envp)
 	redir_ctx = *ctx;
 	if (tree->input_file)
 	{
-		if (exec_input_redir(tree, &redir_ctx, envp) == -1)
+		if (exec_input_redir(tree, &redir_ctx, *envp) == -1)
 			return (-1);
 	}
 	if (tree->output_file)

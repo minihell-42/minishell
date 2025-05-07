@@ -41,7 +41,6 @@ void	exec(t_tree *tree, char ***envp);
 int		exec_tree(t_tree *tree, t_context *ctx, char ***envp);
 int		exec_command(t_tree *tree, t_context *ctx, char ***envp);
 int		exec_pipe(t_tree *tree, t_context *ctx, char ***envp);
-int		exec_sequence(t_tree *tree, t_context *ctx, char ***envp);
 int		exec_redir(t_tree *tree, t_context *ctx, char ***envp);
 
 // PROGRAM PATH
