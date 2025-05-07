@@ -12,7 +12,6 @@
 
 #include "parser.h"
 
-// TODO: Make it more strict
 /**
  * Validates the syntax of the tokens.
  *
@@ -20,7 +19,7 @@
  *
  * @returns 1 if the syntax is valid, 0 otherwise.
  */
-int	validate_syntax(t_token *tokens)
+static int	validate_syntax(t_token *tokens)
 {
 	t_token	*current;
 
@@ -48,7 +47,51 @@ int	validate_syntax(t_token *tokens)
 	return (1);
 }
 
-// TODO: error handling
+/**
+ * Prints a syntax error message to the standard error output.
+ *
+ * @param token The token that caused the syntax error.
+ */
+static void	print_syntax_error(char *token)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `",
+		STDERR_FILENO);
+	ft_putstr_fd(token, STDERR_FILENO);
+	ft_putendl_fd("'", STDERR_FILENO);
+}
+
+/**
+ * Retrieves the token that caused the syntax error.
+ *
+ * @param tokens The input tokens to be parsed.
+ *
+ * @returns A string representing the token that caused the syntax error.
+ */
+static char	*get_error_token(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	if (current->type == TKN_PIPE || is_redir(current->type))
+	{
+		if (is_redir(current->type) && (!current->next
+				|| current->next->type == TKN_END))
+			return ("newline");
+		return (current->value);
+	}
+	while (current && current->type != TKN_END)
+	{
+		if (current->type == TKN_PIPE || is_redir(current->type))
+		{
+			if (!current->next || current->next->type == TKN_END)
+				return("newline");
+			return (current->value);
+		}
+		current = current->next;
+	}
+	return ("newline");
+}
+
 /**
  * Parses a sequence of tokens to build an abstract syntax tree (AST).
  *
@@ -59,12 +102,20 @@ int	validate_syntax(t_token *tokens)
  */
 t_tree	*parse_tokens(t_token *tokens)
 {
+	char	*error_tkn;
+
 	if (tokens && tokens->type == TKN_NEWLINE)
 		tokens = tokens->next;
 	if (!tokens || tokens->type == TKN_END)
 		return (NULL);
 	if (!validate_syntax(tokens))
+	{
+		error_tkn = get_error_token(tokens);
+		print_syntax_error(error_tkn);
+		g_signal = 2;
 		return (NULL);
+	}
+		
 	return (parse_pipeline(&tokens));
 }
 
