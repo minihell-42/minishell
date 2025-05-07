@@ -19,7 +19,7 @@ static int	handle_exec_error(int pid[2])
 	return (-1);
 }
 
-static int	exec_left_side(t_tree *left_side, t_context *ctx, char **envp,
+static int	exec_left_side(t_tree *left_side, t_context *ctx, char ***envp,
 		int pid[2])
 {
 	t_context	left_ctx;
@@ -30,7 +30,7 @@ static int	exec_left_side(t_tree *left_side, t_context *ctx, char **envp,
 	return (exec_tree(left_side, &left_ctx, envp));
 }
 
-static int	exec_right_side(t_tree *right_side, t_context *ctx, char **envp,
+static int	exec_right_side(t_tree *right_side, t_context *ctx, char ***envp,
 		int pid[2])
 {
 	t_context	right_ctx;
@@ -41,7 +41,7 @@ static int	exec_right_side(t_tree *right_side, t_context *ctx, char **envp,
 	return (exec_tree(right_side, &right_ctx, envp));
 }
 
-int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
+int	exec_pipe(t_tree *tree, t_context *ctx, char ***envp)
 {
 	int		pid[2];
 	int		children;
@@ -59,13 +59,10 @@ int	exec_pipe(t_tree *tree, t_context *ctx, char **envp)
 	children = exec_left_side(left_side, ctx, envp, pid);
 	if (children < 0)
 		return (handle_exec_error(pid));
+	close(pid[STDOUT_FILENO]);
 	children += exec_right_side(right_side, ctx, envp, pid);
 	if (children < 0)
 		return (handle_exec_error(pid));
-	if (close(pid[STDIN_FILENO]) == -1 || close(pid[STDOUT_FILENO]) == -1)
-	{
-		perror("minishell: close failed");
-		return (-1);
-	}
+	close(pid[STDIN_FILENO]);
 	return (children);
 }
