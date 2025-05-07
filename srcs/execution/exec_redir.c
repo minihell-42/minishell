@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 17:24:22 by samcasti          #+#    #+#             */
+/*   Updated: 2025/05/06 17:24:23 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/execution.h"
 
 static void	run_heredoc(int pipe_fd[2], char *delimiter)
@@ -81,12 +93,12 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 		return (-1);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(ctx->fd_close);
+		close(ctx->fd[STDOUT_FILENO]);
 	ctx->fd[STDOUT_FILENO] = outfile;
 	return (0);
 }
 
-int	exec_redir(t_tree *tree, t_context *ctx, char **envp)
+int	exec_redir(t_tree *tree, t_context *ctx, char ***envp)
 {
 	int			children;
 	t_context	redir_ctx;

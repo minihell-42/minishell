@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 17:23:32 by samcasti          #+#    #+#             */
+/*   Updated: 2025/05/06 17:23:34 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/execution.h"
 
 char	*ft_getenv(char *name, char **envp)
@@ -65,9 +77,14 @@ static int	add_new_var(char *var_string, int count, char ***envp)
 	if (!new_env)
 		return (0);
 	new_env[count] = ft_strdup(var_string);
-	new_env[count + 1] = NULL;
-	*envp = new_env;
-	return (1);
+    if (!new_env[count])
+    {
+        ft_free_array(new_env);
+        return (0);
+    }
+    new_env[count + 1] = NULL;
+    *envp = new_env;
+    return (1);
 }
 
 int	set_env_var(char *var_string, char ***envp)
@@ -76,6 +93,8 @@ int	set_env_var(char *var_string, char ***envp)
 	char	*name;
 	char	*equals_pos;
 
+	if (!var_string || !envp || !*envp)
+		return (1);
 	equals_pos = ft_strchr(var_string, '=');
 	if (!equals_pos)
 		return (0);

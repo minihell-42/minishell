@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_builtins.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 17:22:51 by samcasti          #+#    #+#             */
+/*   Updated: 2025/05/06 17:22:52 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/execution.h"
 
 static int	exec_builtins(t_tree *tree, char ***envp)
@@ -18,8 +30,8 @@ static int	exec_builtins(t_tree *tree, char ***envp)
 		children = builtin_unset(tree->argc, tree->argv, envp);
 	else if (tree->cmd_type == ENV)
 		children = builtin_env(*envp);
-	// else if (tree->cmd_type == EXIT)
-	// 	children = builtin_exit(tree->argc, tree->argv);
+	else if (tree->cmd_type == EXIT)
+		children = builtin_exit(tree->argc, tree->argv);
 	else
 		children = 1;
 	return (children);

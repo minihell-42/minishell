@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 17:23:42 by samcasti          #+#    #+#             */
+/*   Updated: 2025/05/06 17:23:43 by samcasti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/execution.h"
 
 void	*ft_realloc(void *ptr, size_t new_size)
 {
 	void	*new_ptr;
+	size_t	old_size;
+	char **old_array;
 
 	if (!ptr)
 		return (malloc(new_size));
@@ -11,10 +25,15 @@ void	*ft_realloc(void *ptr, size_t new_size)
 		free(ptr);
 		return (NULL);
 	}
+	old_array = (char **)ptr;
+	old_size = 0;
+	while (old_array[old_size])
+		old_size++;
+	old_size = (old_size + 1) * sizeof(char *);
 	new_ptr = malloc(new_size);
 	if (!new_ptr)
 		return (NULL);
-	ft_memcpy(new_ptr, ptr, new_size);
+	ft_memcpy(new_ptr, ptr, old_size < new_size ? old_size : new_size); 
 	free(ptr);
 	return (new_ptr);
 }
