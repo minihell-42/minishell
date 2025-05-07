@@ -16,8 +16,7 @@ static void	write_cmd_error(t_tree *tree)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(tree->argv[0], STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
 }
 
 static void	handle_sys_error(char *path, char *msg)
@@ -87,7 +86,7 @@ int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 	{
 		write_cmd_error(tree);
 		g_signal = 127;
-		return (0);
+		return (-1);
 	}
 	pid = fork();
 	if (pid == FORKED_ERROR)

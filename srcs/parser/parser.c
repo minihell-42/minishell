@@ -84,7 +84,7 @@ static char	*get_error_token(t_token *tokens)
 		if (current->type == TKN_PIPE || is_redir(current->type))
 		{
 			if (!current->next || current->next->type == TKN_END)
-				return("newline");
+				return ("newline");
 			return (current->value);
 		}
 		current = current->next;
@@ -115,7 +115,6 @@ t_tree	*parse_tokens(t_token *tokens)
 		g_signal = 2;
 		return (NULL);
 	}
-		
 	return (parse_pipeline(&tokens));
 }
 
