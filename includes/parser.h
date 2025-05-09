@@ -121,7 +121,6 @@ t_tree					*parse_command(t_token **tokens);
 t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
 t_cmd_type				is_builtin(char *cmd);
-int						validate_syntax(t_token *tokens);
 int						is_redir(int type);
 
 // AST
