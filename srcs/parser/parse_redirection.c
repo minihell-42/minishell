@@ -106,6 +106,43 @@ static t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 	return (node);
 }
 
+static void	append_trailing_args(t_tree *root, t_token **tokens)
+{
+	t_quote_type	*old_quotes;
+	t_quote_type	q;
+	t_tree				*cmd_node;
+	char					**old_argv;
+	char					*new_argv;
+	int						old_argc;
+	int						i;
+
+	cmd_node = root;
+	while (cmd_node->type == NODE_REDIR)
+		cmd_node = cmd_node->left;
+	while (*tokens && is_filename_token((*tokens)->type))
+	{
+		new_argv = ft_strdup((*tokens)->value);
+		q = (*tokens)->quote_type;
+		old_argc = cmd_node->argc;
+		old_argv = cmd_node->argv;
+		old_quotes = cmd_node->arg_quotes;
+		cmd_node->argv = malloc((old_argc + 2) * sizeof(char*));
+		cmd_node->arg_quotes = malloc((old_argc + 1) * sizeof(t_quote_type));
+		i = 0;
+		while(i < old_argc)
+		{
+			cmd_node->argv[i] = old_argv[i];
+			cmd_node->arg_quotes[i] = old_quotes[i];
+			i++;
+		}
+		cmd_node->argv[old_argc] = new_argv;
+		cmd_node->arg_quotes[old_argc] = q;
+		cmd_node->argv[old_argc + 1] = NULL;
+		cmd_node->argc = old_argc + 1;
+		*tokens = (*tokens)->next;
+	}
+}
+
 /**
  * Parses a redirection and creates an
  * abstract syntax tree (AST) for the redirection.
@@ -130,5 +167,6 @@ t_tree	*parse_redirection(t_token **tokens)
 			return (free_ast(cmd), NULL);
 		cmd = new_cmd;
 	}
+	append_trailing_args(cmd, tokens);
 	return (cmd);
 }
