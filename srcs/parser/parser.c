@@ -69,25 +69,28 @@ static void	print_syntax_error(char *token)
  */
 static char	*get_error_token(t_token *tokens)
 {
-	t_token	*current;
+	t_token	*curr;
 
-	current = tokens;
-	if (current->type == TKN_PIPE || is_redir(current->type))
+	curr = tokens;
+	if (curr->type == TKN_PIPE)
+		return ("|");
+	while (curr && curr->type != TKN_END)
 	{
-		if (is_redir(current->type) && (!current->next
-				|| current->next->type == TKN_END))
-			return ("newline");
-		return (current->value);
-	}
-	while (current && current->type != TKN_END)
-	{
-		if (current->type == TKN_PIPE || is_redir(current->type))
+		if (is_redir(curr->type))
 		{
-			if (!current->next || current->next->type == TKN_END)
+			if (!curr->next || curr->next->type == TKN_END)
 				return ("newline");
-			return (current->value);
+			if (is_redir(curr->next->type) || curr->next->type == TKN_PIPE)
+				return (curr->next->value);
 		}
-		current = current->next;
+		else if (curr->type == TKN_PIPE)
+		{
+			if (!curr->next || curr->next->type == TKN_END)
+				return ("newline");
+			if (curr->next->type == TKN_PIPE)
+				return ("|");
+		}
+		curr = curr->next;
 	}
 	return ("newline");
 }
