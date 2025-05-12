@@ -34,6 +34,7 @@ SRCS = srcs/main.c \
        srcs/parser/parser.c \
        srcs/parser/parse_command.c \
        srcs/parser/parse_redirection.c \
+        srcs/parser/parse_redirection_utils.c \
        srcs/parser/tokens.c \
        srcs/parser/token_handler.c \
        srcs/parser/ast.c \
