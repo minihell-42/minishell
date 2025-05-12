@@ -18,6 +18,7 @@ void	exec(t_tree *tree, char ***envp)
 	int			children;
 	int			i;
 	int			status;
+	int			sig;
 
 	if (!tree)
 		return ;
@@ -39,7 +40,11 @@ void	exec(t_tree *tree, char ***envp)
 		if (WIFEXITED(status))
 			g_signal = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			g_signal = WTERMSIG(status) + 128;
+		{
+			sig = WTERMSIG(status);
+			if (sig != SIGPIPE)
+				g_signal = sig + 128;
+		}
 		i++;
 	}
 }
