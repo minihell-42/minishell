@@ -92,6 +92,7 @@ struct					s_tree
 	char				*output_file;
 	t_quote_type		input_quote;
 	t_quote_type		output_quote;
+	int					here_doc_fd;
 };
 
 // LEXER
@@ -107,7 +108,6 @@ void					free_tokens(t_token *tokens);
 // TOKENS
 t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
-t_token					*tokenize_env_var(char **input);
 t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
 t_token					*handle_quote(char **input, int *is_first_word);
 t_token					*handle_redirection(char **input, int *is_first_word);

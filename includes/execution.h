@@ -80,4 +80,6 @@ void	append_prefix(t_expand_vars *vars, char *str, int i);
 void	append_remainder(t_expand_vars *vars, char *str, int i);
 int		process_variable(t_expand_vars *vars, char *str, char **envp);
 
+// HEREDOC
+void	process_heredocs(t_tree *root, char **envp);
 #endif

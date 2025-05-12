@@ -17,10 +17,10 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	t_token	*tokens;
 	t_tree	*ast;
-	char **copy_env;
+	char	**copy_env;
+
 	(void)argc;
 	(void)argv;
-
 	copy_env = copy_environment(envp);
 	if (!copy_env)
 	{
@@ -42,6 +42,7 @@ int	main(int argc, char **argv, char **envp)
 		ast = parse_tokens(tokens);
 		free_tokens(tokens);
 		// print_ast(ast, 0);
+		process_heredocs(ast, copy_env);
 		exec(ast, &copy_env);
 		free_ast(ast);
 		free(input);
