@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 19:14:43 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/03/01 19:14:44 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:15:58 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-extern volatile sig_atomic_t  g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 // SIGNALS
 void	setup_signals(void);
