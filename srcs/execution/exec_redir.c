@@ -59,31 +59,33 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 	return (0);
 }
 
-int	exec_redir(t_tree *tree, t_context *ctx, char ***envp)
+static void	apply_all_redirs(t_tree *node, t_context *ctx)
 {
-	int			children;
-	t_context	redir_ctx;
+	if (!node || node->type != NODE_REDIR)
+		return ;
+	apply_all_redirs(node->left, ctx);
+	if (node->input_file)
+	{
+		if (exec_input_redir(node, ctx) == -1)
+			perror("minishell: here-doc/input redir");
+	}
+	if (node->output_file)
+	{
+		if (exec_output_redir(node, ctx) == -1)
+			perror("minishell: output redir");
+	}
+}
 
-	redir_ctx = *ctx;
-	if (tree->input_file)
-	{
-		if (exec_input_redir(tree, &redir_ctx) == -1)
-			return (-1);
-	}
-	if (tree->output_file)
-	{
-		if (exec_output_redir(tree, &redir_ctx) == -1)
-		{
-			if (tree->input_file && redir_ctx.fd[STDIN_FILENO] != STDIN_FILENO)
-				close(redir_ctx.fd[STDIN_FILENO]);
-			return (-1);
-		}
-	}
+int	exec_redir(t_tree *root, t_context *orig_ctx, char ***envp)
+{
+	t_context	redir_ctx;
+	t_tree		*base;
+
+	redir_ctx = *orig_ctx;
+	apply_all_redirs(root, &redir_ctx);
 	redir_ctx.fd_close = -1;
-	children = exec_tree(tree->left, &redir_ctx, envp);
-	if (tree->input_file && redir_ctx.fd[STDIN_FILENO] != STDIN_FILENO)
-		close(redir_ctx.fd[STDIN_FILENO]);
-	if (tree->output_file && redir_ctx.fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(redir_ctx.fd[STDOUT_FILENO]);
-	return (children);
+	base = root;
+	while (base->type == NODE_REDIR)
+		base = base->left;
+	return (exec_tree(base, &redir_ctx, envp));
 }

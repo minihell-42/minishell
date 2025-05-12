@@ -41,11 +41,11 @@ void	process_heredocs(t_tree *root, char **envp)
 {
 	if (!root)
 		return ;
+  process_heredocs(root->left, envp);
 	if (root->type == NODE_REDIR && root->redir_type == HERE_DOC)
 	{
 		root->here_doc_fd = open_heredoc_pipe(root->input_file,
 				root->input_quote, envp);
 	}
-	process_heredocs(root->left, envp);
 	process_heredocs(root->right, envp);
 }
