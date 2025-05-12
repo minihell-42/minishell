@@ -23,8 +23,9 @@ typedef struct s_tree t_tree;
 typedef struct s_tree t_tree;
 typedef struct s_context
 {
-	int	fd[2];
-	int	fd_close;
+    char    *last_failed_file;
+	int     fd[2];
+	int     fd_close;
 }		t_context;
 
 typedef struct s_expand_vars

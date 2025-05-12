@@ -31,6 +31,7 @@ void	exec(t_tree *tree, char ***envp)
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
 	ctx.fd_close = -1;
+	ctx.last_failed_file = NULL;
 	children = exec_tree(tree, &ctx, envp);
 	while (i < children)
 	{

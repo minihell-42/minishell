@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:24:22 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:24:23 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:26:52 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ static int	exec_input_redir(t_tree *tree, t_context *ctx)
 	}
 	else
 	{
-		if ((infile = open(tree->input_file, O_RDONLY)) == -1)
+		infile = open(tree->input_file, O_RDONLY);
+		if (infile == -1)
 		{
-			perror("minishell: open file failed");
+			ctx->last_failed_file = tree->input_file;
 			return (-1);
 		}
 	}
@@ -48,9 +49,10 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 		flags |= O_APPEND;
 	else if (tree->redir_type == REDIR_OUT)
 		flags |= O_TRUNC;
-	if ((outfile = open(tree->output_file, flags, 0644)) == -1)
+	outfile = open(tree->output_file, flags, 0644);
+	if (outfile == -1)
 	{
-		perror("minishell: open output file failed");
+		ctx->last_failed_file = tree->output_file;
 		return (-1);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
@@ -59,21 +61,17 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 	return (0);
 }
 
-static void	apply_all_redirs(t_tree *node, t_context *ctx)
+static int	apply_all_redirs(t_tree *node, t_context *ctx)
 {
 	if (!node || node->type != NODE_REDIR)
-		return ;
-	apply_all_redirs(node->left, ctx);
-	if (node->input_file)
-	{
-		if (exec_input_redir(node, ctx) == -1)
-			perror("minishell: here-doc/input redir");
-	}
-	if (node->output_file)
-	{
-		if (exec_output_redir(node, ctx) == -1)
-			perror("minishell: output redir");
-	}
+		return (0);
+	if (apply_all_redirs(node->left, ctx) == -1)
+		return (-1);
+	if (node->input_file && exec_input_redir(node, ctx) == -1)
+		return (-1);
+	if (node->output_file && exec_output_redir(node, ctx) == -1)
+		return (-1);
+	return (0);
 }
 
 int	exec_redir(t_tree *root, t_context *orig_ctx, char ***envp)
@@ -82,8 +80,12 @@ int	exec_redir(t_tree *root, t_context *orig_ctx, char ***envp)
 	t_tree		*base;
 
 	redir_ctx = *orig_ctx;
-	apply_all_redirs(root, &redir_ctx);
-	redir_ctx.fd_close = -1;
+	if (apply_all_redirs(root, &redir_ctx) == -1)
+	{
+		fprintf(stderr, "minishell: %s: %s\n", redir_ctx.last_failed_file,
+			strerror(errno));
+		return (1);
+	}
 	base = root;
 	while (base->type == NODE_REDIR)
 		base = base->left;
