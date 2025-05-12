@@ -82,9 +82,10 @@ int	exec_redir(t_tree *root, t_context *orig_ctx, char ***envp)
 	redir_ctx = *orig_ctx;
 	if (apply_all_redirs(root, &redir_ctx) == -1)
 	{
+		g_signal = 1;
 		fprintf(stderr, "minishell: %s: %s\n", redir_ctx.last_failed_file,
 			strerror(errno));
-		return (1);
+		return (0);
 	}
 	base = root;
 	while (base->type == NODE_REDIR)
