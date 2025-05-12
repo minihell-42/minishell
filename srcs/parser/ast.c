@@ -36,6 +36,7 @@ t_tree	*create_ast_node(t_node_type type, char **argv, int argc,
 	node->argc = argc;
 	node->input_quote = QUOTE_NONE;
 	node->output_quote = QUOTE_NONE;
+	node->here_doc_fd = -1;
 	return (node);
 }
 

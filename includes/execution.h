@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:36:27 by samcasti          #+#    #+#             */
-/*   Updated: 2025/03/04 17:23:17 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:18:57 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,27 @@
 
 # include "parser.h"
 
-typedef struct s_tree t_tree;
+typedef struct s_tree	t_tree;
 
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
 
-typedef struct s_tree t_tree;
+typedef struct s_tree	t_tree;
 typedef struct s_context
 {
-	int	fd[2];
-	int	fd_close;
+	char	*last_failed_file;
+	int		fd[2];
+	int		fd_close;
 }		t_context;
 
 typedef struct s_expand_vars
 {
-    char    *result;
-    char    *var_start;
-    char    *var_end;
-    char    *var_name;
-    char    *var_value;
-}   		t_expand_vars;
+	char	*result;
+	char	*var_start;
+	char	*var_end;
+	char	*var_name;
+	char	*var_value;
+}		t_expand_vars;
 
 // EXECUTION
 void	exec(t_tree *tree, char ***envp);
@@ -75,9 +76,11 @@ char	*expand_env_var(char *var, char **envp);
 void	expand_env_vars_in_tree(t_tree *tree, char **envp);
 char	*expand_vars_in_string(char *str, char **envp);
 int		contains_env_var(char *str);
-int     is_pure_variable(const char *str);
+int		is_pure_variable(const char *str);
 void	append_prefix(t_expand_vars *vars, char *str, int i);
 void	append_remainder(t_expand_vars *vars, char *str, int i);
 int		process_variable(t_expand_vars *vars, char *str, char **envp);
 
+// HEREDOC
+void	process_heredocs(t_tree *root, char **envp);
 #endif

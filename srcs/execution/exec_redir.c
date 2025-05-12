@@ -6,74 +6,28 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:24:22 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:24:23 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:26:52 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execution.h"
 
-static void	run_heredoc(int pipe_fd[2], char *delimiter, char **envp)
-{
-	char	*line;
-	char	*expanded;
-
-	ft_putstr_fd("heredoc> ", STDERR_FILENO);
-	while (1)
-	{
-		line = readline("");
-		if (!line)
-		{
-			ft_putendl_fd("\nminishell: warning: here-document delimited by end-of-file",
-				STDERR_FILENO);
-			break ;
-		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		if (contains_env_var(line))
-		{
-			expanded = expand_vars_in_string(line, envp);
-			ft_putendl_fd(expanded, pipe_fd[STDOUT_FILENO]);
-			free(expanded);
-		}
-		else
-			ft_putendl_fd(line, pipe_fd[STDOUT_FILENO]);
-		free(line);
-		ft_putstr_fd("heredoc> ", STDERR_FILENO);
-	}
-}
-
-static int	create_heredoc(char *delimiter, char **envp)
-{
-	int	pipe_fd[2];
-
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("minishell: pipe failed");
-		return (-1);
-	}
-	run_heredoc(pipe_fd, delimiter, envp);
-	close(pipe_fd[STDOUT_FILENO]);
-	return (pipe_fd[STDIN_FILENO]);
-}
-
-static int	exec_input_redir(t_tree *tree, t_context *ctx, char **envp)
+static int	exec_input_redir(t_tree *tree, t_context *ctx)
 {
 	int	infile;
 
 	if (tree->redir_type == HERE_DOC)
 	{
-		infile = create_heredoc(tree->input_file, envp);
+		infile = tree->here_doc_fd;
 		if (infile == -1)
 			return (-1);
 	}
 	else
 	{
-		if ((infile = open(tree->input_file, O_RDONLY)) == -1)
+		infile = open(tree->input_file, O_RDONLY);
+		if (infile == -1)
 		{
-			perror("minishell: open file failed");
+			ctx->last_failed_file = tree->input_file;
 			return (-1);
 		}
 	}
@@ -95,9 +49,10 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 		flags |= O_APPEND;
 	else if (tree->redir_type == REDIR_OUT)
 		flags |= O_TRUNC;
-	if ((outfile = open(tree->output_file, flags, 0644)) == -1)
+	outfile = open(tree->output_file, flags, 0644);
+	if (outfile == -1)
 	{
-		perror("minishell: open output file failed");
+		ctx->last_failed_file = tree->output_file;
 		return (-1);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
@@ -106,31 +61,34 @@ static int	exec_output_redir(t_tree *tree, t_context *ctx)
 	return (0);
 }
 
-int	exec_redir(t_tree *tree, t_context *ctx, char ***envp)
+static int	apply_all_redirs(t_tree *node, t_context *ctx)
 {
-	int			children;
-	t_context	redir_ctx;
+	if (!node || node->type != NODE_REDIR)
+		return (0);
+	if (apply_all_redirs(node->left, ctx) == -1)
+		return (-1);
+	if (node->input_file && exec_input_redir(node, ctx) == -1)
+		return (-1);
+	if (node->output_file && exec_output_redir(node, ctx) == -1)
+		return (-1);
+	return (0);
+}
 
-	redir_ctx = *ctx;
-	if (tree->input_file)
+int	exec_redir(t_tree *root, t_context *orig_ctx, char ***envp)
+{
+	t_context	redir_ctx;
+	t_tree		*base;
+
+	redir_ctx = *orig_ctx;
+	if (apply_all_redirs(root, &redir_ctx) == -1)
 	{
-		if (exec_input_redir(tree, &redir_ctx, *envp) == -1)
-			return (-1);
+		g_signal = 1;
+		fprintf(stderr, "minishell: %s: %s\n", redir_ctx.last_failed_file,
+			strerror(errno));
+		return (0);
 	}
-	if (tree->output_file)
-	{
-		if (exec_output_redir(tree, &redir_ctx) == -1)
-		{
-			if (tree->input_file && redir_ctx.fd[STDIN_FILENO] != STDIN_FILENO)
-				close(redir_ctx.fd[STDIN_FILENO]);
-			return (-1);
-		}
-	}
-	redir_ctx.fd_close = -1;
-	children = exec_tree(tree->left, &redir_ctx, envp);
-	if (tree->input_file && redir_ctx.fd[STDIN_FILENO] != STDIN_FILENO)
-		close(redir_ctx.fd[STDIN_FILENO]);
-	if (tree->output_file && redir_ctx.fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(redir_ctx.fd[STDOUT_FILENO]);
-	return (children);
+	base = root;
+	while (base->type == NODE_REDIR)
+		base = base->left;
+	return (exec_tree(base, &redir_ctx, envp));
 }
