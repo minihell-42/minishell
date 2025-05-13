@@ -99,6 +99,7 @@ struct					s_tree
 t_token					*get_next_token(char **input, int *is_first_word);
 t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
+void					detect_quote(char c, t_quote_type *qtype);
 char					*extract_quoted(char **input, char quote);
 void					skip_whitespace(char **input);
 void					append_token(t_token **head, t_token **current,
@@ -109,7 +110,6 @@ void					free_tokens(t_token *tokens);
 t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
 t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
-t_token					*handle_quote(char **input, int *is_first_word);
 t_token					*handle_redirection(char **input, int *is_first_word);
 t_token					*handle_pipe_or_newline(char **input,
 							int *is_first_word);

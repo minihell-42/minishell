@@ -116,14 +116,17 @@ t_token	*tokenize_pipes_and_separators(char *input)
  */
 t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 {
-	t_token	*token;
-	char	*frag;
-	char	*acc;
+	t_quote_type	qtype;
+	t_token			*token;
+	char			*frag;
+	char			*acc;
 
 	acc = ft_strdup("");
+	qtype = QUOTE_NONE;
 	while (**input && !isspace(**input) && **input != '|' && **input != '<'
 		&& **input != '>' && **input != '\n')
 	{
+		detect_quote(**input, &qtype);
 		frag = get_frag(input);
 		acc = append_frag(acc, frag);
 		free(frag);
@@ -135,5 +138,6 @@ t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 	}
 	else
 		token = create_token(acc, TKN_ARG);
+	token->quote_type = qtype;
 	return (token);
 }

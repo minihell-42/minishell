@@ -28,8 +28,6 @@ t_token	*get_next_token(char **input, int *is_first_word)
 	skip_whitespace(input);
 	if (!**input)
 		return (NULL);
-	if (**input == '\'' || **input == '"')
-		return (handle_quote(input, is_first_word));
 	if (**input == '<' || **input == '>')
 		token = handle_redirection(input, is_first_word);
 	else if (**input == '|' || **input == '\n')
@@ -83,8 +81,6 @@ t_token	*lexer_tokenizer(char *input)
 		if (!new_token)
 			break ;
 		append_token(&head, &current, new_token);
-		if (*input)
-			input++;
 	}
 	if (current != NULL)
 		current->next = create_token(ft_strdup("\0"), TKN_END);
