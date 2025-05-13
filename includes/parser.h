@@ -120,9 +120,12 @@ t_tree					*parse_tokens(t_token *tokens);
 t_tree					*parse_command(t_token **tokens);
 t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
+t_tree					*parse_heredoc_prefix(t_token **tokens);
 t_cmd_type				is_builtin(char *cmd);
+t_tree					*make_redirection_node(t_tree *prev, t_token **tokens);
 int						is_redir(int type);
 int						is_filename_token(int type);
+void					append_trailing_args(t_tree *root, t_token **tokens);
 
 // AST
 t_tree					*create_ast_node(t_node_type type, char **argv,
