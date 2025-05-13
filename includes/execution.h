@@ -44,6 +44,14 @@ int		exec_command(t_tree *tree, t_context *ctx, char ***envp);
 int		exec_pipe(t_tree *tree, t_context *ctx, char ***envp);
 int		exec_redir(t_tree *tree, t_context *ctx, char ***envp);
 
+// COMMANDS UTILS
+int		handle_command_not_found(t_tree *tree);
+int		handle_is_directory(t_tree *tree, char *program_path);
+int		handle_builtin_with_fd(t_tree *tree, t_context *ctx, char ***envp);
+void	clean_empty_argv(t_tree *tree);
+int		handle_fork_error(char *program_path);
+void	write_cmd_error(t_tree *tree);
+
 // PROGRAM PATH
 char	*get_program_path(char *cmd, char **envp);
 

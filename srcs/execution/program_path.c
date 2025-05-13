@@ -91,7 +91,6 @@ char	*get_program_path(char *cmd, char **envp)
 	cmd_copy = ft_strdup(cmd);
 	if (!cmd_copy)
 		return (NULL);
-	// new implementation for / and ./
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, F_OK) != 0)

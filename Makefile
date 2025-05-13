@@ -15,6 +15,7 @@ SRCS = srcs/main.c \
        srcs/execution/expand_env.c \
        srcs/execution/expand_env_utils.c \
        srcs/execution/exec_command.c \
+       srcs/execution/exec_cmd_utils.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/program_path.c \
        srcs/execution/heredoc.c \

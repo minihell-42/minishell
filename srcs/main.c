@@ -12,11 +12,33 @@
 
 #include "shell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	main_loop(char **envp)
 {
 	char	*input;
 	t_token	*tokens;
 	t_tree	*ast;
+
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (input == NULL)
+		{
+			ft_free_array(envp);
+			exit(0);
+		}
+		add_history(input);
+		tokens = lexer_tokenizer(input);
+		ast = parse_tokens(tokens);
+		free_tokens(tokens);
+		process_heredocs(ast, envp);
+		exec(ast, &envp);
+		free_ast(ast);
+		free(input);
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
 	char	**copy_env;
 
 	(void)argc;
@@ -28,25 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	setup_signals();
-	while (1)
-	{
-		input = readline("minishell$ ");
-		if (input == NULL)
-		{
-			ft_free_array(copy_env);
-			exit(0);
-		}
-		add_history(input);
-		tokens = lexer_tokenizer(input);
-		// print_tokens(tokens);
-		ast = parse_tokens(tokens);
-		free_tokens(tokens);
-		// print_ast(ast, 0);
-		process_heredocs(ast, copy_env);
-		exec(ast, &copy_env);
-		free_ast(ast);
-		free(input);
-	}
+	main_loop(copy_env);
 	ft_free_array(copy_env);
 	rl_clear_history();
 	return (0);
