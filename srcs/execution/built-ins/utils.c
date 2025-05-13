@@ -6,29 +6,11 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:32 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:34 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:15:46 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/execution.h"
-
-char	*ft_getenv(char *name, char **envp)
-{
-	int	i;
-	int	len;
-
-	if (!name || !envp)
-		return (NULL);
-	len = ft_strlen(name);
-	i = 0;
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
-	}
-	return (NULL);
-}
 
 void	update_pwd(char *old_pwd, char ***envp)
 {
@@ -77,19 +59,34 @@ static int	add_new_var(char *var_string, int count, char ***envp)
 	if (!new_env)
 		return (0);
 	new_env[count] = ft_strdup(var_string);
-    if (!new_env[count])
-    {
-        ft_free_array(new_env);
-        return (0);
-    }
-    new_env[count + 1] = NULL;
-    *envp = new_env;
-    return (1);
+	if (!new_env[count])
+	{
+		ft_free_array(new_env);
+		return (0);
+	}
+	new_env[count + 1] = NULL;
+	*envp = new_env;
+	return (1);
+}
+
+int	add_var(char *var_string, char *name, char ***envp)
+{
+	int	i;
+
+	i = 0;
+	while ((*envp)[i])
+		i++;
+	if (!add_new_var(var_string, i, envp))
+	{
+		free(name);
+		return (1);
+	}
+	free(name);
+	return (0);
 }
 
 int	set_env_var(char *var_string, char ***envp)
 {
-	int		i;
 	char	*name;
 	char	*equals_pos;
 
@@ -106,14 +103,5 @@ int	set_env_var(char *var_string, char ***envp)
 		free(name);
 		return (0);
 	}
-	i = 0;
-	while ((*envp)[i])
-		i++;
-	if (!add_new_var(var_string, i, envp))
-	{
-		free(name);
-		return (1);
-	}
-	free(name);
-	return (0);
+	return (add_var(var_string, name, envp));
 }

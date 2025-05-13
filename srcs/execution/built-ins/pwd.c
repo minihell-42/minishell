@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:14 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:16 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:47:12 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	builtin_pwd(void)
 {
-	char cwd[PATH_MAX];
+	char	cwd[PATH_MAX];
 
 	if (getcwd(cwd, PATH_MAX) != NULL)
 	{

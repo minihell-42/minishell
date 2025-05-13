@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:00 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:01 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:55:17 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	builtin_exit(int argc, char **argv)
 {
-	int status;
+	int	status;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (argc == 1)

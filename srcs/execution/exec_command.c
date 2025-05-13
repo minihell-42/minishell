@@ -59,7 +59,8 @@ int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 		return (-1);
 	if (tree->cmd_type >= ECHO && tree->cmd_type <= EXIT)
 	{
-		if (ctx->fd[STDIN_FILENO] != STDIN_FILENO || ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		if (ctx->fd[STDIN_FILENO] != STDIN_FILENO
+			|| ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
 		{
 			pid = fork();
 			if (pid == FORKED_ERROR)

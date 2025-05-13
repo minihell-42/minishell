@@ -6,16 +6,44 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:56 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:56 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:31:43 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/execution.h"
 
+void	copy_vars_to_new_env(char ***envp, char **new_env, char *name, int len)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while ((*envp)[i])
+	{
+		if (ft_strncmp((*envp)[i], name, len) != 0
+				|| ((*envp)[i][len] != '=' && (*envp)[i][len] != '\0'))
+		{
+			new_env[j] = ft_strdup((*envp)[i]);
+			if (!new_env[j])
+			{
+				while (j > 0)
+					free(new_env[--j]);
+				free(new_env);
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+	new_env[j] = NULL;
+	ft_free_array(*envp);
+	*envp = new_env;
+}
+
 void	unset_env_var(char *name, char ***envp)
 {
 	int		i;
-	int		j;
 	int		len;
 	char	**new_env;
 
@@ -28,27 +56,7 @@ void	unset_env_var(char *name, char ***envp)
 	new_env = malloc(sizeof(char *) * (i + 1));
 	if (!new_env)
 		return ;
-	i = 0;
-	j = 0;
-	while ((*envp)[i])
-	{
-		if (ft_strncmp((*envp)[i], name, len) != 0 || ((*envp)[i][len] != '=' && (*envp)[i][len] != '\0'))
-		{
-			new_env[j] = ft_strdup((*envp)[i]);
-			if (!new_env[j])
-			{
-				while(j > 0)
-					free(new_env[--j]);
-				free(new_env);
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
-	new_env[j] = NULL;
-	ft_free_array(*envp);
-	*envp = new_env;
+	copy_vars_to_new_env(envp, new_env, name, len);
 }
 
 int	is_numeric(char *str)
