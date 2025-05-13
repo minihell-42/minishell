@@ -51,9 +51,10 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 
 int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 {
-	int		pid;
-	int		status;
-	char	*program_path;
+	int			pid;
+	int			status;
+	char		*program_path;
+	struct stat	sb;
 
 	if (!tree || !ctx || !envp || !*envp)
 		return (-1);
@@ -87,6 +88,16 @@ int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 	{
 		write_cmd_error(tree);
 		g_signal = 127;
+		return (-1);
+	}
+	// new implementation
+	if (stat(program_path, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(tree->argv[0], STDERR_FILENO);
+		ft_putendl_fd(": Is a directory", STDERR_FILENO);
+		free(program_path);
+		g_signal = 126;
 		return (-1);
 	}
 	pid = fork();

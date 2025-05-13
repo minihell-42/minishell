@@ -99,6 +99,7 @@ struct					s_tree
 t_token					*get_next_token(char **input, int *is_first_word);
 t_token					*lexer_tokenizer(char *input);
 t_token					*create_token(char *value, t_token_type type);
+void					detect_quote(char c, t_quote_type *qtype);
 char					*extract_quoted(char **input, char quote);
 void					skip_whitespace(char **input);
 void					append_token(t_token **head, t_token **current,
@@ -109,7 +110,6 @@ void					free_tokens(t_token *tokens);
 t_token					*tokenize_redirections(char *input);
 t_token					*tokenize_pipes_and_separators(char *input);
 t_token					*tokenize_cmd_and_arg(char **input, int *is_first_word);
-t_token					*handle_quote(char **input, int *is_first_word);
 t_token					*handle_redirection(char **input, int *is_first_word);
 t_token					*handle_pipe_or_newline(char **input,
 							int *is_first_word);
@@ -120,9 +120,12 @@ t_tree					*parse_tokens(t_token *tokens);
 t_tree					*parse_command(t_token **tokens);
 t_tree					*parse_redirection(t_token **tokens);
 t_tree					*parse_pipeline(t_token **tokens);
+t_tree					*parse_heredoc_prefix(t_token **tokens);
 t_cmd_type				is_builtin(char *cmd);
+t_tree					*make_redirection_node(t_tree *prev, t_token **tokens);
 int						is_redir(int type);
 int						is_filename_token(int type);
+void					append_trailing_args(t_tree *root, t_token **tokens);
 
 // AST
 t_tree					*create_ast_node(t_node_type type, char **argv,

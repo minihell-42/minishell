@@ -15,6 +15,22 @@
 #include <ctype.h>
 
 /**
+ * Detects the type of quote character in the input string.
+ *
+ * @param c The character to check.
+ * @param qtype A pointer to the quote type to be set.
+ *
+ * @returns None
+ */
+void	detect_quote(char c, t_quote_type *qtype)
+{
+	if (c == '\'')
+		*qtype = QUOTE_SINGLE;
+	else if (c == '"')
+		*qtype = QUOTE_DOUBLE;
+}
+
+/**
  * Extracts a quoted string from the input string.
  *
  * @param input A pointer to a pointer to the input string.

@@ -24,14 +24,14 @@ static int	validate_syntax(t_token *tokens)
 	t_token	*current;
 
 	current = tokens;
-	if (!current || is_redir(current->type) || current->type == TKN_PIPE)
+	if (!current || (is_redir(current->type) && current->type != TKN_HERE_DOC)
+		|| current->type == TKN_PIPE)
 		return (0);
 	while (current && current->type != TKN_END)
 	{
 		if (current->type == TKN_PIPE)
 		{
-			if (!current->next || is_redir(current->next->type)
-				|| current->next->type == TKN_PIPE
+			if (!current->next || current->next->type == TKN_PIPE
 				|| current->next->type == TKN_END)
 				return (0);
 		}
