@@ -83,6 +83,12 @@ int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 			return (0);
 		}
 	}
+	// $EMPTY handling
+	if (!tree->argv || !tree->argv[0] || *(tree->argv[0]) == '\0')
+	{
+		g_signal = 0;
+		return (0);
+	}
 	program_path = get_program_path(tree->argv[0], *envp);
 	if (!program_path)
 	{
