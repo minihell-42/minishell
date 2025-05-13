@@ -70,6 +70,8 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 extern void			del(void *content);
+int					ft_isspace(int c);
+char				*ft_strndup(const char *s, size_t n);
 
 int					ft_printf(const char *format, ...);
 
