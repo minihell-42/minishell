@@ -57,7 +57,7 @@ static void	fill_redirection(t_tree *node, int tkn_type, char *file,
  *
  * @returns The new redirection node.
  */
-static t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
+t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 {
 	t_quote_type	quote;
 	t_token			*tok;
@@ -119,7 +119,7 @@ static void	append_arg(t_tree *cmd_node, char *arg, t_quote_type q)
  * @param root The root node of the AST.
  * @param tokens The token list.
  */
-static void	append_trailing_args(t_tree *root, t_token **tokens)
+void	append_trailing_args(t_tree *root, t_token **tokens)
 {
 	t_tree	*cmd_node;
 
@@ -146,18 +146,22 @@ static void	append_trailing_args(t_tree *root, t_token **tokens)
 t_tree	*parse_redirection(t_token **tokens)
 {
 	t_tree	*cmd;
-	t_tree	*new_cmd;
+	t_tree	*node;
+	t_tree	*new_node;
 
+	if (*tokens && (*tokens)->type == TKN_HERE_DOC)
+		return (parse_heredoc_prefix(tokens));
 	cmd = parse_command(tokens);
 	if (!cmd)
 		return (NULL);
+	node = cmd;
 	while (*tokens && is_redir((*tokens)->type))
 	{
-		new_cmd = make_redirection_node(cmd, tokens);
-		if (!new_cmd)
-			return (free_ast(cmd), NULL);
-		cmd = new_cmd;
+		new_node = make_redirection_node(node, tokens);
+		if (!new_node)
+			return (free_ast(node), NULL);
+		node = new_node;
 	}
-	append_trailing_args(cmd, tokens);
-	return (cmd);
+	append_trailing_args(node, tokens);
+	return (node);
 }
