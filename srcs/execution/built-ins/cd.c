@@ -27,7 +27,7 @@ char	*get_path(int argc, char ***envp, char **argv)
 	if (argc > 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
-		return (1);
+		return (NULL);
 	}
 	else if (argc == 1)
 	{
@@ -35,7 +35,7 @@ char	*get_path(int argc, char ***envp, char **argv)
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
-			return (1);
+			return (NULL);
 		}
 	}
 	else
@@ -51,6 +51,8 @@ int	builtin_cd(int argc, char **argv, char ***envp)
 
 	old_pwd = getcwd(cwd, PATH_MAX);
 	path = get_path(argc, envp, argv);
+	if (!path)
+		return (1);
 	if (chdir(path) != 0)
 	{
 		print_dir_error(path);
