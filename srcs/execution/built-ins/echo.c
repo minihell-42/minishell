@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:22:27 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:22:33 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:46:16 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	builtin_echo(int argc, char **argv)
 {
-	int i;
-	int n_flag;
+	int	i;
+	int	n_flag;
 
 	i = 1;
 	n_flag = 0;

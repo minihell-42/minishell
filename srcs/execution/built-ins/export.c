@@ -6,7 +6,7 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:06 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:07 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:46:57 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	builtin_export(int argc, char **argv, char ***envp)
 {
-	int i;
-	int result;
+	int	i;
+	int	result;
 
 	result = 0;
 	if (argc == 1)

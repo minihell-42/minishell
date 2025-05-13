@@ -12,13 +12,33 @@
 
 #include "../../includes/execution.h"
 
+void	wait_children(int children)
+{
+	int	i;
+	int	sig;
+	int	status;
+
+	i = 0;
+	while (i < children)
+	{
+		waitpid(-1, &status, 0);
+		if (WIFEXITED(status))
+			g_signal = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			sig = WTERMSIG(status);
+			if (sig != SIGPIPE)
+				g_signal = sig + 128;
+		}
+		i++;
+	}
+}
+
 void	exec(t_tree *tree, char ***envp)
 {
 	t_context	ctx;
 	int			children;
 	int			i;
-	int			status;
-	int			sig;
 
 	if (!tree)
 		return ;
@@ -34,19 +54,7 @@ void	exec(t_tree *tree, char ***envp)
 	ctx.fd_close = -1;
 	ctx.last_failed_file = NULL;
 	children = exec_tree(tree, &ctx, envp);
-	while (i < children)
-	{
-		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
-			g_signal = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-		{
-			sig = WTERMSIG(status);
-			if (sig != SIGPIPE)
-				g_signal = sig + 128;
-		}
-		i++;
-	}
+	wait_children(children);
 }
 
 int	exec_tree(t_tree *tree, t_context *ctx, char ***envp)

@@ -6,17 +6,26 @@
 /*   By: samcasti <samcasti@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:23:42 by samcasti          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:43 by samcasti         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:53:41 by samcasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/execution.h"
 
+static int	get_size(int old_size, int new_size)
+{
+	if (old_size < new_size)
+		return (new_size);
+	else
+		return (old_size);
+}
+
 void	*ft_realloc(void *ptr, size_t new_size)
 {
 	void	*new_ptr;
 	size_t	old_size;
-	char **old_array;
+	char	**old_array;
+	int		size;
 
 	if (!ptr)
 		return (malloc(new_size));
@@ -33,7 +42,8 @@ void	*ft_realloc(void *ptr, size_t new_size)
 	new_ptr = malloc(new_size);
 	if (!new_ptr)
 		return (NULL);
-	ft_memcpy(new_ptr, ptr, old_size < new_size ? old_size : new_size); 
+	size = get_size(old_size, new_size);
+	ft_memcpy(new_ptr, ptr, size); 
 	free(ptr);
 	return (new_ptr);
 }
@@ -99,35 +109,6 @@ void	sort_env(char **env, int count)
 			}
 			j++;
 		}
-		i++;
-	}
-}
-
-void	print_export_format(char **env)
-{
-	int		i;
-	char	*equals_pos;
-	char	*value;
-
-	i = 0;
-	while (env[i])
-	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		equals_pos = ft_strchr(env[i], '=');
-		if (equals_pos)
-		{
-			value = ft_strdup(equals_pos + 1);
-			*equals_pos = '\0';
-			ft_putstr_fd(env[i], STDOUT_FILENO);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(value, STDOUT_FILENO);
-			ft_putstr_fd("\"", STDOUT_FILENO);
-			*equals_pos = '=';
-			free(value);
-		}
-		else
-			ft_putstr_fd(env[i], STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
 		i++;
 	}
 }
