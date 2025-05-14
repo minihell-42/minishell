@@ -12,26 +12,31 @@
 
 #include "../../../includes/execution.h"
 
-int	builtin_exit(int argc, char **argv)
+int	builtin_exit(t_tree *tree, char ***envp)
 {
 	int	status;
 
 	ft_putendl_fd("exit", STDERR_FILENO);
-	if (argc == 1)
+	if (tree->argc == 1)
+	{
+		free_exit(tree, envp);
 		exit(0);
-	if (!is_numeric(argv[1]))
+	}
+	if (!is_numeric(tree->argv[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(argv[1], STDERR_FILENO);
+		ft_putstr_fd(tree->argv[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		free_exit(tree, envp);
 		exit(2);
 	}
-	status = ft_atoi(argv[1]);
-	if (argc > 2)
+	status = ft_atoi(tree->argv[1]);
+	if (tree->argc > 2)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		return (1);
 	}
+	free_exit(tree, envp);
 	exit(status % 256);
 	return (0);
 }

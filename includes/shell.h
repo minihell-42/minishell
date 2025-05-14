@@ -33,8 +33,12 @@
 # include <readline/readline.h>
 
 extern volatile sig_atomic_t	g_signal;
+typedef struct s_tree	t_tree;
 
 // SIGNALS
 void	setup_signals(void);
+
+// FREE EXIT
+void	free_exit(t_tree *ast, char ***envp);
 
 #endif

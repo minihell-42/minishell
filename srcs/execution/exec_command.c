@@ -19,10 +19,11 @@ void	write_cmd_error(t_tree *tree)
 	ft_putendl_fd(": command not found", STDERR_FILENO);
 }
 
-static void	handle_sys_error(char *path, char *msg)
+static void	handle_sys_error(char *path, char *msg, t_tree *tree, char **envp)
 {
 	perror(msg);
 	free(path);
+	free_exit(tree, &envp);
 	exit(EXIT_FAILURE);
 }
 
@@ -32,13 +33,13 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	if (ctx->fd[STDIN_FILENO] != STDIN_FILENO)
 	{
 		if (dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO) == -1)
-			handle_sys_error(program_path, "minishell: dup2 failed for stdin");
+			handle_sys_error(program_path, "minishell: dup2 failed for stdin", tree, envp);
 		close(ctx->fd[STDIN_FILENO]);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
 	{
 		if (dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
-			handle_sys_error(program_path, "minishell: dup2 failed for stdout");
+			handle_sys_error(program_path, "minishell: dup2 failed for stdout", tree, envp);
 		close(ctx->fd[STDOUT_FILENO]);
 	}
 	if (ctx->fd_close >= 0)
@@ -46,6 +47,7 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	execve(program_path, tree->argv, envp);
 	perror("minishell: execve failed");
 	free(program_path);
+	free_exit(tree, &envp);
 	exit(127);
 }
 

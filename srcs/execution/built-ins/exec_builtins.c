@@ -31,7 +31,7 @@ static int	exec_builtins(t_tree *tree, char ***envp)
 	else if (tree->cmd_type == ENV)
 		children = builtin_env(*envp);
 	else if (tree->cmd_type == EXIT)
-		children = builtin_exit(tree->argc, tree->argv);
+		children = builtin_exit(tree, envp);
 	else
 		children = 1;
 	return (children);

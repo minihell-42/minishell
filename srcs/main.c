@@ -12,6 +12,13 @@
 
 #include "shell.h"
 
+void	free_exit(t_tree *ast, char ***envp)
+{
+	ft_free_array(*envp);
+	free_ast(ast);
+	rl_clear_history();
+}
+
 void	main_loop(char **envp)
 {
 	char	*input;
@@ -23,17 +30,17 @@ void	main_loop(char **envp)
 		input = readline("minishell$ ");
 		if (input == NULL)
 		{
-			ft_free_array(envp);
+			free_exit(ast, &envp);
 			exit(0);
 		}
 		add_history(input);
 		tokens = lexer_tokenizer(input);
 		ast = parse_tokens(tokens);
+		free(input);
 		free_tokens(tokens);
 		process_heredocs(ast, envp);
 		exec(ast, &envp);
 		free_ast(ast);
-		free(input);
 	}
 }
 

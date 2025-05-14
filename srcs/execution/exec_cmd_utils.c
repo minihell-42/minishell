@@ -29,6 +29,7 @@ int	handle_builtin_with_fd(t_tree *tree, t_context *ctx, char ***envp)
 		else if (pid == FORKED_CHILD)
 		{
 			status = handle_builtins(tree, ctx, envp);
+			free_exit(tree, envp);
 			exit(status);
 		}
 		return (1);

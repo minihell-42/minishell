@@ -64,7 +64,7 @@ int		builtin_pwd(void);
 int		builtin_export(int argc, char **argv, char ***envp);
 int		builtin_unset(int argc, char **argv, char ***envp);
 int		builtin_env(char **envp);
-int		builtin_exit(int argc, char **argv);
+int		builtin_exit(t_tree *tree, char ***envp);
 
 // BUILTIN UTILS
 char	*ft_getenv(char *name, char **envp);
