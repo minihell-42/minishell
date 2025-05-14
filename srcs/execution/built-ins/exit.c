@@ -16,7 +16,6 @@ int	builtin_exit(t_tree *tree, char ***envp)
 {
 	int	status;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
 	if (tree->argc == 1)
 	{
 		free_exit(tree, envp);

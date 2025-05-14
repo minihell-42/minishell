@@ -14,8 +14,10 @@
 
 void	free_exit(t_tree *ast, char ***envp)
 {
-	ft_free_array(*envp);
-	free_ast(ast);
+	if (envp)
+		ft_free_array(*envp);
+	if (ast)
+		free_ast(ast);
 	rl_clear_history();
 }
 
@@ -25,12 +27,13 @@ void	main_loop(char **envp)
 	t_token	*tokens;
 	t_tree	*ast;
 
+	ast = NULL;
 	while (1)
 	{
 		input = readline("minishell$ ");
 		if (input == NULL)
 		{
-			free_exit(ast, &envp);
+			ft_free_array(envp);
 			exit(0);
 		}
 		add_history(input);
@@ -40,7 +43,8 @@ void	main_loop(char **envp)
 		free_tokens(tokens);
 		process_heredocs(ast, envp);
 		exec(ast, &envp);
-		free_ast(ast);
+		if (ast)
+			free_ast(ast);
 	}
 }
 
@@ -58,7 +62,5 @@ int	main(int argc, char **argv, char **envp)
 	}
 	setup_signals();
 	main_loop(copy_env);
-	ft_free_array(copy_env);
-	rl_clear_history();
 	return (0);
 }

@@ -62,7 +62,7 @@ void	free_ast(t_tree *root)
 			free(root->argv[i]);
 		free(root->argv);
 	}
-	if (root->arg_quotes)
+	if (root->type == NODE_CMD && root->arg_quotes)
 		free(root->arg_quotes);
 	if (root->type == NODE_REDIR)
 	{
