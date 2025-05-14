@@ -71,5 +71,7 @@ void	free_ast(t_tree *root)
 		if (root->output_file)
 			free(root->output_file);
 	}
+	if (root->type == NODE_REDIR && root->redir_type == HERE_DOC)
+		close(root->here_doc_fd);
 	free(root);
 }

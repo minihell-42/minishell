@@ -115,6 +115,7 @@ t_tree	*parse_tokens(t_token *tokens)
 	{
 		error_tkn = get_error_token(tokens);
 		print_syntax_error(error_tkn);
+		free(error_tkn);
 		g_signal = 2;
 		return (NULL);
 	}

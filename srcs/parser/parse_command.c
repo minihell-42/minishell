@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "execution.h"
 
 /**
  * Determines if a given command is a built-in command.
@@ -105,18 +106,22 @@ t_tree	*parse_command(t_token **tokens)
 	if (count == 0)
 		return (NULL);
 	argv = malloc(sizeof(char *) * (count + 1));
+	if (!argv)
+		return (NULL);
 	arg_quotes = malloc(sizeof(t_quote_type) * count);
-	if (!argv || !arg_quotes)
+	if (!arg_quotes)
 	{
-		free(argv);
-		free(arg_quotes);
+		ft_free_array(argv);
 		return (NULL);
 	}
 	fill_args(argv, arg_quotes, tokens);
 	node = create_ast_node(NODE_CMD, argv, count, is_builtin(argv[0]));
-	if (node)
-		node->arg_quotes = arg_quotes;
-	else
-		free(arg_quotes);
+	if (!node)
+		{
+			ft_free_array(argv);
+			free(arg_quotes);
+			return (NULL);
+		}
+	node->arg_quotes = arg_quotes;
 	return (node);
 }

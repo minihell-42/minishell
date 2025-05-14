@@ -94,7 +94,11 @@ char	*get_program_path(char *cmd, char **envp)
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, F_OK) != 0)
+		{
+			free(cmd_copy);
 			return (NULL);
+		}
+		free(cmd_copy);
 		return (ft_strdup(cmd));
 	}
 	if (cmd_copy[0] == '/')

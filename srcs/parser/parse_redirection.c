@@ -73,7 +73,10 @@ t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 	*tokens = (*tokens)->next;
 	node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
 	if (!node)
+	{
+		free(file);
 		return (NULL);
+	}
 	fill_redirection(node, tok->type, file, quote);
 	node->left = prev;
 	return (node);
@@ -95,7 +98,18 @@ static void	append_arg(t_tree *cmd_node, char *arg, t_quote_type q)
 
 	old_argc = cmd_node->argc;
 	new_argv = malloc((old_argc + 2) * sizeof(*new_argv));
+	if (!new_argv)
+	{
+		free(arg);
+		return ;
+	}
 	new_quotes = malloc((old_argc + 1) * sizeof(*new_quotes));
+	if (!new_quotes)
+	{
+		free(new_argv);
+		free(arg);
+		return ;
+	}
 	i = 0;
 	while (i < old_argc)
 	{
