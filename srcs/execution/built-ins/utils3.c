@@ -100,7 +100,7 @@ char	**copy_environment(char **original_env)
 	i = 0;
 	while (original_env[i])
 		i++;
-	new_env = malloc(sizeof(char *) * (400));
+	new_env = malloc(sizeof(char *) * (ENV_BUFFER));
 	if (!new_env)
 		return (NULL);
 	i = 0;

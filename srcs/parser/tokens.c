@@ -62,7 +62,7 @@ static char	*get_frag(char **input)
 	}
 	else
 	{
-		frag = strndup(*input, 1);
+		frag = ft_strndup(*input, 1);
 		(*input)++;
 	}
 	return (frag);
@@ -123,7 +123,7 @@ t_token	*tokenize_cmd_and_arg(char **input, int *is_first_word)
 
 	acc = ft_strdup("");
 	qtype = QUOTE_NONE;
-	while (**input && !isspace(**input) && **input != '|' && **input != '<'
+	while (**input && !ft_isspace(**input) && **input != '|' && **input != '<'
 		&& **input != '>' && **input != '\n')
 	{
 		detect_quote(**input, &qtype);

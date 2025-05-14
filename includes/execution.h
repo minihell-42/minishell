@@ -19,6 +19,7 @@ typedef struct s_tree	t_tree;
 
 # define FORKED_CHILD 0
 # define FORKED_ERROR -1
+# define ENV_BUFFER 400
 
 typedef struct s_tree	t_tree;
 typedef struct s_context

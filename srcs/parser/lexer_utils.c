@@ -47,7 +47,7 @@ char	*extract_quoted(char **input, char quote)
 	start = *input;
 	while (**input && **input != quote)
 		(*input)++;
-	val = strndup(start, *input - start);
+	val = ft_strndup(start, *input - start);
 	if (**input == quote)
 		(*input)++;
 	return (val);
@@ -107,6 +107,6 @@ void	free_tokens(t_token *tokens)
  */
 void	skip_whitespace(char **input)
 {
-	while (**input && isspace(**input) && **input != '\n')
+	while (**input && ft_isspace(**input) && **input != '\n')
 		(*input)++;
 }
