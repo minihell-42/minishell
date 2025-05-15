@@ -24,8 +24,7 @@ static int	validate_syntax(t_token *tokens)
 	t_token	*current;
 
 	current = tokens;
-	if (!current || (is_redir(current->type) && current->type != TKN_HERE_DOC)
-		|| current->type == TKN_PIPE)
+	if (!current || current->type == TKN_PIPE)
 		return (0);
 	while (current && current->type != TKN_END)
 	{
@@ -115,7 +114,6 @@ t_tree	*parse_tokens(t_token *tokens)
 	{
 		error_tkn = get_error_token(tokens);
 		print_syntax_error(error_tkn);
-		free(error_tkn);
 		g_signal = 2;
 		return (NULL);
 	}
