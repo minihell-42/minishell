@@ -64,6 +64,8 @@ int	is_numeric(char *str)
 	int	i;
 
 	i = 0;
+	if (ft_strlen(str) > 20)
+		return (0);
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	while (str[i])

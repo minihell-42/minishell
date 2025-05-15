@@ -36,8 +36,7 @@ static int	validate_syntax(t_token *tokens)
 		}
 		else if (is_redir(current->type))
 		{
-			if (!current->next || is_redir(current->next->type)
-				|| current->next->type == TKN_PIPE
+			if (!current->next || current->next->type == TKN_PIPE
 				|| current->next->type == TKN_END)
 				return (0);
 		}
