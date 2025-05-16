@@ -16,29 +16,29 @@
 # include "../libft/include/libft.h"
 # include "execution.h"
 # include "parser.h"
-# include <linux/limits.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
-# include <stdio.h>
+# include <linux/limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 
 extern volatile sig_atomic_t	g_signal;
-typedef struct s_tree	t_tree;
+typedef struct s_tree			t_tree;
 
 // SIGNALS
-void	setup_signals(void);
+void							setup_signals(void);
 
 // FREE EXIT
-void	free_exit(t_tree *ast, char ***envp);
+void							free_exit(t_tree *ast, char ***envp);
 
 #endif

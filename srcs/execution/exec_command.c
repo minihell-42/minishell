@@ -33,13 +33,15 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	if (ctx->fd[STDIN_FILENO] != STDIN_FILENO)
 	{
 		if (dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO) == -1)
-			handle_sys_error(program_path, "minishell: dup2 failed for stdin", tree, envp);
+			handle_sys_error(program_path, "minishell: dup2 failed for stdin",
+				tree, envp);
 		close(ctx->fd[STDIN_FILENO]);
 	}
 	if (ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
 	{
 		if (dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO) == -1)
-			handle_sys_error(program_path, "minishell: dup2 failed for stdout", tree, envp);
+			handle_sys_error(program_path, "minishell: dup2 failed for stdout",
+				tree, envp);
 		close(ctx->fd[STDOUT_FILENO]);
 	}
 	if (ctx->fd_close >= 0)
@@ -51,8 +53,8 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	exit(127);
 }
 
-int	exec_external(t_tree *tree, t_context *ctx,
-	char ***envp, char *program_path)
+int	exec_external(t_tree *tree, t_context *ctx, char ***envp,
+		char *program_path)
 {
 	struct stat	sb;
 	int			pid;
@@ -72,7 +74,7 @@ int	exec_external(t_tree *tree, t_context *ctx,
 
 int	exec_command(t_tree *tree, t_context *ctx, char ***envp)
 {
-	char		*program_path;
+	char	*program_path;
 
 	if (!tree || !ctx || !envp || !*envp)
 		return (-1);

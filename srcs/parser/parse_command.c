@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
 #include "execution.h"
+#include "parser.h"
 
 /**
  * Determines if a given command is a built-in command.
@@ -117,11 +117,11 @@ t_tree	*parse_command(t_token **tokens)
 	fill_args(argv, arg_quotes, tokens);
 	node = create_ast_node(NODE_CMD, argv, count, is_builtin(argv[0]));
 	if (!node)
-		{
-			ft_free_array(argv);
-			free(arg_quotes);
-			return (NULL);
-		}
+	{
+		ft_free_array(argv);
+		free(arg_quotes);
+		return (NULL);
+	}
 	node->arg_quotes = arg_quotes;
 	return (node);
 }
