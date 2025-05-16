@@ -36,8 +36,7 @@ static int	open_heredoc_pipe(char *delimiter, t_quote_type quote, char **envp)
 		return (perror("minishell: pipe"), -1);
 	while (1)
 	{
-		ft_putstr_fd("heredoc> ", STDERR_FILENO);
-		line = readline("");
+		line = readline("heredoc> ");
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			if (!line)

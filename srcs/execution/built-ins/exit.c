@@ -19,7 +19,7 @@ int	builtin_exit(t_tree *tree, char ***envp)
 	if (tree->argc == 1)
 	{
 		free_exit(tree, envp);
-		exit(0);
+		exit(g_signal);
 	}
 	if (!is_numeric(tree->argv[1]))
 	{

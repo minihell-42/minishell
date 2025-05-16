@@ -38,7 +38,6 @@ void	exec(t_tree *tree, char ***envp)
 {
 	t_context	ctx;
 	int			children;
-	int			i;
 
 	if (!tree)
 		return ;
@@ -48,7 +47,6 @@ void	exec(t_tree *tree, char ***envp)
 		return ;
 	}
 	expand_env_vars_in_tree(tree, *envp);
-	i = 0;
 	ctx.fd[0] = STDIN_FILENO;
 	ctx.fd[1] = STDOUT_FILENO;
 	ctx.fd_close = -1;
