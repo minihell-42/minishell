@@ -125,6 +125,13 @@ t_cmd_type				is_builtin(char *cmd);
 t_tree					*make_redirection_node(t_tree *prev, t_token **tokens);
 int						is_redir(int type);
 int						is_filename_token(int type);
+int						alloc_new_arrays(int old_argc, char ***new_argv,
+							t_quote_type **new_quotes, char *arg);
+void					copy_and_append_args(t_tree *cmd_node, char **new_argv,
+							t_quote_type *new_quotes, char *arg);
+int						extract_filename(t_token **tokens, char **file,
+							t_quote_type *quote);
+void					append_arg(t_tree *cmd_node, char *arg, t_quote_type q);
 void					append_trailing_args(t_tree *root, t_token **tokens);
 
 // AST

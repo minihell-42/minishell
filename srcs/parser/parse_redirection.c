@@ -49,6 +49,28 @@ static void	fill_redirection(t_tree *node, int tkn_type, char *file,
 	}
 }
 
+static t_tree	*create_command_if_null(char *file)
+{
+	char	**empty_argv;
+	t_tree	*prev;
+
+	empty_argv = malloc(sizeof(*empty_argv));
+	if (!empty_argv)
+	{
+		free(file);
+		return (NULL);
+	}
+	empty_argv[0] = NULL;
+	prev = create_ast_node(NODE_CMD, empty_argv, 0, OTHER);
+	if (!prev)
+	{
+		free(empty_argv);
+		free(file);
+		return (NULL);
+	}
+	return (prev);
+}
+
 /**
  * Creates a new redirection node with the given values.
  *
@@ -65,12 +87,8 @@ t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 	char			*file;
 
 	tok = *tokens;
-	*tokens = (*tokens)->next;
-	if (!*tokens || !is_filename_token((*tokens)->type))
+	if (!extract_filename(tokens, &file, &quote))
 		return (NULL);
-	file = ft_strdup((*tokens)->value);
-	quote = (*tokens)->quote_type;
-	*tokens = (*tokens)->next;
 	node = create_ast_node(NODE_REDIR, NULL, 0, OTHER);
 	if (!node)
 	{
@@ -78,74 +96,36 @@ t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 		return (NULL);
 	}
 	fill_redirection(node, tok->type, file, quote);
+	if (prev == NULL)
+	{
+		prev = create_command_if_null(file);
+		if (!prev)
+			return (free_ast(node), NULL);
+	}
 	node->left = prev;
 	return (node);
 }
 
-/**
- * Appends an argument to the command node.
- *
- * @param cmd_node The command node to append to.
- * @param arg The argument to append.
- * @param q The quote type of the argument.
- */
-static void	append_arg(t_tree *cmd_node, char *arg, t_quote_type q)
+static t_tree	*process_redir_first(t_token **tokens)
 {
-	t_quote_type	*new_quotes;
-	char			**new_argv;
-	int				old_argc;
-	int				i;
+	t_tree	*node;
+	t_tree	*new_node;
 
-	old_argc = cmd_node->argc;
-	new_argv = malloc((old_argc + 2) * sizeof(*new_argv));
-	if (!new_argv)
+	node = make_redirection_node(NULL, tokens);
+	if (!node)
+		return (NULL);
+	while (*tokens && is_redir((*tokens)->type))
 	{
-		free(arg);
-		return ;
+		new_node = make_redirection_node(node, tokens);
+		if (!new_node)
+		{
+			free_ast(node);
+			return (NULL);
+		}
+		node = new_node;
 	}
-	new_quotes = malloc((old_argc + 1) * sizeof(*new_quotes));
-	if (!new_quotes)
-	{
-		free(new_argv);
-		free(arg);
-		return ;
-	}
-	i = 0;
-	while (i < old_argc)
-	{
-		new_argv[i] = cmd_node->argv[i];
-		new_quotes[i] = cmd_node->arg_quotes[i];
-		i++;
-	}
-	new_argv[old_argc] = arg;
-	new_quotes[old_argc] = q;
-	new_argv[old_argc + 1] = NULL;
-	free(cmd_node->argv);
-	free(cmd_node->arg_quotes);
-	cmd_node->argv = new_argv;
-	cmd_node->argc = old_argc + 1;
-	cmd_node->arg_quotes = new_quotes;
-}
-
-/**
- * Appends trailing arguments to the command node.
- *
- * @param root The root node of the AST.
- * @param tokens The token list.
- */
-void	append_trailing_args(t_tree *root, t_token **tokens)
-{
-	t_tree	*cmd_node;
-
-	cmd_node = root;
-	while (cmd_node->type == NODE_REDIR)
-		cmd_node = cmd_node->left;
-	while (*tokens && is_filename_token((*tokens)->type))
-	{
-		append_arg(cmd_node, ft_strdup((*tokens)->value),
-			(*tokens)->quote_type);
-		*tokens = (*tokens)->next;
-	}
+	append_trailing_args(node, tokens);
+	return (node);
 }
 
 /**
@@ -159,21 +139,22 @@ void	append_trailing_args(t_tree *root, t_token **tokens)
  */
 t_tree	*parse_redirection(t_token **tokens)
 {
-	t_tree	*cmd;
 	t_tree	*node;
 	t_tree	*new_node;
 
-	if (*tokens && (*tokens)->type == TKN_HERE_DOC)
-		return (parse_heredoc_prefix(tokens));
-	cmd = parse_command(tokens);
-	if (!cmd)
+	if (*tokens && is_redir((*tokens)->type))
+		return (process_redir_first(tokens));
+	node = parse_command(tokens);
+	if (!node)
 		return (NULL);
-	node = cmd;
 	while (*tokens && is_redir((*tokens)->type))
 	{
 		new_node = make_redirection_node(node, tokens);
 		if (!new_node)
-			return (free_ast(node), NULL);
+		{
+			free_ast(node);
+			return (NULL);
+		}
 		node = new_node;
 	}
 	append_trailing_args(node, tokens);
