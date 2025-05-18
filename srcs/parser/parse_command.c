@@ -88,6 +88,39 @@ static void	fill_args(char **argv, t_quote_type *arg_quotes, t_token **tokens)
 }
 
 /**
+ * Allocates memory for command arguments and quote types.
+ *
+ * @param count Number of arguments to allocate.
+ * @param argv_ptr Pointer to store the allocated argument array.
+ * @param quotes_ptr Pointer to store the allocated quote types array.
+ *
+ * @returns 1 on success, 0 on failure.
+ */
+static int	allocate_cmd_memory(int count, char ***argv_ptr,
+		t_quote_type **quotes_ptr)
+{
+	char			**argv;
+	t_quote_type	*arg_quotes;
+
+	argv = NULL;
+	arg_quotes = NULL;
+	argv = malloc(sizeof(char *) * (count + 1));
+	if (!argv)
+	{
+		return (0);
+	}
+	arg_quotes = malloc(sizeof(t_quote_type) * count);
+	if (!arg_quotes)
+	{
+		ft_free_array(argv);
+		return (0);
+	}
+	*argv_ptr = argv;
+	*quotes_ptr = arg_quotes;
+	return (1);
+}
+
+/**
  * Parses a command and creates an abstract syntax tree (AST) for the command.
  *
  * @param tokens A pointer to the pointer to the tokens
@@ -102,18 +135,13 @@ t_tree	*parse_command(t_token **tokens)
 	int				count;
 	char			**argv;
 
+	arg_quotes = NULL;
+	node = NULL;
 	count = count_cmd_tokens(*tokens);
 	if (count == 0)
 		return (NULL);
-	argv = malloc(sizeof(char *) * (count + 1));
-	if (!argv)
+	if (!allocate_cmd_memory(count, &argv, &arg_quotes))
 		return (NULL);
-	arg_quotes = malloc(sizeof(t_quote_type) * count);
-	if (!arg_quotes)
-	{
-		ft_free_array(argv);
-		return (NULL);
-	}
 	fill_args(argv, arg_quotes, tokens);
 	node = create_ast_node(NODE_CMD, argv, count, is_builtin(argv[0]));
 	if (!node)
