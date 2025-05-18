@@ -37,6 +37,13 @@ int	contains_env_var(char *str)
 	return (0);
 }
 
+/**
+ * Checks if a string is a pure variable (e.g., $VAR, $?, etc.).
+ *
+ * @param str The string to check.
+ *
+ * @returns 1 if the string is a pure variable, 0 otherwise.
+ */
 int	is_pure_variable(const char *str)
 {
 	const char	*var_end;

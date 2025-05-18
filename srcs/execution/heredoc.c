@@ -12,6 +12,14 @@
 
 #include "execution.h"
 
+/**
+ * Writes the heredoc output to the file descriptor.
+ * 
+ * @param line The line to write.
+ * @param quote The quote type of the line.
+ * @param envp The environment variables.
+ * @param fd The file descriptor to write to.
+ */
 static void	write_heredoc_output(char *line, t_quote_type quote, char **envp,
 		int fd)
 {
@@ -27,6 +35,15 @@ static void	write_heredoc_output(char *line, t_quote_type quote, char **envp,
 		ft_putendl_fd(line, fd);
 }
 
+/**
+ * Opens a pipe for heredoc input and reads lines until the delimiter is reached.
+ *
+ * @param delimiter The delimiter to stop reading.
+ * @param quote The quote type of the delimiter.
+ * @param envp The environment variables.
+ *
+ * @returns The read end of the pipe.
+ */
 static int	open_heredoc_pipe(char *delimiter, t_quote_type quote, char **envp)
 {
 	int		fds[2];
@@ -52,6 +69,12 @@ static int	open_heredoc_pipe(char *delimiter, t_quote_type quote, char **envp)
 	return (fds[0]);
 }
 
+/**
+ * Processes the heredoc nodes in the AST.
+ *
+ * @param root The root of the AST.
+ * @param envp The environment variables.
+ */
 void	process_heredocs(t_tree *root, char **envp)
 {
 	if (!root)

@@ -60,6 +60,15 @@ void	append_trailing_args(t_tree *root, t_token **tokens)
 	}
 }
 
+/**
+ * Extracts the filename from the token list.
+ *
+ * @param tokens A pointer to the token list.
+ * @param file A pointer to the filename string.
+ * @param quote A pointer to the quote type.
+ *
+ * @returns 1 on success, 0 on failure.
+ */
 int	extract_filename(t_token **tokens, char **file, t_quote_type *quote)
 {
 	*tokens = (*tokens)->next;

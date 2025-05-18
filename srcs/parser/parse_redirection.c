@@ -49,6 +49,13 @@ static void	fill_redirection(t_tree *node, int tkn_type, char *file,
 	}
 }
 
+/**
+ * Creates a command node if the previous node is NULL.
+ *
+ * @param file The filename for the command.
+ *
+ * @returns The new command node.
+ */
 static t_tree	*create_command_if_null(char *file)
 {
 	char	**empty_argv;
@@ -106,6 +113,14 @@ t_tree	*make_redirection_node(t_tree *prev, t_token **tokens)
 	return (node);
 }
 
+/**
+ * Processes the first redirection in the token list
+ * 
+ * @param tokens A pointer to the pointer to the tokens
+ * representing the redirection.
+ * 
+ * @returns A pointer to the root of the AST representing the redirection
+ */
 static t_tree	*process_redir_first(t_token **tokens)
 {
 	t_tree	*node;

@@ -39,6 +39,16 @@ int	is_filename_token(int type)
 	return (0);
 }
 
+/**
+ * Allocates memory for new arrays of strings and quote types.
+ *
+ * @param old_argc The number of existing arguments.
+ * @param new_argv A pointer to the new array of strings.
+ * @param new_quotes A pointer to the new array of quote types.
+ * @param arg The argument to append to the new array.
+ *
+ * @returns 1 on success, 0 on failure.
+ */
 int	alloc_new_arrays(int old_argc, char ***new_argv, t_quote_type **new_quotes,
 		char *arg)
 {
@@ -58,6 +68,15 @@ int	alloc_new_arrays(int old_argc, char ***new_argv, t_quote_type **new_quotes,
 	return (1);
 }
 
+/**
+ * Copies existing arguments and quote types from a command node
+ * to a new array, and appends a new argument to the end of the new array
+ *
+ * @param cmd_node The command node containing existing arguments.
+ * @param new_argv The new array of strings to fill.
+ * @param new_quotes The new array of quote types to fill.
+ * @param arg The argument to append to the new array.
+ */
 void	copy_and_append_args(t_tree *cmd_node, char **new_argv,
 		t_quote_type *new_quotes, char *arg)
 {

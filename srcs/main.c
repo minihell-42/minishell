@@ -12,6 +12,12 @@
 
 #include "shell.h"
 
+/**
+ * Frees the environment variables and the AST.
+ * 
+ * @param ast A pointer to the AST to free.
+ * @param envp A pointer to the environment variables to free.
+ */
 void	free_exit(t_tree *ast, char ***envp)
 {
 	if (envp)
