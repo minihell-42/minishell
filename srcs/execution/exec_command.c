@@ -60,7 +60,17 @@ int	exec_external(t_tree *tree, t_context *ctx, char ***envp,
 	int			pid;
 
 	if (!program_path)
+	{
+		if (ft_strchr(tree->argv[0], '/'))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(tree->argv[0], STDERR_FILENO);
+			ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+			g_signal = 127;
+			return (-1);
+		}
 		return (handle_command_not_found(tree));
+	}
 	if (stat(program_path, &sb) == 0 && S_ISDIR(sb.st_mode))
 		return (handle_is_directory(tree, program_path));
 	pid = fork();

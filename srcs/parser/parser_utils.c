@@ -92,6 +92,5 @@ void	copy_and_append_args(t_tree *cmd_node, char **new_argv,
 		i++;
 	}
 	new_argv[old_argc] = arg;
-	new_quotes[old_argc] = cmd_node->arg_quotes[i];
 	new_argv[old_argc + 1] = NULL;
 }
