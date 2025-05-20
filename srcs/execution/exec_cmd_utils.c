@@ -17,8 +17,7 @@ int	handle_builtin_with_fd(t_tree *tree, t_context *ctx, char ***envp)
 	int	pid;
 	int	status;
 
-	if (ctx->fd[STDIN_FILENO] != STDIN_FILENO
-		|| ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+	if (ctx->fd[0] != 0 || ctx->fd[1] != 1)
 	{
 		pid = fork();
 		if (pid == FORKED_ERROR)

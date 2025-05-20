@@ -92,15 +92,7 @@ char	*get_program_path(char *cmd, char **envp)
 	if (!cmd_copy)
 		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
-	{
-		if (access(cmd, F_OK) != 0)
-		{
-			free(cmd_copy);
-			return (NULL);
-		}
-		free(cmd_copy);
-		return (ft_strdup(cmd));
-	}
+		return (path_access(cmd, cmd_copy));
 	if (cmd_copy[0] == '/')
 	{
 		program_path = handle_absolute_path(cmd_copy);

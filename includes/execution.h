@@ -55,6 +55,7 @@ void	write_cmd_error(t_tree *tree);
 
 // PROGRAM PATH
 char	*get_program_path(char *cmd, char **envp);
+char	*path_access(char *cmd, char *cmd_copy);
 
 // BUILTINS
 int		handle_builtins(t_tree *tree, t_context *ctx, char ***envp);

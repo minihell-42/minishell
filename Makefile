@@ -18,6 +18,7 @@ SRCS = srcs/main.c \
        srcs/execution/exec_cmd_utils.c \
        srcs/execution/exec_pipe.c \
        srcs/execution/program_path.c \
+       srcs/execution/path_utils.c \
        srcs/execution/heredoc.c \
        srcs/execution/exec_redir.c \
        srcs/execution/built-ins/exec_builtins.c \
