@@ -50,7 +50,7 @@ static void	exec_child_process(t_tree *tree, t_context *ctx, char **envp,
 	perror("minishell: execve failed");
 	free(program_path);
 	free_exit(tree, &envp);
-	exit(127);
+	exit(126);
 }
 
 int	exec_external(t_tree *tree, t_context *ctx, char ***envp,
